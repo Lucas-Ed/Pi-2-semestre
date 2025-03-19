@@ -118,7 +118,7 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
         </sub>
        </a>
        <br />
-       <a href="https://www.instagram.com/lemeeliabe" title="Instagram"></a>
+       <a href="https://www.instagram.com/lemeeliabe" title="Instagram">@lemeeliabe</a>
        <br />
     </td>
      <td align="center">
@@ -130,7 +130,7 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
         </sub>
        </a>
        <br />
-       <a href="" title="instagram"></a>
+       <a href="https://www.instagram.com/brunorod07" title="instagram">@brunorod07</a>
        <br />
     </td>
      <td align="center">
@@ -142,7 +142,7 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
         </sub>
        </a>
        <br />
-       <a href="https://www.instagram.com/tatu_wp" title="instagram"></a>
+       <a href="https://www.instagram.com/tatu_wp" title="instagram">@tatu_wp</a>
        <br />
     </td>
   </table>
