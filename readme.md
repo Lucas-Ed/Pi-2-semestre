@@ -110,23 +110,23 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
        <br />
     </td> 
     <td align="center">
-      <a href="https://github.com/">
-        <img src="" width="100px;" alt=""/>
+      <a href="https://github.com/eliabe36i">
+        <img src="https://avatars.githubusercontent.com/u/80930943?v=4" width="100px;" alt=""/>
         <br />
         <sub>
-          <b></b>
+          <b> Eliabe Leme</b>
         </sub>
        </a>
        <br />
-       <a href="https://www.instagram.com" title="Instagram"></a>
+       <a href="https://www.instagram.com/lemeeliabe" title="Instagram"></a>
        <br />
     </td>
      <td align="center">
-      <a href="https://github.com/">
-        <img src="" width="100px;" alt=""/>
+      <a href="https://github.com/brunorod07">
+        <img src="https://avatars.githubusercontent.com/u/183766962?v=4" width="100px;" alt=""/>
         <br />
         <sub>
-          <b></b>
+          <b>Bruno E. Rodrigues</b>
         </sub>
        </a>
        <br />
@@ -134,42 +134,17 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
        <br />
     </td>
      <td align="center">
-      <a href="https://github.com">
-        <img src="" width="100px;" alt=""/>
+      <a href="https://github.com/Paulino-Willian">
+        <img src="https://avatars.githubusercontent.com/u/179543395?v=4" width="100px;" alt=""/>
         <br />
         <sub>
-          <b></b>
+          <b>Willian Paulino</b>
         </sub>
        </a>
        <br />
-       <a href="" title="instagram"></a>
+       <a href="https://www.instagram.com/tatu_wp" title="instagram"></a>
        <br />
     </td>
-    <td align="center">
-      <a href="">
-        <img src="" width="100px;" alt=""/>
-        <br />
-        <sub>
-          <b></b>
-        </sub>
-       </a>
-       <br />
-       <a href="https://www.instagram.com" title="instagram"></a>
-       <br />
-    </td>
-     <td align="center">
-      <a href="">
-        <img src="" width="100px;" alt=""/>
-        <br />
-        <sub>
-          <b></b>
-        </sub>
-       </a>
-       <br />
-       <a href="https://www.instagram.com" title="instagram"></a>
-       <br />
-    </td>
-  </tr>
   </table>
   <br>
 
