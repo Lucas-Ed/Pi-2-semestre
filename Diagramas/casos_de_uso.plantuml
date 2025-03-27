@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+actor "Cliente" as cliente
+rectangle Aplicação {
+  usecase "Login" as login
+  usecase "Cadastro" as cadastro
+  usecase "Recuperação de Senha" as recuperacao
+  usecase "Agendamento" as agendamento
+  usecase "Cancelamento" as cancelamento
+
+
+
+}
+
+cliente --> login
+cliente --> cadastro
+cliente --> agendamento
+cliente --> cancelamento
+cliente --> recuperacao
+@enduml

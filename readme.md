@@ -94,6 +94,19 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
 
 [![Watch the video](./img/capa_video.PNG)](https://www.youtube.com/watch?v=jeLNnmUUFrM) -->
 
+Para rodar o sistema localmente, siga os passos abaixo:
+1. Clone o repositório
+2. coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
+3. importe o backup do banco de dados "users.sql" no phpmyadmin.
+4. Instale as dependências com o comando:
+
+```bash
+composer install
+```
+5. ligue o servidor local (XAMPP ou WAMP).
+6. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`.
+
+<br>
 ## 👨🏼‍🎓 Autores
 <table>
   <tr>
