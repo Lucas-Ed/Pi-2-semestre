@@ -1,12 +1,17 @@
 @startuml
 left to right direction
 actor "Cliente" as cliente
-rectangle Aplicação {
+actor "Administrador" as administrador
+rectangle Aplicação-Lava-Rápido {
   usecase "Login" as login
   usecase "Cadastro" as cadastro
   usecase "Recuperação de Senha" as recuperacao
-  usecase "Agendamento" as agendamento
-  usecase "Cancelamento" as cancelamento
+  usecase "Agendar" as agendamento
+  usecase "Cancelar Agendamento" as cancelarAgendamento
+  usecase "Consultar Serviços" as consultarServicos
+  usecase "Alterar Agendamento" as alterarAgendamento
+  usecase "Consultar Agendamentos" as consultarAgendamentos
+  usecase "Consultar Clientes" as consultarClientes
 
 
 
@@ -15,6 +20,17 @@ rectangle Aplicação {
 cliente --> login
 cliente --> cadastro
 cliente --> agendamento
-cliente --> cancelamento
+cliente --> alterarAgendamento
+cliente --> cancelarAgendamento
 cliente --> recuperacao
+cliente --> cancelarAgendamento
+cliente --> consultarServicos
+cliente --> consultarAgendamentos
+
+administrador --> consultarAgendamentos
+administrador --> consultarClientes
+administrador --> cancelarAgendamento
+administrador --> login
+administrador --> cadastro
+administrador --> recuperacao
 @enduml
