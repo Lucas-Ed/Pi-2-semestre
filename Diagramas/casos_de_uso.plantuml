@@ -6,12 +6,14 @@ rectangle Aplicação-Lava-Rápido {
   usecase "Login" as login
   usecase "Cadastro" as cadastro
   usecase "Recuperação de Senha" as recuperacao
-  usecase "Agendar" as agendamento
+  usecase "Agendar serviço" as agendamento
   usecase "Cancelar Agendamento" as cancelarAgendamento
+  usecase "Cadastrar veiculos" as veiculos
   usecase "Consultar Serviços" as consultarServicos
   usecase "Alterar Agendamento" as alterarAgendamento
   usecase "Consultar Agendamentos" as consultarAgendamentos
   usecase "Consultar Clientes" as consultarClientes
+  usecase "Cadastrar cartão" as cartoes
 
 
 
@@ -26,11 +28,11 @@ cliente --> recuperacao
 cliente --> cancelarAgendamento
 cliente --> consultarServicos
 cliente --> consultarAgendamentos
+cliente --> veiculos
+cliente --> cartoes
 
 administrador --> consultarAgendamentos
 administrador --> consultarClientes
 administrador --> cancelarAgendamento
 administrador --> login
-administrador --> cadastro
-administrador --> recuperacao
 @enduml

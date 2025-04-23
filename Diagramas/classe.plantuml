@@ -1,2 +1,55 @@
--- aqui o diagrama
-// @startuml
+@startuml
+class Cliente {
+  +consultarServicos()
+  +alterarAgendamento()
+  +cadastrar()
+  +recuperarSenha()
+  +agendarServico()
+  +cadastrarVeiculos()
+  +cancelarAgendamento()
+  +login()
+}
+
+class Administrador {
+  +login()
+  +consultarAgendamentos()
+  +consultarClientes()
+}
+
+class Servico {
+  -descricao: String
+  -preco: Double
+}
+
+class Agendamento {
+  -data: Date
+  -hora: Time
+  -status: String
+}
+
+class Veiculo {
+  -marca: String
+  -modelo: String
+  -placa: String
+}
+
+class ClienteService
+class AgendamentoService
+class VeiculoService
+class AuthService
+
+Cliente --> Servico : consulta
+Cliente --> Agendamento : agenda / altera / cancela
+Cliente --> Veiculo : cadastra
+Administrador --> Agendamento : consulta
+Administrador --> Cliente : consulta
+
+Cliente --> ClienteService
+Administrador --> ClienteService
+Cliente --> AgendamentoService
+Administrador --> AgendamentoService
+Cliente --> VeiculoService
+Cliente --> AuthService
+Administrador --> AuthService
+
+@enduml

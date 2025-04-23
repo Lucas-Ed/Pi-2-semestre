@@ -1,0 +1,20 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+actor Administrador
+
+' ========== 2. Login ==========
+== Login ==
+Cliente -> Pagina : acessarPaginaLogin()
+Pagina -> Cliente : exibirFormularioLogin()
+Cliente -> Pagina : enviarCredenciais(usuário, senha)
+Pagina -> Sistema : autenticar(usuário, senha)
+Sistema -> BD : consultarCredenciais(usuário)
+BD --> Sistema : retornarDadosAcesso()
+Sistema -> Pagina : resultadoAutenticacao(valido)
+Pagina -> Cliente : redirecionarParaDashboard()
+
+@enduml

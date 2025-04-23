@@ -1,0 +1,27 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+actor Administrador
+
+' ========== 9. Consultar Agendamentos ==========
+== Consultar Agendamentos ==
+Cliente -> Pagina : acessarPaginaAgendamentos()
+Pagina -> Sistema : buscarAgendamentosCliente(idCliente)
+Sistema -> BD : consultarAgendamentos(idCliente)
+BD --> Sistema : listaAgendamentos()
+Sistema -> Pagina : exibirAgendamentos()
+Pagina -> Cliente : mostrarListaAgendamentos()
+
+Administrador -> Pagina : acessarPaginaAgendamentos()
+Pagina -> Sistema : buscarAgendamentos()
+Sistema -> BD : consultarAgendamentos()
+BD --> Sistema : listaAgendamentos()
+Sistema -> Pagina : exibirAgendamentos()
+Pagina -> Administrador : mostrarListaAgendamentos()
+
+
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Administrador
+
+' ========== 10. Alterar Data/Hora (Administrador) ==========
+== Alterar Data e Horário ==
+Administrador -> Pagina : acessarGestaoAgendamentos()
+Pagina -> Sistema : listarAgendamentos()
+Sistema -> BD : obterTodosAgendamentos()
+BD --> Sistema : listaAgendamentos()
+Sistema -> Pagina : mostrarAgendamentos()
+Administrador -> Pagina : selecionarAgendamento()
+Administrador -> Pagina : enviarNovaDataHora()
+Pagina -> Sistema : atualizarDataHoraAgendamento()
+Sistema -> BD : salvarAlteracao()
+BD --> Sistema : confirmacao()
+Sistema -> Pagina : exibirMensagem("Data/Hora atualizada com sucesso.")
+
+
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+actor Administrador
+
+' ========== 1. Cadastro ==========
+== Cadastro ==
+Cliente -> Pagina : acessarPaginaCadastro()
+Pagina -> Cliente : exibirFormularioCadastro()
+Cliente -> Pagina : enviarFormulario(dadosCliente)
+Pagina -> Sistema : processarCadastro(dadosCliente)
+Sistema -> Sistema : validarDados(dadosCliente)
+Sistema -> BD : salvarCliente(dadosValidados)
+BD --> Sistema : retornoCadastro(sucesso)
+Sistema -> Pagina : retornoCadastro(sucesso)
+Pagina -> Cliente : exibirMensagem("Cadastro realizado com sucesso!")
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+
+' ========== 3. Recuperar Senha ==========
+== Recuperar Senha ==
+Cliente -> Pagina : acessarRecuperarSenha()
+Pagina -> Cliente : exibirFormularioEmail()
+Cliente -> Pagina : enviarEmailRecuperacao(email)
+Pagina -> Sistema : gerarTokenRecuperacao(email)
+Sistema -> Sistema : verificarTokenValido(email)
+Sistema -> Pagina : cadastrarNovaSenha
+
+Pagina -> Cliente : mostrarMensagem("Suceesso/Erro.")
+
+@enduml

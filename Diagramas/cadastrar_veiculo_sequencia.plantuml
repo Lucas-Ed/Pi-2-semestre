@@ -1,0 +1,19 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+
+
+' ========== 7. Cadastrar Veículo ==========
+== Cadastrar Veículo ==
+Cliente -> Pagina : acessarPaginaCadastroVeiculo()
+Pagina -> Cliente : exibirFormularioVeiculo()
+Cliente -> Pagina : enviarFormulario(veiculo)
+Pagina -> Sistema : processarCadastroVeiculo(veiculo)
+Sistema -> BD : salvarVeiculo(veiculo)
+BD --> Sistema : retornoCadastro()
+Sistema -> Pagina : mostrarMensagem("Veículo cadastrado com sucesso.")
+
+@enduml

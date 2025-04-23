@@ -58,18 +58,18 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 </p> -->
 
-<!-- ## 💻 Layout do Projeto
+ ## 💻 Layout do Projeto
 
-![](/img/gif_apresentação.gif)
+<!-- ![](/img/gif_apresentação.gif) -->
 
-Para ver o layout completo solicite acesso [aqui.](https://www.figma.com/design/sIfEtyseMbpBPBKTnMTnAm/Casa-S%C3%B4nia-Fashion?node-id=0-88&t=xCCDPaCHfE8gytH9-1)
+Veja o layout completo  [aqui.](https://www.figma.com/design/PpyOYg0jN5SyXKjDlWTspq/Fatec-Projeto-Integrador-2%C2%BA-S?node-id=0-1&p=f)
 
 
-## 🛠 Metodologia ágil
+ <!-- ## 🛠 Metodologia ágil
 
 Para o gerenciamento, do projeto, foi utilizado o [Trello](https://trello.com/invite/b/670a36ac9fdfb633bd12bc42/ATTIc0bd37a0dad55feb71e78e437d7367886CFD379C/fatec-pi-documentacao-casa-sonia-fashion), solicite acesso para vizualizar ao quadro no link anterior;  O Trello é uma ferramenta para melhor controle e divisão de tarefas entre os autores, ficando da seguinte forma igual da imagem abaixo:
 
-![](img/trello.png)
+![](img/trello.png) -->
 
 ## 🧩 Api 
 Foi construída uma API para o projeto em NodeJs, acesse [aqui](https://github.com/Lucas-Ed/Backend_grupo02_pi), o repositório da Api, para mais informações. -->
@@ -85,7 +85,7 @@ Acesse a documentação do projeto [aqui.](https://github.com/Lucas-Ed/grupo-02_
 
 ## 📲 Deploy
 
-Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
+Acesse o site do Pi [aqui.]()
 
 # 👓 Live
 
@@ -94,7 +94,7 @@ Acesse o site do Pi [aqui.](https://csfashion-pi.netlify.app)
 
 [![Watch the video](./img/capa_video.PNG)](https://www.youtube.com/watch?v=jeLNnmUUFrM) -->
 
-Para rodar o sistema localmente, siga os passos abaixo:
+<!-- Para rodar o sistema localmente, siga os passos abaixo:
 1. Clone o repositório
 2. coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
 3. importe o backup do banco de dados "users.sql" no phpmyadmin.
@@ -104,7 +104,7 @@ Para rodar o sistema localmente, siga os passos abaixo:
 composer install
 ```
 5. ligue o servidor local (XAMPP ou WAMP).
-6. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`.
+6. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`. -->
 
 <br>
 ## 👨🏼‍🎓 Autores
