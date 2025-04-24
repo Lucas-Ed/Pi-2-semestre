@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 23/04/2025 às 18:05
+-- Tempo de geração: 24/04/2025 às 19:56
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -43,6 +43,7 @@ CREATE TABLE `agendamentos` (
 
 CREATE TABLE `pagamentos` (
   `idpagamentos` int(10) UNSIGNED NOT NULL,
+  `cartoes_idcartoes` int(10) UNSIGNED NOT NULL,
   `agendamentos_idagendamentos` int(10) UNSIGNED NOT NULL,
   `payment_id` varchar(50) NOT NULL,
   `valor` decimal(10,0) NOT NULL
@@ -57,12 +58,16 @@ CREATE TABLE `pagamentos` (
 CREATE TABLE `usuarios` (
   `idusuarios` int(10) UNSIGNED NOT NULL,
   `nome` varchar(45) NOT NULL,
-  `cpf` int(10) UNSIGNED NOT NULL,
-  `telefone` int(10) UNSIGNED NOT NULL,
+  `cpf` int(11) NOT NULL,
+  `telefone` int(11) NOT NULL,
   `endereco` varchar(100) NOT NULL,
   `email` varchar(45) NOT NULL,
   `senha` varchar(20) NOT NULL,
-  `tipo` varchar(20) NOT NULL
+  `tipo` varchar(20) NOT NULL,
+  `termos` varchar(3) NOT NULL,
+  `token_hash` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `criacao_token` datetime NOT NULL,
+  `expiracao_token` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -95,7 +100,8 @@ ALTER TABLE `agendamentos`
 --
 ALTER TABLE `pagamentos`
   ADD PRIMARY KEY (`idpagamentos`),
-  ADD KEY `pagamentos_FKIndex1` (`agendamentos_idagendamentos`);
+  ADD KEY `pagamentos_FKIndex1` (`agendamentos_idagendamentos`),
+  ADD KEY `pagamentos_FKIndex2` (`cartoes_idcartoes`);
 
 --
 -- Índices de tabela `usuarios`
