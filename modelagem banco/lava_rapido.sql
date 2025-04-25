@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 24/04/2025 às 19:56
+-- Tempo de geração: 25/04/2025 às 17:56
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -32,7 +32,8 @@ CREATE TABLE `agendamentos` (
   `usuarios_idusuarios` int(10) UNSIGNED NOT NULL,
   `veiculos_idveiculos` int(10) UNSIGNED NOT NULL,
   `data_agendamento` date NOT NULL,
-  `hora_agendamento` time NOT NULL
+  `hora_agendamento` time NOT NULL,
+  `leva_e_tras` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -64,7 +65,7 @@ CREATE TABLE `usuarios` (
   `email` varchar(45) NOT NULL,
   `senha` varchar(20) NOT NULL,
   `tipo` varchar(20) NOT NULL,
-  `termos` varchar(3) NOT NULL,
+  `termos` tinyint(1) NOT NULL,
   `token_hash` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `criacao_token` datetime NOT NULL,
   `expiracao_token` datetime NOT NULL
