@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/04/2025 às 17:56
+-- Tempo de geração: 26/04/2025 às 19:21
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -61,15 +61,21 @@ CREATE TABLE `usuarios` (
   `nome` varchar(45) NOT NULL,
   `cpf` int(11) NOT NULL,
   `telefone` int(11) NOT NULL,
-  `endereco` varchar(100) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `senha` varchar(20) NOT NULL,
+  `senha` varchar(255) NOT NULL,
   `tipo` varchar(20) NOT NULL,
   `termos` tinyint(1) NOT NULL,
-  `token_hash` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `token_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `criacao_token` datetime NOT NULL,
   `expiracao_token` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha`, `tipo`, `termos`, `token_hash`, `criacao_token`, `expiracao_token`) VALUES
+(1, 'Lucas eduardo rosolem', 0, 0, '', '$2y$10$pMDgFCfWgoPwp.9sEjPMFutmvWpw8i41gjUhdVbXVPmshkjWB2aoK', '', 0, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -137,7 +143,7 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
