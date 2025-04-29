@@ -93,19 +93,66 @@ Acesse o site do Pi [aqui.]()
 
 [![Watch the video](./img/capa_video.PNG)](https://www.youtube.com/watch?v=jeLNnmUUFrM) -->
 
-<!-- Para rodar o sistema localmente, siga os passos abaixo:
-1. Clone o repositório
-2. coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
-3. importe o backup do banco de dados "users.sql" no phpmyadmin.
-4. Instale as dependências com o comando:
+Para rodar o sistema localmente, siga os passos abaixo:
+
+0. Requisito, ter o composer instalado na máquina, caso não tenha baixe [aqui.](https://getcomposer.org/download/)
+1. Clone o repositório.
+2. Ligue o servidor/Mysql local (XAMPP ou WAMP).
+3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
+4. Dentro da pasta sistema, pelo terminal, instale as dependências com o comando:
 
 ```bash
 composer install
 ```
-5. ligue o servidor local (XAMPP ou WAMP).
-6. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`. -->
+
+5. Importe o backup do banco de dados "lava_rapido.sql" que esta na pasta `modelagem de banco` no phpmyadmin.
+6. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`.
+7. Abra o sistema clicando na pasta views.
+8. Pronto você verá a página Home do sistema.
+
+## 📂 Arquitetura do Projeto
+
+```bash
+📂 lava_rapido/ (pasta raiz)
+|
+├── 📂 Config/ (arquivos de configurações)
+│    ├── mercado_pago.php (configuração da API de pagamento)
+|
+|
+├── 📂 controllers/ (lógica de negócios - salvar, listar, excluir)
+│ ├── processa.php-(lógica do cadastro)
+| └──logout.php-(lógica do logout do sistema)
+|
+├── 📂 Model/ (arquivos de conexão com o banco de dados)
+│    ├── config.php (configuração do banco)
+│ 
+│
+├── 📂 public/ (arquivos estáticos como CSS, JS, imagens)
+│    ├── 📂 css/ (Bootstrap e estilos personalizados)
+│    ├── 📂 js/ (scripts)
+│    └── 📂 images/ (carrossel de imagens)
+|
+├── 📂Vendor (Blibliotecas do sistema)
+|
+├── 📂 views/ (páginas do sistema)
+│    ├── cadastro.php (formulário de login)
+│    ├── index.php (página inicial com navbar e carrossell)
+│    ├── login.php (login de usuários)
+│    ├── welcome.php (área logada de usuario)
+│    ├── admin_agendamentos.php (listagem de agendamentos para admin)
+│    └──admin_usuarios.php (listagem de usuários para admin)
+|
+|
+├── .env (variáveis de ambiente)
+├── init.php (arquivo de inicialização)
+├── .gitignore (arquivo para github)
+├── composer.json (declara as dependências necessárias do projeto)
+├── composer.lock (registra as dependências do projeto)
+└── README.md (instruções do projeto)
+```
 
 <br>
+
 ## 👨🏼‍🎓 Autores
 <table>
   <tr>
@@ -161,6 +208,7 @@ composer install
   <br>
 
 Professor, <a href="https://github.com/orlandosaraivajr">Orlando Saraiva.</a>
+
 
   ---
 <!-- ## :memo: Licença

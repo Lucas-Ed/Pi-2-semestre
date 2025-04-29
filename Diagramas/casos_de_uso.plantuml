@@ -3,7 +3,7 @@ left to right direction
 actor "Cliente" as cliente
 actor "Administrador" as administrador
 rectangle Aplicação-Lava-Rápido {
-  usecase "Login" as login
+  usecase "Login/logout" as login
   usecase "Cadastro" as cadastro
   usecase "Recuperação de Senha" as recuperacao
   usecase "Agendar serviço" as agendamento
