@@ -147,8 +147,7 @@ composer install
 ├── init.php (arquivo de inicialização)
 ├── .gitignore (arquivo para github)
 ├── composer.json (declara as dependências necessárias do projeto)
-├── composer.lock (registra as dependências do projeto)
-└── README.md (instruções do projeto)
+└── composer.lock (registra as dependências do projeto)
 ```
 
 <br>
