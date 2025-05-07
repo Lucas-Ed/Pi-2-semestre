@@ -1,6 +1,7 @@
-<!-- Arquivo necessario para conectar ao banco de dados MySQL para Login e Cadastro -->
 <?php
-require_once '../vendor/autoload.php'; // Certifique-se de que o autoload do Composer está carregado
+// Arquivo necessario para conectar ao banco de dados MySQL para Login e Cadastro
+// require_once '../vendor/autoload.php'; 
+require_once __DIR__ . '/../vendor/autoload.php';// Certifique-se de que o autoload do Composer está carregado
 
 // use Dotenv\Dotenv;
 

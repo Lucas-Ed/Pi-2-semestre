@@ -7,7 +7,7 @@ session_start();
 // Certifique-se de que init.php foi incluído ANTES deste arquivo.
 require_once '../init.php'; // Se este arquivo for o ponto de entrada
 
-require_once BASE_PATH . '/model/config.php';
+require_once BASE_PATH . '/model/db.php';
 // require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -16,14 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST['senha']);
 
         // Prepara a consulta SQL para evitar SQL Injection
-        $sql = "SELECT idusuarios, nome, senha, tipo FROM usuarios WHERE nome = ?"; // tipo
+        $sql = "SELECT idusuarios, nome, senha, tipo, telefone FROM usuarios WHERE nome = ?"; // tipo
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $db_username, $db_password, $db_tipo);  // , $db_tipo
+            $stmt->bind_result($id, $db_username, $db_password, $db_tipo, $db_telefone);  // , $db_tipo
             $stmt->fetch();
             //echo $db_password;
             // Verifica se a senha está correta
@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = TRUE;
                 $_SESSION['idusuarios'] = $id;
                 $_SESSION['nome'] = $db_username;
+                $_SESSION["telefone"] = $db_telefone; // Adiciona o telefone à sessão
                 $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
                 
                 // Redireciona conforme o tipo.
@@ -69,7 +70,7 @@ if (empty($_SESSION['csrf_token'])) {
 <head>
     <meta charset="UTF-8">
     <title>Acessar</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }

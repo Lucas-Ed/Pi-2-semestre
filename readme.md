@@ -113,41 +113,53 @@ composer install
 ## 📂 Arquitetura do Projeto
 
 ```bash
-📂 lava_rapido/ (pasta raiz)
-|
-├── 📂 Config/ (arquivos de configurações)
-│    ├── mercado_pago.php (configuração da API de pagamento)
-|
-|
-├── 📂 controllers/ (lógica de negócios - salvar, listar, excluir)
-│ ├── processa.php-(lógica do cadastro)
-| └──logout.php-(lógica do logout do sistema)
-|
-├── 📂 Model/ (arquivos de conexão com o banco de dados)
-│    ├── config.php (configuração do banco)
-│ 
+📂 lava_rapido/
 │
-├── 📂 public/ (arquivos estáticos como CSS, JS, imagens)
-│    ├── 📂 css/ (Bootstrap e estilos personalizados)
-│    ├── 📂 js/ (scripts)
-│    └── 📂 images/ (carrossel de imagens)
+├── 📂 config/
+│   ├── 📄 base_url.php-(URL base do sistema)  
+│   └── 📄 gateway.php-(configuração da API de pagamento)
+│
+├── 📂 controllers/-(lógica de negócios - salvar, listar, excluir)
+│   ├── 📂 Api/
+│   │    ├── 📄get_agndamentos.php(listar agendamentos)
+│   │    └── 📄 get_veiculos.php (listar veiculos)
+|   |
+|   ├── 📄 add_agendamento.php(adicionar agendamento)
+|   ├── 📄 addcar.php(cadastrar veiculo)
+|   ├── 📄 logout.php-(lógica do logout do sistema)
+│   ├── 📄 processa.php- (lógica do cadastro)
+|   ├── 📄 removecar.php(remover veiculo)
+|   ├── 📄 remover_agendamento.php(remover agendamento)
+│   └── 📄 salvar_veiculo.php(cadastrar veiculo no banco)
 |
-├── 📂Vendor (Blibliotecas do sistema)
 |
-├── 📂 views/ (páginas do sistema)
-│    ├── cadastro.php (formulário de login)
-│    ├── index.php (página inicial com navbar e carrossell)
-│    ├── login.php (login de usuários)
-│    ├── welcome.php (área logada de usuario)
-│    ├── admin_agendamentos.php (listagem de agendamentos para admin)
-│    └──admin_usuarios.php (listagem de usuários para admin)
+├── 📂 model/
+│   └── 📄 db.php (configuração do banco)
+│
+├── 📂 public/
+│   | └── 📂 js/
+│   |     ├── 📄 validacao_veiculo.js- (validação de veículos)
+│   |     └── 📄 welcome.js- (funcionalidades de area logada)
+|   |
+|   └── 📂 css/ (estilos personalizados)
 |
+├── 📂 vendor/
 |
-├── .env (variáveis de ambiente)
-├── init.php (arquivo de inicialização)
-├── .gitignore (arquivo para github)
-├── composer.json (declara as dependências necessárias do projeto)
-└── composer.lock (registra as dependências do projeto)
+├── 📂 views/
+│   ├── 📄 admin_agendamentos.php-(Àrea logada Admin)
+│   ├── 📄 admin_usuarios.php-(Àrea logada Admin)
+│   ├── 📄 cadastro.-(Página de cadastro de clientes)
+│   ├── 📄 index.php-(Página Home)
+│   ├── 📄 login.php- (Página de login de usuários)
+│   └── 📄 welcome.php-(Àrea logada usuario cliente)
+│
+│
+├── 📄 .env-(variáveis de ambiente)
+├── 📄 .gitignore-(arquivo para github)
+├── 📄 composer.json-(declara as dependências necessárias do projeto)
+├── 📄 composer.lock-(registra as dependências do projeto)
+└── 📄 init.php-(arquivo de inicialização)
+
 ```
 
 <br>
@@ -210,9 +222,9 @@ Professor, <a href="https://github.com/orlandosaraivajr">Orlando Saraiva.</a>
 
 
   ---
-<!-- ## :memo: Licença
+## :memo: Licença
 
-Esse projeto está sob a licença Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0). -->
+Esse projeto está sob a licença Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0).
 
 ---
 

@@ -1,10 +1,11 @@
 <?php
-
+ob_start(); // inicia buffer de saída
 // Define o caminho base do projeto (opcional, mas útil)
 define('BASE_PATH', __DIR__);
 
 // Carrega as libs necessárias do Composer
 require_once __DIR__ . '/Vendor/autoload.php';
+
 //require_once BASE_PATH . '/vendor/autoload.php';
 // Agora você pode usar as classes das bibliotecas do Composer diretamente
 // sem precisar de require individual para cada arquivo.
@@ -25,7 +26,10 @@ $dotenv->load();
 // Inicia a sessão:
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    
 }
 
 // incluir outros arquivos de configuração:
+require_once __DIR__ . '/model/db.php';
 // require_once BASE_PATH . '/config/global.php';
+?>
