@@ -75,7 +75,7 @@ if (empty($_SESSION['csrf_token'])) {
             </div>
  
             <div class="mb-3 form-check">
-                <input type="checkbox" name="termos" class="form-check-input" id="termos" required>
+                <input type="checkbox" name="termos" class="form-check-input" id="termos">
                 <label class="form-check-label" for="termos">
                     Eu aceito os <a href="termos.html" target="_blank">Termos de Uso</a>
                 </label>

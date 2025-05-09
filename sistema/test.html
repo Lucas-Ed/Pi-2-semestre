@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .agendamentos {
+          width: 100%;
+          border-collapse: collapse;
+        }
+      
+        .agendamentos th,
+        .agendamentos td {
+          border: 1px solid #ccc;
+          padding: 10px;
+          text-align: left;
+        }
+      
+        /* Responsivo: transforma em lista vertical no mobile */
+        @media (max-width: 768px) {
+          .agendamentos,
+          .agendamentos thead,
+          .agendamentos tbody,
+          .agendamentos th,
+          .agendamentos td,
+          .agendamentos tr {
+            display: block;
+            width: 100%;
+          }
+      
+          .agendamentos thead {
+            display: none;
+          }
+      
+          .agendamentos tr {
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+          }
+      
+          .agendamentos td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border: none;
+            border-bottom: 1px solid #eee;
+          }
+      
+          .agendamentos td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #333;
+          }
+      
+          .agendamentos td:last-child {
+            border-bottom: none;
+          }
+        }
+      </style>
+      
+      <table class="agendamentos">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Veículo</th>
+            <th>T. Lavagem</th>
+            <th>S. Adicionais</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Leva e Trás</th>
+            <th>Preço</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Nome">Ellabe Leme</td>
+            <td data-label="Telefone">(19) 94036-5620</td>
+            <td data-label="Veículo">M3 (ANW-7273)</td>
+            <td data-label="T. Lavagem">Ducha Completa</td>
+            <td data-label="S. Adicionais">Cristalização</td>
+            <td data-label="Data">08/07/2025</td>
+            <td data-label="Hora">14:00</td>
+            <td data-label="Leva e Trás">Sim</td>
+            <td data-label="Preço">150,00 R$</td>
+            <td data-label="Status" style="color: red;">Não Confirmado</td>
+          </tr>
+          <!-- Você pode repetir os <tr> aqui para outros agendamentos -->
+        </tbody>
+      </table>
+</body>
+</html>

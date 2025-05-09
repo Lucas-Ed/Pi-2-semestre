@@ -110,7 +110,7 @@ composer install
 7. Abra o sistema clicando na pasta views.
 8. Pronto você verá a página Home do sistema.
 
-## 📂 Arquitetura do Projeto
+## 📂 Arquitetura(MVC) e funcionalidades do Projeto
 
 ```bash
 📂 lava_rapido/
@@ -121,7 +121,7 @@ composer install
 │
 ├── 📂 controllers/-(lógica de negócios - salvar, listar, excluir)
 │   ├── 📂 Api/
-│   │    ├── 📄get_agndamentos.php(listar agendamentos)
+│   │    ├── 📄 get_agndamentos.php(listar agendamentos)
 │   │    └── 📄 get_veiculos.php (listar veiculos)
 |   |
 |   ├── 📄 add_agendamento.php(adicionar agendamento)
@@ -215,6 +215,18 @@ composer install
        <a href="https://www.instagram.com/tatu_wp" title="instagram">@tatu_wp</a>
        <br />
     </td>
+    <td align="center">
+      <a href="https://github.com/Marques894">
+        <img src="https://avatars.githubusercontent.com/u/136036690?v=4" width="100px;" alt=""/>
+        <br />
+        <sub>
+          <b>Renan Marques</b>
+        </sub>
+       </a>
+       <br />
+       <a href="https://www.instagram.com/augustti_m?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" title="instagram">@augustti_m</a>
+       <br />
+    </td>
   </table>
   <br>
 
@@ -225,6 +237,10 @@ Professor, <a href="https://github.com/orlandosaraivajr">Orlando Saraiva.</a>
 ## :memo: Licença
 
 Esse projeto está sob a licença Creative Commons Attribution-NonCommercial 4.0 (CC BY-NC 4.0).
+
+Para mais informações acesse o link:
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 ---
 

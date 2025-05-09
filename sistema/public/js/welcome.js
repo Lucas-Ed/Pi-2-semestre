@@ -163,35 +163,60 @@ async function addCar(car) {
 }
 
 // Agendar
+document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const selectedCarId = document.getElementById('selectedCar').value;
+  const service = document.getElementById('service').value;
+  const date = document.getElementById('date').value;
+  const time = document.getElementById('time').value;
+  const levaETraz = document.getElementById('leva_e_tras').checked;// comentar essa linha caso leva e tras não tenha n form
+
+  if (!selectedCarId || !service || !date || !time) {
+    Swal.fire('Campos obrigatórios!', 'Preencha todos os campos.', 'warning');
+    return;
+  }
+
+  const appointmentData = {
+    veiculos_idveiculos: selectedCarId,
+    data_agendamento: date,
+    hora_agendamento: time,
+    leva_e_tras: levaETraz, // Para ativar essa opção no form colocar levaETraz ou false  para não pegar essa opção
+    servico: service
+  };
+
+  await addAppointment(appointmentData);
+});
+
 async function addAppointment(appointmentData) {
   try {
-    const selectedCarId = document.getElementById('selectedCar').value;
-
-    if (!selectedCarId) throw new Error('Selecione um carro.');
-
-    const appointmentToSend = {
-      ...appointmentData,
-      car_id: selectedCarId
-    };
-
-    const res = await fetch('../controllers/add_agend.php', {
+    const res = await fetch('../controllers/add_agendamento.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(appointmentToSend)
+      body: JSON.stringify(appointmentData)
     });
 
-    const data = await res.json();
+    const text = await res.text();
+    console.log('Resposta bruta do servidor:', text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      Swal.fire('Erro de resposta', 'Resposta inesperada do servidor.', 'error');
+      return;
+    }
 
     if (data.success) {
       Swal.fire({
         icon: 'success',
         title: 'Agendamento realizado!',
-        text: `Para ${appointmentData.date} às ${appointmentData.time}`,
+        text: `Para ${appointmentData.data_agendamento} às ${appointmentData.hora_agendamento}`,
         timer: 3000,
         showConfirmButton: false
       });
-      await loadAppointments();
+      //await loadAppointments(); // Atualiza os agendamentos após sucesso
     } else {
       throw new Error(data.message || 'Falha ao agendar.');
     }

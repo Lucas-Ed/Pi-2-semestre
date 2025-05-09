@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/05/2025 às 15:53
+-- Tempo de geração: 09/05/2025 às 20:57
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -36,7 +36,8 @@ CREATE TABLE `agendamentos` (
   `data_agendamento` date NOT NULL,
   `hora_agendamento` time NOT NULL,
   `leva_e_tras` tinyint(1) NOT NULL,
-  `pagamento_na_hora` tinyint(1) NOT NULL
+  `pagamento_na_hora` tinyint(1) NOT NULL,
+  `servico` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -66,6 +67,13 @@ CREATE TABLE `enderecos` (
   `bairro` varchar(100) DEFAULT NULL,
   `cep` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `enderecos`
+--
+
+INSERT INTO `enderecos` (`idenderecos`, `usuarios_idusuarios`, `rua`, `numero`, `bairro`, `cep`) VALUES
+(11, 16, 'rua oito', '008', 'jardim das primas', '13609-300');
 
 -- --------------------------------------------------------
 
@@ -120,7 +128,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha`, `tipo`, `termos`, `token_hash`, `criacao_token`, `expiracao_token`) VALUES
 (1, 'Lucas eduardo rosolem', '0', '19998235078', '', '$2y$10$pMDgFCfWgoPwp.9sEjPMFutmvWpw8i41gjUhdVbXVPmshkjWB2aoK', '', 0, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, 'admin', '2147483647', '11999999999', 'admin@seudominio.com', '$2y$10$VpptMUovchWAR30UMdHCTumI9Y4eThiD/ghuoeb3b.v5VNp.cLgfq', 'admin', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(15, 'admin', '2147483647', '11999999999', 'admin@seudominio.com', '$2y$10$VpptMUovchWAR30UMdHCTumI9Y4eThiD/ghuoeb3b.v5VNp.cLgfq', 'admin', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(16, 'test', '38398477623', '19996689410', 'teste6@teste6.com.br', '$2y$10$z169FAWCoi1yZI2xG6SjjuAuvzao249BcwUioqQPXwYpQoCwkW8ve', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -141,9 +150,9 @@ CREATE TABLE `veiculos` (
 --
 
 INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`) VALUES
-(1, 1, 'gol', 'AAA-1234', ''),
 (2, 1, 'civic', 'BBB-1234', ''),
-(3, 1, 'gtr', 'AAA-1234', '');
+(3, 1, 'gtr', 'AAA-1234', ''),
+(15, 1, 'gol', 'AAA-1234', '');
 
 --
 -- Índices para tabelas despejadas
@@ -219,7 +228,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `pagamentos`
@@ -237,13 +246,13 @@ ALTER TABLE `status_ag`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restrições para tabelas despejadas

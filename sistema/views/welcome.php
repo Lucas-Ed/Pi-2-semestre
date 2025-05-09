@@ -95,7 +95,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
           <div class="card shadow-sm">
             <div class="card-body">
               <h2 class="h4 mb-4">Agendamentos</h2>
-              <div id="appointments"></div><!--- id="appointmentsList" -->
+              <div id="appointmentsList"></div><!--- id="appointmentsList" -->
               <!-- <p class="card-text"><strong>Carro:</strong> ${selectedCar.model}</p>
               <p class="card-text"><strong>Placa:</strong> ${selectedCar.plate}</p>
               <p class="card-text"><strong>Nome:</strong> ${appointment.name}</p> -->
@@ -199,16 +199,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </select>
               </div>
 
-              <div class="mb-3">
-                <label for="service" class="form-label">Forma de pagamento:</label>
-                <select class="form-select" id="service" required>
-                  <option value="">Selecione a forma</option>
-                  <option value="credito">cartão de credito</option>
-                  <option value="debto">cartão de credito</option>
-                  <option value="pix">Pix</option>
-                </select>
-              </div>
-
+            <div class="mb-3 form-check">
+                <input type="checkbox" name="leva_e_tras" class="form-check-input" id="leva_e_tras">
+                <label class="form-check-label" for="levar_e_tras">
+                    <p>Quer serviço Leva e Traz ?</p>
+                </label>
+            </div>
 
 
               <div class="text-end">
