@@ -1,0 +1,153 @@
+<?php
+session_start();
+// if (session_status() !== PHP_SESSION_ACTIVE) {
+//     die("Sessão não iniciada!");
+// }
+
+// Certifique-se de que init.php foi incluído ANTES deste arquivo.
+require_once '../init.php'; // Se este arquivo for o ponto de entrada
+require_once __DIR__ . '/components/header.php';
+
+require_once BASE_PATH . '/model/db.php';
+// require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_POST['nome']) && !empty($_POST['senha'])) {
+        $username = trim($_POST['nome']);
+        $password = trim($_POST['senha']);
+
+        // Prepara a consulta SQL para evitar SQL Injection
+        $sql = "SELECT idusuarios, nome, senha, tipo, telefone FROM usuarios WHERE nome = ?"; // tipo
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($id, $db_username, $db_password, $db_tipo, $db_telefone);  // , $db_tipo
+            $stmt->fetch();
+            //echo $db_password;
+            // Verifica se a senha está correta
+            if (password_verify($password, $db_password)) {
+                session_regenerate_id(true); // Regerar a sessão ao logar,Proteção (regenerando session ID)
+                $_SESSION['loggedin'] = TRUE;
+                $_SESSION['idusuarios'] = $id;
+                $_SESSION['nome'] = $db_username;
+                $_SESSION["telefone"] = $db_telefone; // Adiciona o telefone à sessão
+                $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
+                
+                // Redireciona conforme o tipo.
+                $redirectUrl = ($db_tipo === 'admin') ? '../views/admin_agendamentos.php' : '../views/welcome.php';
+                        echo '
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                            Swal.fire({
+                                icon: "success",
+                                title: "Login feito com sucesso!",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                window.location.href = "' . $redirectUrl . '";
+                            });
+                        </script>';
+                        exit();
+
+            } else {
+                $_SESSION['loggedin'] = FALSE;
+                $error = "Usuário ou senha inválidos.";
+            }
+        } else {
+            $_SESSION['loggedin'] = FALSE;
+            $error = "Usuário ou senha inválidos.";
+        }
+
+        $stmt->close();
+        $conn->close();
+    } else {
+        $error = "Por favor, preencha todos os campos.";
+    }
+}
+
+// Gera o token CSRF
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+?>
+
+<title>Acessar</title>
+<!-- Inicio do body -->
+<section class="bg-white d-flex flex-column min-vh-100 position-relative">
+
+    <!-- Botão Sair -->
+    <a href="index.php" class="position-absolute top-0 end-0 m-5 text-decoration-none text-secondary small">
+        <i class="bi bi-power"></i> Sair
+    </a>
+
+    <!-- Conteúdo central -->
+    <main class="d-flex flex-grow-1 align-items-center justify-content-center px-3">
+        <div style="width: 100%; max-width: 400px;">
+            <h4 class="text-center fw-bold mb-5" style="color: #444;">Login</h4>
+
+
+            <!-- Exibição de erro, apenas após submissão real do form -->
+            <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login']) && !empty($error)): ?>
+                <div class="alert alert-danger"><?php echo $error; ?></div>
+            <?php endif; ?>
+
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <p class="text-muted mb-2 small">Insira seus dados...</p>
+
+                <!-- Campo Nome -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center"
+                        style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
+                        <i class="bi bi-person-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
+                        <input type="text" name="nome" class="form-control border-0 shadow-none placeholder-light"
+                            placeholder="Nome completo"
+                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
+                    </div>
+                </div>
+
+                <!-- Campo Senha -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center"
+                        style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
+                        <i class="bi bi-key" style="color: #00a3c7; font-size: 1.2rem;"></i>
+                        <input type="password" name="senha" class="form-control border-0 shadow-none placeholder-light"
+                            placeholder="Senha"
+                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
+                    </div>
+                </div>
+
+                <!-- Botão Entrar -->
+    <div class="d-grid mb-3">
+        <button type="submit" name="login" class="btn text-white d-flex align-items-center justify-content-center"
+            style="background-color: #009bbf; border-radius: 10px; height: 55px;">
+            Entrar
+        </button>
+    </div>
+
+                <!-- Link Esqueci a senha -->
+                <div class="text-start mb-4">
+                    <small class="text-muted" style="font-size: 0.85rem;">
+                        Esqueceu a senha?
+                        <a href="../views/recovery.php"
+                            class="text-decoration-none" style="color: #009bbf;">Recuperar senha</a>
+                    </small>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-white text-center py-5"
+        style="background-color: #009bbf; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+        <small>
+            Não tem uma conta?
+            <a href="../views/cadastro.php" class="text-white fw-bold text-decoration-underline">Cadastre-se</a>
+        </small>
+    </footer>
+</section>
+
+    <!-- lib sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

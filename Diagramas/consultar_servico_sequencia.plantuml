@@ -1,0 +1,18 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+
+
+' ========== 8. Consultar Serviços ==========
+== Consultar Serviços ==
+Cliente -> Pagina : acessarPaginaServicos()
+Pagina -> Sistema : buscarServicosDisponiveis()
+Sistema -> BD : consultarServicos()
+BD --> Sistema : listaServicos()
+Sistema -> Pagina : exibirServicos()
+Pagina -> Cliente : mostrarListaServicos()
+
+@enduml

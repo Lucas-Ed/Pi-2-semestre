@@ -1,0 +1,27 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+actor Administrador
+
+' ========== 6. Cancelar Agendamento ==========
+== Cancelar Agendamento ==
+Cliente -> Pagina : acessarPaginaCancelarAgendamento()
+Pagina -> Cliente : exibirListaAgendamentos()
+Cliente -> Pagina : selecionarAgendamentoParaCancelar()
+Pagina -> Sistema : cancelarAgendamento(id)
+Sistema -> BD : deletarAgendamento(id)
+BD --> Sistema : confirmacao()
+Sistema -> Pagina : exibirMensagem("Agendamento cancelado com sucesso.")
+
+Administrador -> Pagina : acessarPaginaCancelarAgendamento()
+Pagina -> Administrador : exibirListaAgendamentos()
+Administrador -> Pagina : selecionarAgendamentoParaCancelar()
+Pagina -> Sistema : cancelarAgendamento(id)
+Sistema -> BD : deletarAgendamento(id)
+BD --> Sistema : confirmacao()
+Sistema -> Pagina : exibirMensagem("Agendamento cancelado com sucesso.")
+
+@enduml

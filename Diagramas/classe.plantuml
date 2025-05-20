@@ -1,0 +1,115 @@
+@startuml
+
+' ====== CLASSE BASE ======
+class Usuario {
+  -id: int
+  -nome: String
+  -cpf: String
+  -telefone: String
+  -email: String
+  -senha: String
+  -tipo: String
+  -termos: bool
+  -token_hash: String
+  -criacao_token: DateTime
+  -expiracao_token: DateTime
+
+  +login()
+  +logout()
+  +cadastrar()
+  +recuperarSenha()
+}
+
+' ====== HERANÇA ======
+class Administrador {
+  -id: int
+  -nome: String
+  -cpf: String
+  -telefone: String
+  -email: String
+  -senha: String
+  -tipo: String
+  -termos: bool
+  -token_hash: String
+  -criacao_token: DateTime
+  -expiracao_token: DateTime
+
+  +consultarAgendamentos()
+  +consultarClientes()
+  +cancelar()
+  +alterar()
+}
+
+Usuario <|-- Administrador
+
+' ====== DEMAIS CLASSES ======
+
+class Endereco {
+  -id: int
+  -rua: String
+  -numero: String
+  -bairro: String
+  -cep: String
+}
+
+class Veiculo {
+  -id: int
+  -modelo: String
+  -placa: String
+  -marca: String
+  -tipo: String
+
+  +cadastrar()
+  +remover()
+}
+
+class Cartao {
+  -id: int
+  -nome_titular: String
+  -numero_cartao: Blob
+
+  +cadastrar()
+  +remover()
+}
+
+class Agendamento {
+  -id: int
+  -data: Date
+  -hora: Time
+  -leva_e_traz: bool
+  -pagamento_na_hora: bool
+  -executado: bool
+
+  +agendar()
+  +cancelar()
+  +alterar()
+  +getDetalhes()
+}
+
+class Pagamento {
+  -id: int
+  -payment_id: String
+  -valor: Decimal
+}
+
+class StatusAgendamento {
+  -id: int
+  -status: String
+}
+
+' ====== RELACIONAMENTOS ======
+
+Usuario "1" --> "0..*" Endereco : possui
+Usuario "1" --> "0..*" Veiculo : possui
+Usuario "1" --> "0..*" Cartao : possui
+Usuario "1" --> "0..*" Agendamento : realiza
+
+Agendamento "1" --> "1" Veiculo : usa
+Agendamento "1" --> "0..1" Pagamento : gera
+Agendamento "1" --> "1" StatusAgendamento : tem
+Cartao "1" --> "0..*" Pagamento : vincula
+
+Administrador --> Agendamento : consulta
+Administrador --> Usuario : consulta
+
+@enduml

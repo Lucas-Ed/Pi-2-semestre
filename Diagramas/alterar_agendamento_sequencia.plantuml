@@ -1,0 +1,39 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+actor Administrador
+
+' ========== 5. Alterar Agendamento ==========
+== Alterar Agendamento ==
+Cliente -> Pagina : acessarPaginaAlterarAgendamento()
+Pagina -> Cliente : exibirAgendamentos()
+Cliente -> Pagina : selecionarAgendamento(alterar)
+Pagina -> Sistema : buscarDadosAgendamento(id)
+Sistema -> BD : consultarAgendamento(id)
+BD --> Sistema : retornarAgendamento()
+Sistema -> Pagina : exibirFormularioAlteracao()
+Cliente -> Pagina : enviarAlteracoes(dadosAtualizados)
+Pagina -> Sistema : atualizarAgendamento(dadosAtualizados)
+Sistema -> BD : salvarAlteracoes(dadosAtualizados)
+BD --> Sistema : confirmacao()
+Sistema -> Pagina : exibirMensagem("Alteração realizada com sucesso.")
+
+Administrador -> Pagina : acessarPaginaAlterarAgendamento()
+Pagina -> Administrador : exibirAgendamentos()
+Administrador -> Pagina : selecionarAgendamento(alterar)
+Pagina -> Sistema : buscarDadosAgendamento(id)
+Sistema -> BD : consultarAgendamento(id)
+BD --> Sistema : retornarAgendamento()
+Sistema -> Pagina : exibirFormularioAlteracao()
+Administrador -> Pagina : enviarAlteracoes(dadosAtualizados)
+Pagina -> Sistema : atualizarAgendamento(dadosAtualizados)
+Sistema -> BD : salvarAlteracoes(dadosAtualizados)
+BD --> Sistema : confirmacao()
+Sistema -> Pagina : exibirMensagem("Alteração realizada com sucesso.")
+
+
+
+@enduml

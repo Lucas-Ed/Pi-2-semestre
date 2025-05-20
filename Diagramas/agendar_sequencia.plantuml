@@ -1,0 +1,20 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Cliente
+
+
+' ========== 4. Agendar Serviço ==========
+== Agendar Serviço ==
+Cliente -> Pagina : acessarPaginaAgendamento()
+Pagina -> Cliente : exibirFormularioAgendamento()
+Cliente -> Pagina : enviarFormulario(dadosAgendamento)
+Pagina -> Sistema : processarAgendamento(dadosAgendamento)
+Sistema -> BD : salvarAgendamento(dadosAgendamento)
+BD --> Sistema : retornoGravacao(sucesso)
+Sistema -> Pagina : agendamentoConfirmado()
+Pagina -> Cliente : mostrarMensagem("Agendamento realizado com sucesso!")
+
+@enduml

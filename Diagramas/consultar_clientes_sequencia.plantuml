@@ -1,0 +1,19 @@
+@startuml
+
+
+
+' =============== Atores =================
+actor Administrador
+
+' ========== 11. Consultar Clientes (Administrador) ==========
+== Consultar Clientes ==
+Administrador -> Pagina : acessarPaginaClientes()
+Pagina -> Sistema : buscarTodosClientes()
+Sistema -> BD : consultarClientes()
+BD --> Sistema : listaClientes()
+Sistema -> Pagina : exibirClientes()
+Pagina -> Administrador : mostrarListaClientes()
+
+
+
+@enduml

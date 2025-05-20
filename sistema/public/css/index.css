@@ -1,0 +1,31 @@
+.carrossel-container {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.carrossel-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+  gap: 1rem;
+}
+
+.carrossel-track img {
+  width: 300px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
