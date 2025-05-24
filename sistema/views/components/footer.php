@@ -1,5 +1,5 @@
     <!-- Rodapé fixo no fundo -->
-    <footer class="text-white text-center py-3"
+    <footer class="text-white text-center py-3 fixed-bottom"
         style="background-color: #0097B2; border-top-left-radius: 20px; border-top-right-radius: 20px;">
         <div class=" d-flex gap-3 p-3 align-items-center justify-content-center">
         
