@@ -1,51 +1,42 @@
 <?php
-// Inicia a sessão
 session_start();
-// carrega o init.php
-// Este arquivo deve conter a configuração do autoload e outras configurações globais
-require_once __DIR__ . '/../init.php'; // Conecta via mysqli
+require_once __DIR__ . '/../init.php';
 
-// error_reporting(E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 header("Content-Type: application/json");
-// require_once __DIR__ . '/../../model/config.php'; // Conecta via mysqli
 
-// Verifica se o usuário está autenticado
 $idUsuario = $_SESSION['idusuarios'] ?? 0;
 if ($idUsuario === 0) {
     echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
     exit;
 }
-// Recebe os dados JSON do frontend
+
 $data = json_decode(file_get_contents("php://input"), true);
 
+$tipo = trim($data['tipo'] ?? '');
+$marca = trim($data['marca'] ?? '');
 $modelo = trim($data['modelo'] ?? '');
 $placa = strtoupper(trim($data['placa'] ?? ''));
-// $idUsuario = intval($data['idusuarios'] ?? 0);
 
-// Validações de segurança
-if (empty($modelo) || empty($placa) || $idUsuario === 0) {
-    echo json_encode(["success" => false, "message" => "Dados inválidos recebidos no salvamento."]);
+if (empty($tipo) || empty($marca) || empty($modelo) || empty($placa)) {
+    echo json_encode(["success" => false, "message" => "Todos os campos são obrigatórios."]);
     exit;
 }
 
-// Usa prepared statement com mysqli
-$stmt = $conn->prepare("INSERT INTO veiculos (modelo, placa, usuarios_idusuarios) VALUES (?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO veiculos (tipo, marca, modelo, placa, usuarios_idusuarios) VALUES (?, ?, ?, ?, ?)");
 if ($stmt) {
-    $stmt->bind_param("ssi", $modelo, $placa, $idUsuario);
+    $stmt->bind_param("ssssi", $tipo, $marca, $modelo, $placa, $idUsuario);
 
     if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
+        echo json_encode(["success" => true, "message" => "Veículo salvo com sucesso."]);
     } else {
-        echo json_encode(["success" => false, "message" => "Erro ao salvar no banco: " . $stmt->error]);
+        echo json_encode(["success" => false, "message" => "Erro ao salvar: " . $stmt->error]);
     }
 
     $stmt->close();
 } else {
-    echo json_encode(["success" => false, "message" => "Erro na preparação da query: " . $conn->error]);
+    echo json_encode(["success" => false, "message" => "Erro na query: " . $conn->error]);
 }
 
 $conn->close();

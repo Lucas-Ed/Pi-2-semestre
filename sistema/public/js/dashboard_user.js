@@ -48,24 +48,6 @@ function updateCarSelect(cars) {
   }
 }
 
-
-
-// =====================================================================================================
-// Carrega veículos
-async function loadUserCars() {
-  try {
-    showSpinner(carsList);
-    const res = await fetch('http://localhost/sistema_2/controllers/api/get_veiculos.php', {
-      credentials: 'include'
-    });
-    if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
-    const data = await res.json();
-    displayCars(data);
-  } catch (error) {
-    Swal.fire('Erro ao carregar veículos', error.message, 'error');
-  }
-}
-
 // Exibe lista de carros
 function displayCars(cars) {
   carsList.innerHTML = '';
@@ -97,7 +79,88 @@ function displayCars(cars) {
   }
   updateCarSelect(cars);
 }
-// =====================================================================================================
+
+// Carrega veículos
+async function loadUserCars() {
+  try {
+    showSpinner(carsList);
+    const res = await fetch('http://localhost/sistema_2/controllers/api/get_veiculos.php', {
+      credentials: 'include'
+    });
+    if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+    const data = await res.json();
+    displayCars(data);
+  } catch (error) {
+    Swal.fire('Erro ao carregar veículos', error.message, 'error');
+  }
+}
+
+// Remove carro
+async function removeCar(carId) {
+  const result = await Swal.fire({
+    title: 'Tem certeza?',
+    text: "Você não poderá reverter esta ação!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, remover!',
+    cancelButtonText: 'Cancelar'
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const res = await fetch('http://localhost/sistema_2/controllers/removecar.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ id: carId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      Swal.fire('Removido!', 'O carro foi removido com sucesso.', 'success');
+      await loadUserCars();
+      await loadAppointments();
+    } else {
+      throw new Error(data.message || 'Erro ao remover veículo.');
+    }
+  } catch (error) {
+    Swal.fire('Erro', error.message, 'error');
+  }
+}
+
+// Validar placa
+function isValidPlate(placa) {
+  const oldFormat = /^[A-Z]{3}-\d{4}$/;
+  const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
+  return oldFormat.test(placa) || newFormat.test(placa);
+}
+
+// Adicionar carro
+async function addCar(car) {
+  try {
+    if (!isValidPlate(car.placa)) {
+      throw new Error('Placa inválida! Use o formato AAA-12343');
+    }
+
+    const res = await fetch('../controllers/salvar_veiculo.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(car)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      Swal.fire('Veículo salvo!', `${car.modelo} - ${car.placa}`, 'success');
+      await loadUserCars();
+    } else {
+      throw new Error(data.message || 'Erro ao salvar o veículo.');
+    }
+  } catch (error) {
+    Swal.fire('Erro', error.message, 'error');
+  }
+}
 
 // Agendar
 document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
@@ -233,6 +296,7 @@ async function removeAppointment(appointmentId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: appointmentId })
     });
+
     const data = await res.json();
 
     if (data.success) {
@@ -246,100 +310,18 @@ async function removeAppointment(appointmentId) {
   }
 }
 
-// ======================================================================================================================
-// Funcionalidade de adicionar carro
-// Submissão do formulário de carro
+// Submissão de formulários
 carForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const formData = {
-  tipo: document.getElementById('tipo').value,
-  marca: document.getElementById('marca').value,
-  modelo: document.getElementById('modelo').value,
-  placa: document.getElementById('placa').value.toUpperCase()
+    modelo: document.getElementById('modelo').value,
+    placa: document.getElementById('placa').value.toUpperCase()
   };
-
-  // testando
-  console.log({
-  tipo: document.getElementById('tipo').value,
-  marca: document.getElementById('marca').value,
-  modelo: document.getElementById('modelo').value,
-  placa: document.getElementById('placa').value.toUpperCase()
-});
-
   addCar(formData);
   carForm.reset();
   addCarModal.hide();
 });
 
-// Validar placa
-function isValidPlate(placa) {
-  const oldFormat = /^[A-Z]{3}-\d{4}$/;
-  const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
-  return oldFormat.test(placa) || newFormat.test(placa);
-}
-
-// Adicionar carro
-async function addCar(car) {
-  try {
-    if (!isValidPlate(car.placa)) {
-      throw new Error('Placa inválida! Use o formato AAA-1234');
-    }
-
-    const res = await fetch('../controllers/salvar_veiculo.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(car)
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      Swal.fire('Veículo salvo!', `${car.modelo} - ${car.placa}`, 'success');
-      await loadUserCars();
-    } else {
-      throw new Error(data.message || 'Erro ao salvar o veículo.');
-    }
-  } catch (error) {
-    Swal.fire('Erro', error.message, 'error');
-  }
-}
-
-// ======================================================================================================================
-// Remove carro
-async function removeCar(carId) {
-  const result = await Swal.fire({
-    title: 'Tem certeza?',
-    text: "Você não poderá reverter esta ação!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sim, remover!',
-    cancelButtonText: 'Cancelar'
-  });
-
-  if (!result.isConfirmed) return;
-
-  try {
-    const res = await fetch('../controllers/removecar.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ id: carId })
-    });
-    const data = await res.json();
-    if (data.success) {
-      Swal.fire('Removido!', 'O carro foi removido com sucesso.', 'success');
-      await loadUserCars();
-      await loadAppointments();
-    } else {
-      throw new Error(data.message || 'Erro ao remover veículo.');
-    }
-  } catch (error) {
-    Swal.fire('Erro', error.message, 'error');
-  }
-}
-
-// =====================================================================================================
 appointmentForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const formData = {

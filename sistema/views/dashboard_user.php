@@ -1,0 +1,306 @@
+<?php
+session_start();
+require_once __DIR__ . '/../init.php'; // para garantir que a conexão esteja disponível
+// Chama o componente de cabeçalho da página
+require_once __DIR__ . '/components/header.php'; 
+
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: ../views/index.php");
+    exit;
+}
+
+// Verifica se a sessão está ativa, caso contrário, redireciona para a página de login
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] >1800)) {
+    session_unset();
+    session_destroy();
+    header("location: ../controllers/logout.php");
+    exit;
+}
+
+$_SESSION['LAST_ACTIVITY'] = time();
+
+$userId = $_SESSION['idusuarios']; // ou o nome correto do ID na session
+
+// Consulta para obter o número de veículos do usuário.
+$query = "SELECT COUNT(*) AS total FROM veiculos WHERE usuarios_idusuarios = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$qtdVeiculos = $row['total'];
+
+?>
+    <!-- carrega o css da página -->
+    <link rel="stylesheet" href="../public/css/dashboard_user.css">
+    <!-- lib sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+<section class="bg-white d-flex flex-column" style="min-height: 100vh;">
+    <!-- Header -->
+    <section class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
+        style="background-color: #009bbf; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
+
+        <div>
+            <h4 class="text-white m-0">
+                Olá,
+                <?php
+                $nomeCompleto = htmlspecialchars($_SESSION["nome"]);
+                $nomes = explode(" ", $nomeCompleto);
+
+                if (count($nomes) >= 2) {
+                    $primeiroSegundoNome = $nomes[0] . " " . $nomes[1];
+                    echo $primeiroSegundoNome;
+                } else {
+                    echo $nomeCompleto;
+                }
+            ?>
+            </h4>
+            <small class="text-white" style="font-size: 0.9rem;">Seja bem-vindo!</small>
+        </div>
+
+        <!-- Perfil e Sair -->
+        <div class="d-flex flex-column align-items-end ms-auto">
+            <a href="../views/perfil_user.php" class="text-white text-decoration-none small d-flex align-items-center mb-2">
+                <i class="bi bi-person me-2"></i> <span class="fw-bold">Meu Perfil</span>
+            </a>
+            <a href="../controllers/logout.php" class="text-white text-decoration-none small d-flex align-items-center">
+                <i class="bi bi-power me-2"></i> Sair
+            </a>
+        </div>
+    </section>
+
+     <!-- Main -->
+    <main class="flex-grow-1 py-4">
+        <h5 class="text-center fw-semibold mb-4" style="color: #444;">Dashboard</h5>
+
+        <div class="container">
+            <div class="d-flex flex-wrap gap-3 justify-content-start">
+
+                <div class="container">
+                <div class="row g-4">
+                    <!-- Card de Veículos -->
+                    <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column gap-3">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-2">
+                            <div class="d-flex align-items-center">
+                            <i class="bi bi-car-front me-2" style="font-size: 2rem; color: #009bbf;"></i>
+                            <h2 class="h4 mb-0">Meus Veículos</h2>
+                            </div>
+                            <button id="addCarBtn" class="btn_add_vei">
+                            <i class="bi bi-plus-lg"></i> Adicionar Veículo
+                            </button>
+                        </div>
+                        <small class="text-muted" style="font-size: 13px;">
+                          <?= $qtdVeiculos ?> veículo<?= $qtdVeiculos == 1 ? '' : 's' ?> cadastrado<?= $qtdVeiculos == 1 ? '' : 's' ?>
+                        </small>
+
+                        <div id="carsList"></div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Card de Agendamentos -->
+                    <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="bi bi-calendar3 me-3" style="font-size: 2rem; color: #009bbf;"></i>
+                            <h2 class="h4 m-0">Agendamentos</h2>
+                        </div>
+                        <div id="appointmentsList"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 small" style="color: #bbb;">
+        &copy; <?= date('Y') ?> Embelezamento Automotivo. Todos os direitos reservados.
+    </footer>
+
+
+
+<!-- Modal: Novo Veículo -->
+<div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
+      <form id="carForm" method="POST">
+        <div class="modal-body px-4 py-4 text-white">
+          <h5 class="text-center fw-bold mb-4">Novo Veículo</h5>
+
+          <!-- Tipo de Veículo -->
+          <div class="mb-3">
+            <label class="form-label small">Tipo de Veículo</label>
+            <select class="form-select" id="tipo" name="tipo" required
+              style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+              <option value="" disabled selected>Carregando tipos...</option>
+            </select>
+          </div>
+
+          <!-- Marca do Veículo -->
+          <div class="mb-3">
+            <label class="form-label small">Marca do Veículo</label>
+            <select class="form-select" id="marca" name="marca" required
+              style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+              <option value="" disabled selected>Selecione o tipo primeiro</option>
+            </select>
+          </div>
+
+          <!-- Modelo do Veículo (input) -->
+          <div class="mb-3">
+            <label class="form-label small">Modelo do Veículo</label>
+            <input type="text" class="form-control" id="modelo" name="modelo" required
+              style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;"
+              placeholder="Ex: Civic, Strada, Fazer 250">
+          </div>
+
+          <!-- Placa -->
+          <div class="mb-3">
+            <label class="form-label small">Placa</label>
+            <input type="text" name="placa" id="placa" class="form-control" required
+              style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;"
+              placeholder="Ex: TRG2E34">
+          </div>
+
+          <!-- Botões -->
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn w-50 me-2" data-bs-dismiss="modal"
+              style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+              Voltar
+            </button>
+            <button type="submit" class="btn w-50 ms-2"
+              style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+              Salvar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+    <!-- Modal Agendamento -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
+          <div class="modal-header px-4 py-4 text-white">
+            <h5 class="modal-title">Agendamento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="appointmentForm">
+              <div class="mb-3">
+                <i class="bi bi-person text-white m-0"></i>
+                <label class="form-label text-white m-0">
+                  Nome: <span id="name"><?php echo htmlspecialchars($_SESSION["nome"]); ?></span>
+                </label>
+              </div>
+
+              <div class="mb-3">
+                <i class="bi bi-telephone text-white m-0"></i>
+                <label class="form-label text-white m-0">
+                  Telefone: <span id="phone"><?php echo htmlspecialchars($_SESSION["telefone"]); ?></span>
+                </label>
+              </div>
+
+
+              <div class="mb-3">
+                <label for="selectedCar" class="form-label small text-white m-0">Veículo:</label>
+                <select class="form-select" id="selectedCar"  style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
+                  <option value=""disabled selected >Selecione um veículo</option>
+                </select>
+              </div>
+
+                            
+
+              <div class="mb-3">
+                <label for="service" class="form-label small text-white m-0">Serviço:</label>
+                <select class="form-select" id="service" style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
+                  <option value="">Selecione o serviço</option>
+                  <option value="simples">Lavagem Simples - R$ 40,00</option>
+                  <option value="completa">Lavagem Completa - R$ 70,00</option>
+                  <option value="premium">Lavagem Premium - R$ 100,00</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="date" class="form-label small  text-white m-0">Data:</label>
+                <input type="date" class="form-control" id="date"  style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="time" class="form-label small  text-white m-0">Horário:</label>
+                <select class="form-select" id="time" style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
+                  <option value="">Selecione um horário</option>
+                  <option value="08:00">08:00</option>
+                  <option value="09:00">09:00</option>
+                  <option value="10:00">10:00</option>
+                  <option value="11:00">11:00</option>
+                  <option value="14:00">14:00</option>
+                  <option value="15:00">15:00</option>
+                  <option value="16:00">16:00</option>
+                  <option value="17:00">17:00</option>
+                </select>
+              </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" name="leva_traz" id="leva_traz"
+                        style="border-radius: 50%; background-color: transparent; border: 2px solid white;">
+                  <label class="form-check-label text-white small" for="leva_traz">
+                      Deseja o serviço leva e trás?
+                </label>
+            </div>
+
+          <!-- Informações dos horários -->
+          <div class="alert alert-light text-dark small mb-4" style="border-radius: 10px;">
+                <strong>Horários de funcionamento:</strong><br>
+                Segunda a Sexta: 07:00 às 18:00<br>
+                Sábados: 07:00 às 15:00<br>
+                Domingos: 07:00 às 12:00
+          </div>
+
+
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn w-50 me-2" data-bs-dismiss="modal"
+                    style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                      Voltar
+            </button>
+            <button type="submit" class="btn w-50 ms-2"
+                    style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                      Agendar
+            </button>
+          </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!--Spinner-de-carregabdo-->
+    <div id="loadingSpinner" class="text-center my-4" style="display: none;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+
+<!---fim da página de agendamento--->
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- carregando o js das funcionalidades -->
+    <script type="module" src="../public/js/welcome.js"></script>
+    <!--- carrega a base url do projeto -->
+    <!-- <script src="config/base_url.php"></script> -->
+    <!-- validação de veiculos -->
+    <script src="../public/js/validacao_veiculo.js"></script>
+    <!-- cadastro de veiculos -->
+     <script src="../public/js/cadastro_veiculo.js"></script>
+
+
+</section>

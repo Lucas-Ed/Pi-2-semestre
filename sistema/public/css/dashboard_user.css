@@ -1,0 +1,51 @@
+.placeholder-light::placeholder {
+            color: #ccc !important;
+            opacity: 1;
+        }
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+.btn_add_vei {
+  position: relative;
+  padding: 10px 20px;
+  background-color: #009bbf ;
+  color: black;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn_add_vei::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(92.83deg, white 0%, rgb(35, 35, 125) 100%);
+  z-index: -1;
+  filter: blur(4px);
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 0.4s;
+  animation: rotateGradient 4s linear infinite;
+}
+
+@keyframes rotateGradient {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

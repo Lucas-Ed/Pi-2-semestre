@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
                 
                 // Redireciona conforme o tipo.
-                $redirectUrl = ($db_tipo === 'admin') ? '../views/admin_agendamentos.php' : '../views/welcome.php';
+                $redirectUrl = ($db_tipo === 'admin') ? '../views/dashboard_admin.php' : '../views/dashboard_user.php';
                         echo '
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                         <script>

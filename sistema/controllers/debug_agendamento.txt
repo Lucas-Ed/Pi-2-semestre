@@ -1,8 +1,7 @@
 Array
 (
-    [veiculos_idveiculos] => 2
-    [data_agendamento] => 2025-05-19
-    [hora_agendamento] => 15:00
-    [leva_e_tras] => 
-    [servico] => simples
+    [name] => 
+    [date] => 2025-05-28
+    [time] => 09:00
+    [service] => completa
 )
