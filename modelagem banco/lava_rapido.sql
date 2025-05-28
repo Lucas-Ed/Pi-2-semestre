@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/05/2025 às 14:10
+-- Tempo de geração: 28/05/2025 às 20:38
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -45,19 +45,7 @@ CREATE TABLE `agendamentos` (
 --
 
 INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`) VALUES
-(1, 1, 15, '2025-05-15', '14:00:00', 0, 0, 'simples'),
-(2, 1, 15, '2025-05-16', '14:00:00', 0, 0, 'simples'),
-(3, 1, 15, '2025-05-16', '16:00:00', 0, 0, 'simples'),
-(4, 1, 2, '2025-05-14', '16:00:00', 0, 0, 'simples'),
-(5, 1, 3, '2025-05-21', '17:00:00', 0, 0, 'premium'),
-(6, 1, 3, '2025-05-29', '17:00:00', 0, 0, 'premium'),
-(7, 1, 15, '2025-05-20', '14:00:00', 1, 0, 'simples'),
-(8, 1, 2, '2025-05-27', '14:00:00', 1, 0, 'completa'),
-(9, 1, 2, '2025-05-30', '16:00:00', 0, 0, 'completa'),
-(10, 1, 2, '2025-05-29', '15:00:00', 1, 0, 'premium'),
-(11, 1, 3, '2025-05-21', '08:00:00', 1, 0, 'premium'),
-(12, 1, 3, '2025-05-31', '17:00:00', 0, 0, 'premium'),
-(13, 1, 2, '2025-05-19', '15:00:00', 0, 0, 'simples');
+(26, 1, 29, '2025-05-30', '13:40:00', 1, 0, 'polimento');
 
 -- --------------------------------------------------------
 
@@ -156,7 +144,7 @@ INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha
 (16, 'test', '38398477623', '19996689410', 'teste6@teste6.com.br', '$2y$10$z169FAWCoi1yZI2xG6SjjuAuvzao249BcwUioqQPXwYpQoCwkW8ve', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (17, 'testando', '55454545454545', '19996689435', 'teste@testandocom.br', '$2y$10$uTNBZ/cJImF8Yp4jyBrmCuXtvjw8ykijB5hZas5FcycA3T4aimYQC', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (18, 'testetop', '38398477634', '19996689435', 'teste11@teste11.com.br', '$2y$10$z8s.XglGJWWtDxSZr8zpu.qprA0mbCouTGBRPLIRtnwVH1.VpbzTe', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 'teste', '38398477616', '19996689435', 'madruguinha.racing@gmail.com', '$2y$10$EIjBOz1798exKmr0yI5zNe8c6vqzSetsgJnCS58gZ278a74e77.PS', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(19, 'teste', '38398477616', '19996689435', 'madruguinha.racing@gmail.com', '$2y$10$7B.C6nc0zaoP55ag.S8bLO9Mkfc.7mVujeDlZllTV1jyCK0NAznim', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (20, 'teste', '38398477619', '19996689446', 'lucastradingbit@gmail.com', '$2y$10$ZuShyc5IVxojJ2R0R3R0jOYFNc5aIeELH6PghBY5zVqLhR546yPqC', 'cliente', 1, '$2y$10$L4rJ87etbmT7THN6x13vpermeQsk.dBxw0/LweYtP0a0oNov4KIeC', '2025-05-18 22:12:04', '2025-05-19 00:12:04'),
 (21, 'teste', '38398477617', '19996689446', 'Renanmarques894@gmail.com', '$2y$10$j5n6yWXs15uVu.MaNudXUucWcnGMPKm4BflLW5A841e0uCWT4Ke4O', 'cliente', 1, '$2y$10$cRi25MePEjvHpCYFi9i5LOHPWA7/2Nsn4EgQGDLNlbyw1yv.EroPm', '2025-05-18 19:57:31', '2025-05-18 21:57:31');
 
@@ -180,9 +168,9 @@ CREATE TABLE `veiculos` (
 --
 
 INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`) VALUES
-(2, 1, 'civic', 'BBB-1234', '', ''),
-(3, 1, 'gtr', 'AAA-1234', '', ''),
-(15, 1, 'gol', 'AAA-1234', '', '');
+(27, 1, 'titan 150', 'FFF-1234', 'honda', 'moto'),
+(28, 1, '440', 'KKK-1234', 'volvo', 'caminhao'),
+(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro');
 
 --
 -- Índices para tabelas despejadas
@@ -193,6 +181,7 @@ INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, 
 --
 ALTER TABLE `agendamentos`
   ADD PRIMARY KEY (`idagendamentos`),
+  ADD UNIQUE KEY `unique_data_hora` (`data_agendamento`,`hora_agendamento`),
   ADD KEY `agendamentos_FKIndex1` (`veiculos_idveiculos`),
   ADD KEY `agendamentos_FKIndex2` (`usuarios_idusuarios`);
 
@@ -246,7 +235,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -282,7 +271,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Restrições para tabelas despejadas

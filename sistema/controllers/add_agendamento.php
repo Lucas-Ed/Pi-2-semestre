@@ -41,7 +41,31 @@ $hora_agendamento = $data['hora_agendamento'];
 $leva_e_tras = !empty($data['leva_e_tras']) ? 1 : 0;
 $servico = $data['servico'];
 
-// Prepara e executa o SQL
+// ------------------------------------------------------------------------------------
+// Verifica se já existe agendamento para a mesma data e hora- referente ao select do modal
+$verifica_sql = "SELECT idagendamentos FROM agendamentos WHERE data_agendamento = ? AND hora_agendamento = ?";
+$verifica_stmt = $conn->prepare($verifica_sql);
+if ($verifica_stmt) {
+    $verifica_stmt->bind_param("ss", $data_agendamento, $hora_agendamento);
+    $verifica_stmt->execute();
+    $verifica_stmt->store_result();
+
+    if ($verifica_stmt->num_rows > 0) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Este horário já está reservado. Por favor, escolha outro.'
+        ]);
+        exit;
+    }
+
+    $verifica_stmt->close();
+} else {
+    echo json_encode(['success' => false, 'message' => 'Erro ao verificar disponibilidade: ' . $conn->error]);
+    exit;
+}
+
+// ------------------------------------------------------------------------------------
+// Prepara e executa o SQL de inserção
 $sql = "INSERT INTO agendamentos (
     usuarios_idusuarios,
     veiculos_idveiculos,

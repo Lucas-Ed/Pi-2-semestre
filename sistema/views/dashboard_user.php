@@ -30,6 +30,15 @@ $result = $stmt->get_result();
 $row = $result->fetch_assoc();
 $qtdVeiculos = $row['total'];
 
+// Consulta para obter o tipo de veículos do usuário.
+$stmt = $conn->prepare("SELECT idveiculos, modelo, tipo FROM veiculos WHERE usuarios_idusuarios = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$veiculos = $result->fetch_all(MYSQLI_ASSOC);
+//print_r($veiculos); // debug
+
+
 ?>
     <!-- carrega o css da página -->
     <link rel="stylesheet" href="../public/css/dashboard_user.css">
@@ -164,7 +173,7 @@ $qtdVeiculos = $row['total'];
             <label class="form-label small">Placa</label>
             <input type="text" name="placa" id="placa" class="form-control" required
               style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;"
-              placeholder="Ex: TRG2E34">
+              placeholder="Ex: AAA-1234">
           </div>
 
           <!-- Botões -->
@@ -184,102 +193,101 @@ $qtdVeiculos = $row['total'];
   </div>
 </div>
 
-    <!-- Modal Agendamento -->
-    <div class="modal fade" id="scheduleModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
-          <div class="modal-header px-4 py-4 text-white">
-            <h5 class="modal-title">Agendamento</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+<!-- Modal Agendamento -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
+      <div class="modal-header px-4 py-4 text-white">
+        <h5 class="modal-title">Agendamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="appointmentForm">
+          <div class="mb-3">
+            <i class="bi bi-person text-white m-0"></i>
+            <label class="form-label text-white m-0">
+              Nome: <span id="name"><?php echo htmlspecialchars($_SESSION["nome"]); ?></span>
+            </label>
           </div>
-          <div class="modal-body">
-            <form id="appointmentForm">
-              <div class="mb-3">
-                <i class="bi bi-person text-white m-0"></i>
-                <label class="form-label text-white m-0">
-                  Nome: <span id="name"><?php echo htmlspecialchars($_SESSION["nome"]); ?></span>
-                </label>
-              </div>
 
-              <div class="mb-3">
-                <i class="bi bi-telephone text-white m-0"></i>
-                <label class="form-label text-white m-0">
-                  Telefone: <span id="phone"><?php echo htmlspecialchars($_SESSION["telefone"]); ?></span>
-                </label>
-              </div>
+          <div class="mb-3">
+            <i class="bi bi-telephone text-white m-0"></i>
+            <label class="form-label text-white m-0">
+              Telefone: <span id="phone"><?php echo htmlspecialchars($_SESSION["telefone"]); ?></span>
+            </label>
+          </div>
 
+          <div class="mb-3">
+            <label for="selectedCar" class="form-label small text-white m-0">Veículo:</label>
+            <select class="form-select" id="selectedCar" required
+                        style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+            <option value="" disabled selected>Selecione um veículo</option>
+            <?php foreach ($veiculos as $veiculo): ?>
+              <option 
+                value="<?= $veiculo['idveiculos'] ?>" 
+                data-tipo="<?= strtolower($veiculo['tipo']) ?>">
+                <?= htmlspecialchars($veiculo['modelo']) ?> (<?= ucfirst($veiculo['tipo']) ?>)
+              </option>
+            <?php endforeach; ?>
+          </select>
 
-              <div class="mb-3">
-                <label for="selectedCar" class="form-label small text-white m-0">Veículo:</label>
-                <select class="form-select" id="selectedCar"  style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
-                  <option value=""disabled selected >Selecione um veículo</option>
-                </select>
-              </div>
+          </div>
 
-                            
+          <div class="mb-3">
+            <label for="service" class="form-label small text-white m-0">Serviço:</label>
+            <select class="form-select" id="serviceSelect" required
+                    style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+              <option value="" disabled selected>Selecione o serviço</option>
+            </select>
+          </div>
 
-              <div class="mb-3">
-                <label for="service" class="form-label small text-white m-0">Serviço:</label>
-                <select class="form-select" id="service" style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
-                  <option value="">Selecione o serviço</option>
-                  <option value="simples">Lavagem Simples - R$ 40,00</option>
-                  <option value="completa">Lavagem Completa - R$ 70,00</option>
-                  <option value="premium">Lavagem Premium - R$ 100,00</option>
-                </select>
-              </div>
+          <div class="mb-3">
+            <label for="date" class="form-label small text-white m-0">Data:</label>
+            <input type="date" class="form-control" id="date" required
+                   style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+          </div>
 
-              <div class="mb-3">
-                <label for="date" class="form-label small  text-white m-0">Data:</label>
-                <input type="date" class="form-control" id="date"  style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
-              </div>
+          <div class="mb-3">
+            <label for="time" class="form-label small text-white m-0">Horário:</label>
+            <select class="form-select" id="time" required
+                    style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;">
+               <option value="">Selecione um horário</option>
+            </select>
 
-              <div class="mb-3">
-                <label for="time" class="form-label small  text-white m-0">Horário:</label>
-                <select class="form-select" id="time" style="border-radius: 10px; height: 45px; font-size: 0.95rem; border: none;" required>
-                  <option value="">Selecione um horário</option>
-                  <option value="08:00">08:00</option>
-                  <option value="09:00">09:00</option>
-                  <option value="10:00">10:00</option>
-                  <option value="11:00">11:00</option>
-                  <option value="14:00">14:00</option>
-                  <option value="15:00">15:00</option>
-                  <option value="16:00">16:00</option>
-                  <option value="17:00">17:00</option>
-                </select>
-              </div>
+          </div>
 
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" name="leva_traz" id="leva_traz"
-                        style="border-radius: 50%; background-color: transparent; border: 2px solid white;">
-                  <label class="form-check-label text-white small" for="leva_traz">
-                      Deseja o serviço leva e trás?
-                </label>
-            </div>
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="leva_tras" id="leva_tras"
+                   style="border-radius: 50%; background-color: transparent; border: 2px solid white;">
+            <label class="form-check-label text-white small" for="leva_tras">
+              Deseja o serviço leva e trás?
+            </label>
+          </div>
 
-          <!-- Informações dos horários -->
           <div class="alert alert-light text-dark small mb-4" style="border-radius: 10px;">
-                <strong>Horários de funcionamento:</strong><br>
-                Segunda a Sexta: 07:00 às 18:00<br>
-                Sábados: 07:00 às 15:00<br>
-                Domingos: 07:00 às 12:00
+            <strong>Horários de funcionamento:</strong><br>
+            Segunda a Sexta: 07:00 às 18:00<br>
+            Sábados: 07:00 às 15:00<br>
+            Domingos: 07:00 às 12:00
           </div>
-
 
           <div class="d-flex justify-content-between">
             <button type="button" class="btn w-50 me-2" data-bs-dismiss="modal"
-                    style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
-                      Voltar
+                    style="background-color: white; color: #444; border-radius: 10px; height: 55px;
+                           box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+              Voltar
             </button>
             <button type="submit" class="btn w-50 ms-2"
-                    style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
-                      Agendar
+                    style="background-color: white; color: #444; border-radius: 10px; height: 55px;
+                           box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+              Agendar
             </button>
           </div>
-            </form>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
 
 
 

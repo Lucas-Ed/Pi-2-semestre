@@ -1,7 +1,8 @@
 Array
 (
-    [name] => 
-    [date] => 2025-05-28
-    [time] => 09:00
-    [service] => completa
+    [veiculos_idveiculos] => 29
+    [data_agendamento] => 2025-05-30
+    [hora_agendamento] => 13:40
+    [leva_e_tras] => 1
+    [servico] => polimento
 )

@@ -34,20 +34,145 @@ function showSpinner(container) {
       </div>
     </div>`;
 }
-
+// =====================================================================================================
 // Atualiza select
+const servicos = {
+  enceramento: { carro: 80, moto: 40, caminhao: 250 },
+  polimento: { carro: 180, moto: 40, caminhao: 350, van: 1200 },
+  cristalizacao: { carro: 280, van: 1200 },
+  vitrificacao: { carro: 730 },
+  lavagem_motor: { carro: 60, van: 80 },
+  hidratacao_couro: { carro: 180, caminhao: 250 },
+  higienizacao: { carro: 230, caminhao: 330, van: 800 },
+  lavagem_externa: { carro: 70, moto: 40, caminhao: 250, van: 50 },
+  lavagem_interna: { carro: 35, caminhao: 125, van: 50 }
+};
+
+const nomesServicos = {
+  enceramento: "Enceramento",
+  polimento: "Polimento",
+  cristalizacao: "Cristalização",
+  vitrificacao: "Vitrificação",
+  lavagem_motor: "Lavagem de motor",
+  hidratacao_couro: "Hidratação em couro",
+  higienizacao: "Higienização",
+  lavagem_externa: "Lavagem externa",
+  lavagem_interna: "Lavagem interna"
+};
+
+function normalizarTipo(tipo) {
+  if (tipo === "caminhonete") return "carro";
+  if (tipo === "onibus") return "caminhao";
+  
+  return tipo;
+}
+
+// Atualiza o select com os carros
 function updateCarSelect(cars) {
-  selectedCarSelect.innerHTML = '<option value="">Selecione um carro</option>';
+  selectedCarSelect.innerHTML = '<option value="">Selecione um Veículo</option>';
+
   if (Array.isArray(cars)) {
     cars.forEach((car) => {
       const option = document.createElement('option');
       option.value = car.id;
       option.textContent = `${car.modelo} - ${car.placa}`;
+      option.dataset.tipo = `${car.tipo}`.toLowerCase();
       selectedCarSelect.appendChild(option);
     });
   }
 }
 
+// Evento para atualizar serviços ao trocar o carro
+selectedCarSelect.addEventListener("change", function () {
+  const serviceSelect = document.getElementById("serviceSelect");
+  const selectedOption = selectedCarSelect.options[selectedCarSelect.selectedIndex];
+  const tipoRaw = selectedOption?.dataset?.tipo;
+
+  if (!tipoRaw) {
+    serviceSelect.innerHTML = '<option value="">Selecione o serviço</option>';
+    return;
+  }
+
+  const tipoVeiculo = normalizarTipo(tipoRaw.toLowerCase());
+  serviceSelect.innerHTML = '<option value="">Selecione o serviço</option>';
+
+  Object.entries(servicos).forEach(([chave, precos]) => {
+    if (precos[tipoVeiculo] !== undefined) {
+      const option = document.createElement("option");
+      option.value = chave;
+      option.textContent = `${nomesServicos[chave]} - R$ ${precos[tipoVeiculo].toFixed(2)}`;
+      serviceSelect.appendChild(option);
+    }
+  });
+});
+
+// =====================================================================================================
+// Select de data e horário.
+// evento de mudança no input de data
+document.getElementById('date').addEventListener('change', async function () {
+  const selectedDate = new Date(this.value);
+  if (!selectedDate) return;
+
+  const day = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
+  let startHour, endHour;
+
+  if (day === 0) {
+    startHour = 7; endHour = 12;
+  } else if (day === 6) {
+    startHour = 7; endHour = 15;
+  } else {
+    startHour = 7; endHour = 18;
+  }
+
+  const horariosDisponiveis = gerarHorariosDisponiveis(startHour, endHour, 40);
+  const agendados = await buscarHorariosAgendados(this.value);
+  const horariosFiltrados = horariosDisponiveis.filter(horario => !agendados.includes(horario));
+
+  preencherSelectHorarios(horariosFiltrados);
+});
+// Gera horários disponíveis
+function gerarHorariosDisponiveis(inicio, fim, intervaloMinutos) {
+  const horarios = [];
+  const base = new Date();
+  base.setHours(inicio, 0, 0, 0);
+  const limite = new Date();
+  limite.setHours(fim, 0, 0, 0);
+
+  while (base < limite) {
+    const horas = base.getHours().toString().padStart(2, '0');
+    const minutos = base.getMinutes().toString().padStart(2, '0');
+    horarios.push(`${horas}:${minutos}`);
+    base.setMinutes(base.getMinutes() + intervaloMinutos);
+  }
+
+  return horarios;
+}
+// busca horários agendados
+async function buscarHorariosAgendados(data) {
+  try {
+    const res = await fetch(`../controllers/api/get_agendamentos.php?data=${data}`, {
+      credentials: 'include'
+    });
+    const dataJson = await res.json();
+    return dataJson.map(item => item.hora); // deve retornar algo como ["08:00", "08:40"]
+  } catch (error) {
+    console.error("Erro ao buscar agendamentos:", error);
+    return [];
+  }
+}
+
+// Preenche o select de horários
+function preencherSelectHorarios(horarios) {
+  const select = document.getElementById('time');
+  select.innerHTML = '<option value="">Selecione um horário</option>';
+
+  horarios.forEach(hora => {
+    const option = document.createElement('option');
+    option.value = hora;
+    option.textContent = hora;
+    select.appendChild(option);
+  });
+}
 
 
 // =====================================================================================================
@@ -55,7 +180,7 @@ function updateCarSelect(cars) {
 async function loadUserCars() {
   try {
     showSpinner(carsList);
-    const res = await fetch('http://localhost/sistema_2/controllers/api/get_veiculos.php', {
+    const res = await fetch('http://localhost/sistema_4/controllers/api/get_veiculos.php', {
       credentials: 'include'
     });
     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
@@ -81,7 +206,9 @@ function displayCars(cars) {
               <p class="card-text text-muted mb-0">Placa: ${car.placa}</p>
             </div>
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm" onclick="openScheduleModal(${car.id})">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleModal" 
+              style="background-color: #009BBF; color: white;
+               " onclick="openScheduleModal(${car.id})">
                 <i class="bi bi-calendar-plus"></i> Agendar
               </button>
               <button class="btn btn-danger btn-sm" onclick="removeCar(${car.id})">
@@ -99,15 +226,29 @@ function displayCars(cars) {
 }
 // =====================================================================================================
 
-// Agendar
+// Efetuar Agendamento
+// appointmentForm.addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   const formData = {
+//     name: document.getElementById('name').value,
+//     phone: document.getElementById('phone').value,
+//     date: document.getElementById('date').value,
+//     time: document.getElementById('time').value,
+//     service: document.getElementById('service').value
+//   };
+//   addAppointment(formData);
+//   appointmentForm.reset();
+//   scheduleModal.hide();
+// });
+
 document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const selectedCarId = document.getElementById('selectedCar').value;
-  const service = document.getElementById('service').value;
+  const service = document.getElementById('serviceSelect').value;
   const date = document.getElementById('date').value;
   const time = document.getElementById('time').value;
-  const levaETraz = document.getElementById('leva_e_tras').checked;// comentar essa linha caso leva e tras não tenha n form
+  const levaETraz = document.getElementById('leva_tras').checked;// comentar essa linha caso leva e tras não tenha n form
 
   if (!selectedCarId || !service || !date || !time) {
     Swal.fire('Campos obrigatórios!', 'Preencha todos os campos.', 'warning');
@@ -125,6 +266,7 @@ document.getElementById('appointmentForm').addEventListener('submit', async (e) 
   await addAppointment(appointmentData);
 });
 
+// função para adicionar agendamento
 async function addAppointment(appointmentData) {
   try {
     const res = await fetch('../controllers/add_agendamento.php', {
@@ -135,7 +277,7 @@ async function addAppointment(appointmentData) {
     });
 
     const text = await res.text();
-    console.log('Resposta bruta do servidor:', text);
+    //console.log('Resposta bruta do servidor:', text);
 
     let data;
     try {
@@ -150,9 +292,11 @@ async function addAppointment(appointmentData) {
         icon: 'success',
         title: 'Agendamento realizado!',
         text: `Para ${appointmentData.data_agendamento} às ${appointmentData.hora_agendamento}`,
-        timer: 3000,
+        timer: 2000,
         showConfirmButton: false
-      });
+      }).then(() => {
+            window.location.href = '../views/dashboard_user.php';
+        });
       //await loadAppointments(); // Atualiza os agendamentos após sucesso
     } else {
       throw new Error(data.message || 'Falha ao agendar.');
@@ -177,27 +321,45 @@ async function loadAppointments() {
   }
 }
 
+
+
+// Função para sanitizar strings
+function sanitize(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 // Exibir agendamentos
 function displayAppointments(appointmentsData) {
   appointmentsList.innerHTML = '';
+
   if (Array.isArray(appointmentsData) && appointmentsData.length > 0) {
     appointmentsData.forEach((appointment) => {
       const card = document.createElement('div');
       card.className = 'card mb-3';
+
+      const levaETrazHTML = appointment.leva_e_traz
+        ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
+        : '';
+
+      // HTML 
       card.innerHTML = `
         <div class="card-body">
-          <h5 class="card-title">${appointment.nome}</h5>
+          <h5 class="card-title">${sanitize(appointment.nome)}</h5>
           <div class="row">
             <div class="col-md-6">
-              <p><strong>Telefone:</strong> ${appointment.telefone}</p>
-              <p><strong>Carro:</strong> ${appointment.car_modelo}</p>
-              <p><strong>Placa:</strong> ${appointment.car_placa}</p>
+              <p><strong>Telefone:</strong> ${sanitize(appointment.telefone)}</p>
+              <p><strong>Veículo:</strong> ${sanitize(appointment.car_modelo)}</p>
+              <p><strong>Placa:</strong> ${sanitize(appointment.car_placa)}</p>
             </div>
             <div class="col-md-6">
               <p><strong>Data:</strong> ${formatDate(appointment.data)}</p>
-              <p><strong>Horário:</strong> ${appointment.hora}</p>
-              <p><strong>Serviço:</strong> ${getServiceName(appointment.servico)}</p>
-              ${appointment.leva_e_traz ? '<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>' : ''}
+              <p><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
+              <p><strong>Serviço:</strong> ${sanitize(appointment.servico)}</p>
+              ${levaETrazHTML}
             </div>
           </div>
           <div class="mt-3">
@@ -206,13 +368,18 @@ function displayAppointments(appointmentsData) {
               <i class="bi bi-x-circle"></i> Cancelar
             </button>
           </div>
-        </div>`;
+        </div>
+      `;
+
       appointmentsList.appendChild(card);
     });
   } else {
     appointmentsList.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
   }
 }
+
+
+
 
 // Cancelar agendamento
 async function removeAppointment(appointmentId) {
@@ -228,7 +395,7 @@ async function removeAppointment(appointmentId) {
   if (!result.isConfirmed) return;
 
   try {
-    const res = await fetch('../controllers/remove_ag.php', {
+    const res = await fetch('../controllers/remover_agendamento.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: appointmentId })
@@ -259,12 +426,12 @@ carForm.addEventListener('submit', (e) => {
   };
 
   // testando
-  console.log({
-  tipo: document.getElementById('tipo').value,
-  marca: document.getElementById('marca').value,
-  modelo: document.getElementById('modelo').value,
-  placa: document.getElementById('placa').value.toUpperCase()
-});
+//   console.log({
+//   tipo: document.getElementById('tipo').value,
+//   marca: document.getElementById('marca').value,
+//   modelo: document.getElementById('modelo').value,
+//   placa: document.getElementById('placa').value.toUpperCase()
+// });
 
   addCar(formData);
   carForm.reset();
@@ -340,25 +507,31 @@ async function removeCar(carId) {
 }
 
 // =====================================================================================================
-appointmentForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const formData = {
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    date: document.getElementById('date').value,
-    time: document.getElementById('time').value,
-    service: document.getElementById('service').value
-  };
-  addAppointment(formData);
-  appointmentForm.reset();
-  scheduleModal.hide();
-});
+
 
 // Abrir modal agendamento
-function openScheduleModal(carId) {
-  selectedCarSelect.value = carId;
+// function openScheduleModal(carId) {
+//   selectedCarSelect.value = carId;
+//   scheduleModal.show();
+// }
+// Abrir modal agendamento sem um veículo pré selecionado.
+function openScheduleModal() {
+  // Resetar para a opção padrão
+  selectedCarSelect.selectedIndex = 0;
+
+  // Limpar o select de serviços
+  const serviceSelect = document.getElementById("serviceSelect");
+  serviceSelect.innerHTML = '<option value="">Selecione o serviço</option>';
+
+  // Limpar os outros campos do formulário
+  document.getElementById('date').value = '';
+  document.getElementById('time').selectedIndex = 0;
+  document.getElementById('leva_traz').checked = false;
+
+  // Mostrar o modal
   scheduleModal.show();
 }
+
 
 // Definir data mínima
 const dateInput = document.getElementById('date');
