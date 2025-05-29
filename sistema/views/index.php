@@ -60,7 +60,11 @@ $pagina = $caminho[0] ?? 'index';
     <img src="../public/uploads/img/carrossel/car3.jpg" alt="Imagem 3">
   </div>
 </div>
+<br>
+<br>
+<br>
+<br>
+<?php require_once __DIR__ . '/components/footer.php'; ?> 
 </section>
 
 
-<?php require_once __DIR__ . '/components/footer.php'; ?> 
