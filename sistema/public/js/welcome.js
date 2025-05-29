@@ -180,35 +180,63 @@ function preencherSelectHorarios(horarios) {
 async function loadUserCars() {
   try {
     showSpinner(carsList);
-    const res = await fetch('http://localhost/sistema_4/controllers/api/get_veiculos.php', {
+    const res = await fetch('http://localhost/sistema_41/controllers/api/get_veiculos.php', {
       credentials: 'include'
     });
     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
     const data = await res.json();
+    // console.log('Dados recebidos:', data); // Para depuração
+    console.log('Veículos carregados:', data);
     displayCars(data);
   } catch (error) {
     Swal.fire('Erro ao carregar veículos', error.message, 'error');
   }
 }
 
-// Exibe lista de carros
+// sanitiza e normaliza a marca
+function normalizarMarca(marca) {
+  return (marca ?? 'default')
+    .toLowerCase()
+    .normalize('NFD') // remove acentos
+    .replace(/[\u0300-\u036f]/g, '') // continua removendo acentos
+    .replace(/\s+/g, '') // remove espaços
+    .replace(/[^a-z0-9]/g, ''); // remove caracteres especiais
+}
+
+// Mapeia o logo do veículo por tipo de veículo.
+function pastaDaMarcaPorTipo(tipo) {
+  switch ((tipo ?? '').toLowerCase()) {
+    case 'carro':
+      return 'logo_carros';
+    case 'moto':
+      return 'logo_motos';
+    case 'caminhao':
+      return 'logo_caminhoes';
+    default:
+      return 'logo_carros'; 
+  }
+}
+
 function displayCars(cars) {
   carsList.innerHTML = '';
   if (Array.isArray(cars) && cars.length > 0) {
-    cars.forEach((car, index) => {
+    cars.forEach((car) => {
       const card = document.createElement('div');
       card.className = 'card mb-3';
       card.innerHTML = `
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
+        <div class="card-body d-flex align-items-center gap-3 ">
+          <div class="d-flex justify-content-between align-items-center w-100">
+                    <img src="../public/uploads/img/marcas/${pastaDaMarcaPorTipo(car.tipo)}/${normalizarMarca(car.marca)}.svg"
+                      alt="${car.marca ?? 'Marca desconhecida'}"
+                      style="width: 60px; height: auto; max-height: 100px;">
             <div>
-              <h5 class="card-title">${car.modelo}</h5>
+              <h5 class="card-title mb-1">${car.modelo}</h5>
               <p class="card-text text-muted mb-0">Placa: ${car.placa}</p>
             </div>
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleModal" 
-              style="background-color: #009BBF; color: white;
-               " onclick="openScheduleModal(${car.id})">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleModal"
+                      style="background-color: #009BBF; color: white;"
+                      onclick="openScheduleModal(${car.id})">
                 <i class="bi bi-calendar-plus"></i> Agendar
               </button>
               <button class="btn btn-danger btn-sm" onclick="removeCar(${car.id})">
@@ -224,6 +252,7 @@ function displayCars(cars) {
   }
   updateCarSelect(cars);
 }
+
 // =====================================================================================================
 
 // Efetuar Agendamento
@@ -302,7 +331,9 @@ async function addAppointment(appointmentData) {
       throw new Error(data.message || 'Falha ao agendar.');
     }
   } catch (error) {
-    Swal.fire('Erro ao agendar', error.message, 'error');
+    Swal.fire('Erro ao agendar', error.message, 'error').then(() => {
+            window.location.href = '../views/dashboard_user.php';
+        });
   }
 }
 
@@ -406,7 +437,27 @@ async function removeAppointment(appointmentId) {
       Swal.fire('Cancelado!', 'Agendamento cancelado com sucesso.', 'success');
       await loadAppointments();
     } else {
-      throw new Error(data.message || 'Falha ao cancelar o agendamento.');
+      // Mensagem de cancelamento caso passe menos de 1 hora do agendamento.
+      if (data.message.includes('1 hora de antecedência')) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Cancelamento não permitido',
+          text: 'Você só pode cancelar agendamentos com no mínimo 1 hora de antecedência do horário agendado.'
+        });         // Mensagem de cancelamento caso passe menos de 1 dia do agendamento.
+      } else if (data.message.includes('data futura')) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Cancelamento inválido',
+          text: 'Você só pode cancelar agendamentos com data a partir de amanhã.'
+        });
+      } else {
+        // Erros genéricos
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao cancelar',
+          text: data.message || 'Falha ao cancelar o agendamento.'
+        });
+      }
     }
   } catch (error) {
     Swal.fire('Erro ao cancelar', error.message, 'error');

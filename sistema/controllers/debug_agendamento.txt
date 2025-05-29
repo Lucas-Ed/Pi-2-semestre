@@ -1,8 +1,8 @@
 Array
 (
-    [veiculos_idveiculos] => 29
+    [veiculos_idveiculos] => 32
     [data_agendamento] => 2025-05-30
-    [hora_agendamento] => 13:40
-    [leva_e_tras] => 1
-    [servico] => polimento
+    [hora_agendamento] => 07:00
+    [leva_e_tras] => 
+    [servico] => hidratacao_couro
 )

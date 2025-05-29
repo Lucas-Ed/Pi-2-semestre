@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const marcaSelect = document.getElementById('marca');
 
   const marcasPorTipo = {
-    carro: ['Fiat', 'Volkswagen', 'Chevrolet', 'Toyota', 'Honda', 'Hyundai', 'Ford', 'Renault', 'Nissan', 'Citroën', 'Peugeot', 'Kia', 'Mitsubishi', 'Chery', 'Lifan', 'JAC Motors', 'Volvo'],
-    moto: ['Honda', 'Yamaha', 'Suzuki', 'Kawasaki', 'Ducati', 'Triumph', 'Shineray', 'Dafra', 'sundown', 'BMW', 'Royal Enfield', 'Harley Davidson', 'ktm', 'Voltz', 'GWS'],
-    caminhao: ['Scania', 'Mercedes-Benz', 'Volvo', 'Iveco', 'MAN', 'DAF', 'Ford', 'Chevrolet', 'Fiat', 'Volkswagen'],
-    van: ['Fiat', 'Renault', 'Mercedes-Benz', 'Ford', 'Volkswagen', 'Chevrolet', 'Citroën', 'Peugeot', 'Nissan', 'Hyundai', 'Kia'],
-    onibus: ['Mercedes-Benz', 'Volvo', 'Scania', 'Marcopolo', 'Iveco', 'Volkswagen', 'Caio', 'Neobus', 'Trolebus', 'Volare', 'Mascarello', 'Comil', 'Irizar', 'Viação', 'G7'],
-    caminhonete: ['Fiat', 'Volkswagen', 'Chevrolet', 'Toyota', 'Honda', 'Hyundai', 'Ford', 'Renault', 'Nissan', 'Jeep' , 'Citroën', 'Peugeot', 'Kia', 'Mitsubishi', 'Chery', 'Troller', 'Lifan', 'JAC Motors', 'Volvo']
+    carro: ['lexus','audi','alfa_romeo','rolls_royce','Fiat', 'volkswagen', 'vhevrolet', 'toyota', 'honda', 'hyundai', 'ford', 'renault', 'nissan', 'citroen', 'peugeot', 'kia', 'mitsubishi', 'chery', 'lifan', 'jac', 'volvo'],
+    moto: ['husqvarna', 'mv_augusta','honda', 'yamaha',"triumph", 'suzuki', 'kawasaki', 'ducati', 'triumph', 'shineray', 'dafra', 'sundown', 'bmw', 'royal_enfield', 'harley_davidson', 'ktm', 'voltz', 'gws'],
+    caminhao: ['man','foton','scania', 'mercedes-Benz', 'Volvo', 'Iveco', 'daf', 'ford', 'chevrolet', 'fiat', 'volkswagen'],
+    van: ['fiat', 'renault', 'mercedes_benz', 'ford', 'volkswagen', 'chevrolet', 'citroen', 'peugeot', 'nissan', 'hyundai', 'kia'],
+    onibus: ['mercedes_benz', 'volvo', 'scania', 'marcopolo', 'iveco', 'volkswagen', 'neobus', 'trolebus', 'volare', 'mascarello', 'comil', 'irizar', 'viação'],
+    caminhonete: ['land_rover','fiat', 'volkswagen', 'chevrolet', 'toyota', 'honda', 'hyundai', 'ford', 'renault', 'nissan', 'jeep' , 'citroen', 'peugeot', 'kia', 'mitsubishi', 'chery', 'troller', 'lifan', 'jac', 'volvo']
   };
 
   // Popula o select de tipo

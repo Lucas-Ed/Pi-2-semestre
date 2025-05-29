@@ -12,19 +12,19 @@ require_once BASE_PATH . '/model/db.php';
 // require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!empty($_POST['nome']) && !empty($_POST['senha'])) {
-        $username = trim($_POST['nome']);
+    if (!empty($_POST['email']) && !empty($_POST['senha'])) {
+        $username = trim($_POST['email']);
         $password = trim($_POST['senha']);
 
         // Prepara a consulta SQL para evitar SQL Injection
-        $sql = "SELECT idusuarios, nome, senha, tipo, telefone FROM usuarios WHERE nome = ?"; // tipo
+        $sql = "SELECT idusuarios, email, nome, senha, tipo, telefone FROM usuarios WHERE email = ?"; // tipo
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $db_username, $db_password, $db_tipo, $db_telefone);  // , $db_tipo
+            $stmt->bind_result($id, $db_email, $db_username, $db_password, $db_tipo, $db_telefone);  // , $db_tipo
             $stmt->fetch();
             //echo $db_password;
             // Verifica se a senha está correta
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = TRUE;
                 $_SESSION['idusuarios'] = $id;
                 $_SESSION['nome'] = $db_username;
+                $_SESSION['email'] = $db_email; // Adiciona o e-mail à sessão
                 $_SESSION["telefone"] = $db_telefone; // Adiciona o telefone à sessão
                 $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
                 
@@ -98,7 +99,7 @@ if (empty($_SESSION['csrf_token'])) {
                 <p class="text-muted mb-2 small">Insira seus dados...</p>
 
                 <!-- Campo Nome -->
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <div class="d-flex align-items-center"
                         style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                         <i class="bi bi-person-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
@@ -106,7 +107,19 @@ if (empty($_SESSION['csrf_token'])) {
                             placeholder="Nome completo"
                             style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
                     </div>
+                </div> -->
+
+                <!-- Campo E-mail -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center"
+                        style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
+                        <i class="bi bi-envelope-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
+                        <input type="email" name="email" class="form-control border-0 shadow-none placeholder-light"
+                            placeholder="E-mail"
+                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
+                    </div>
                 </div>
+
 
                 <!-- Campo Senha -->
                 <div class="mb-3">

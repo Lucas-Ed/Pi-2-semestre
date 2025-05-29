@@ -9,13 +9,16 @@ if (!isset($_SESSION['idusuarios'])) {
     exit;
 }
 
+
+
 $idUsuario = $_SESSION['idusuarios'];
 
 $stmt = $conn->prepare("SELECT
-    v.idveiculos,
-    v.modelo,
-    v.placa,
-    v.tipo
+    v.idveiculos AS idveiculos,
+    v.modelo     AS modelo,
+    v.placa      AS placa,
+    v.tipo       AS tipo,
+    v.marca      AS marca
 FROM veiculos v
 WHERE v.usuarios_idusuarios = ?
 ORDER BY v.modelo");
@@ -26,14 +29,27 @@ $result = $stmt->get_result();
 $veiculos = [];
 
 if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $veiculos[] = [
-            'id' => $row['idveiculos'],
-            'modelo' => $row['modelo'],
-            'placa' => $row['placa'],
-            'tipo' => $row['tipo'],
-        ];
-    }
+    if ($result && $result->num_rows > 0) {
+//     while ($row = $result->fetch_assoc()) {
+//         // Exibe o conteúdo real do que está vindo
+//         echo "<pre>";
+//         var_dump($row);
+//         echo "</pre>";
+//         exit;
+//     }
+// }
+
+     while ($row = $result->fetch_assoc()) {
+         $veiculos[] = [
+             'id' => $row['idveiculos'],
+             'modelo' => $row['modelo'],
+             'placa' => $row['placa'],
+             'tipo' => $row['tipo'],
+             'marca'  => isset($row['marca']) ? $row['marca'] : 'default',
+             //'marca' => array_key_exists('marca', $row) ? $row['marca'] : 'default',
+         ];
+     }
+}
 }
 
 header('Content-Type: application/json');
