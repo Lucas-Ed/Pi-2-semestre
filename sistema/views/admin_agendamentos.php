@@ -12,6 +12,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 // Consulta os agendamentos e os dados dos usuários
 $sql = "
 SELECT 
+    a.idagendamentos,
     u.nome,
     u.telefone,
     u.email,
@@ -31,7 +32,7 @@ SELECT
 FROM agendamentos a
 INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
 LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
-INNER JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
+LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
 LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
 LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
 ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
@@ -40,6 +41,40 @@ ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
 $result = $conn->query($sql);
 if (!$result) {
     die("Erro na consulta: " . $conn->error);
+}
+
+// Tabela de preços baseada no welcome.js
+$servicos = [
+    "enceramento" => ["carro" => 80, "moto" => 40, "caminhao" => 250],
+    "polimento" => ["carro" => 180, "moto" => 40, "caminhao" => 350, "van" => 1200],
+    "cristalizacao" => ["carro" => 280, "van" => 1200],
+    "vitrificacao" => ["carro" => 730],
+    "lavagem_motor" => ["carro" => 60, "van" => 80],
+    "hidratacao_couro" => ["carro" => 180, "caminhao" => 250],
+    "higienizacao" => ["carro" => 230, "caminhao" => 330, "van" => 800],
+    "lavagem_externa" => ["carro" => 70, "moto" => 40, "caminhao" => 250, "van" => 50],
+    "lavagem_interna" => ["carro" => 35, "caminhao" => 125, "van" => 50]
+];
+
+$nomesServicos = [
+    "enceramento" => "Enceramento",
+    "polimento" => "Polimento",
+    "cristalizacao" => "Cristalização",
+    "vitrificacao" => "Vitrificação",
+    "lavagem_motor" => "Lavagem de motor",
+    "hidratacao_couro" => "Hidratação em couro",
+    "higienizacao" => "Higienização",
+    "lavagem_externa" => "Lavagem externa",
+    "lavagem_interna" => "Lavagem interna"
+];
+
+// Função auxiliar para obter tipo de veículo
+function tipoVeiculo($modelo) {
+    $modeloLower = strtolower($modelo);
+    if (str_contains($modeloLower, 'moto')) return 'moto';
+    if (str_contains($modeloLower, 'caminhao')) return 'caminhao';
+    if (str_contains($modeloLower, 'van')) return 'van';
+    return 'carro'; // padrão
 }
 ?>
 
@@ -86,15 +121,28 @@ if (!$result) {
                                 <td><?= htmlspecialchars($row['nome']) ?></td>
                                 <td><?= htmlspecialchars($row['telefone']) ?></td>
                                 <td><?= htmlspecialchars($row['modelo']) ?> [<?= htmlspecialchars($row['placa']) ?>]</td>
-                                <td><?= htmlspecialchars($row['servico']) ?></td>
+                                <!-- <td>?<= htmlspecialchars($row['servico']) ?></td> -->
+                                 <td><?= $nomesServicos[$row['servico']] ?? ucfirst($row['servico']) ?></td>
                                 <td><?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></td>
                                 <td><?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></td>
                                 <td><?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></td>
-                                <td><?= number_format($row['valor'], 2, ',', '.') ?> R$</td>
-                                <td><?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></td>
+                                <!-- <td>?<= number_format($row['valor'], 2, ',', '.') ?> R$</td> -->
+                                 <?php
+                                        $tipo = tipoVeiculo($row['modelo']);
+                                        $servico = $row['servico'];
+                                        $valor = $servicos[$servico][$tipo] ?? 0;
+                                    ?>
+                                    <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
+
+                                <td><?= htmlspecialchars($row['executado'] ?? 'Não definido') ?></td>
                                 <td>
-                                    <i class="bi bi-pencil-square me-2 icon-action" title="Editar" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar" style="color: #00a3c7;"></i>
+                                    <i class="bi bi-pencil-square me-2 icon-action btn-editar"
+                                        title="Editar"
+                                        data-id="<?= $row['idagendamentos'] ?>"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar"
+                                        style="color: #00a3c7;">
+                                    </i>
                                     <i class="bi bi-card-text icon-action btn-detalhes" 
                                         title="Detalhes"
                                         data-bs-toggle="modal"
@@ -135,7 +183,16 @@ if (!$result) {
                         <p><strong>Status:</strong> <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
 
                         <div class="position-absolute top-0 end-0 m-3">
-                            <i class="bi bi-pencil-square me-2" data-bs-toggle="modal" data-bs-target="#modalEditar"></i>
+                            <!-- Botão de editar -->
+                            <i class="bi bi-pencil-square me-2 icon-action btn-editar"
+                                title="Editar"
+                                data-id="<?= $row['idagendamentos'] ?>"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditar"
+                                style="color: #00a3c7;">
+                            </i>
+
+                            <!-- Botão de detalhes -->
                             <i class="bi bi-card-text btn-detalhes" 
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalDetalhes"
@@ -201,6 +258,44 @@ if (!$result) {
             </div>
         </div>
     </div>
+
+<!-- Modal Editar -->
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
+                <div class="modal-body px-4 py-4 text-white">
+                    <h5 class="text-center fw-bold mb-4">Processo de lavagem</h5>
+
+                    <button type="button" class="btn w-100 mb-3 btn-status" style="background-color: white; color: #444; border-radius: 10px; height: 55px; 
+                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                        Confirmado
+                    </button>
+
+                    <button type="button" class="btn w-100 mb-3 btn-status" style="background-color: white; color: red; border-radius: 10px; height: 55px; 
+                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                        Fila de espera
+                    </button>
+
+                    <button type="button" class="btn w-100 mb-3 btn-status" style="background-color: white; color: orange; border-radius: 10px; height: 55px; 
+                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                        Em andamento
+                    </button>
+
+                    <button type="button" class="btn w-100 mb-4 btn-status" style="background-color: white; color: #444; border-radius: 10px; height: 55px; 
+                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
+                        Concluída
+                    </button>
+
+                    <div class="pt-5">
+                        <button type="button" class="btn w-100" style="background-color: white; color: #444; border-radius: 10px; height: 55px; 
+                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;" data-bs-dismiss="modal">
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Script para preencher o modal dinamicamente -->
@@ -258,6 +353,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+<!-- alertas  de editar-->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+let agendamentoId = null;
+
+document.querySelectorAll('.btn-editar').forEach(btn => {
+    btn.addEventListener('click', () => {
+        agendamentoId = btn.dataset.id;
+    });
+});
+
+document.querySelectorAll('#modalEditar .btn-status').forEach(button => {
+    button.addEventListener('click', () => {
+        const status = button.innerText.trim();
+        if (!agendamentoId) return;
+
+        fetch('../controllers/update_status.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: agendamentoId, status: status })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Status atualizado',
+                    text: 'O status foi alterado com sucesso!',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => location.reload());
+            } else {
+                Swal.fire({ icon: 'error', title: 'Erro', text: data.message || 'Erro ao atualizar o status.' });
+            }
+        })
+        .catch(() => {
+            Swal.fire({ icon: 'error', title: 'Erro', text: 'Erro na requisição.' });
+        });
+    });
+});
+</script>>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

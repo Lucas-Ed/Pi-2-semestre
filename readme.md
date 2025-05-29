@@ -102,17 +102,18 @@ composer install
 │
 ├── 📂 controllers/-(lógica de negócios - salvar, listar, excluir)
 │   ├── 📂 Api/
-│   │    ├── 📄 get_agndamentos.php(listar agendamentos)
-│   │    └── 📄 get_veiculos.php (listar veiculos)
+│   │    ├── 📄 get_agndamentos.php-(listar agendamentos)
+│   │    └── 📄 get_veiculos.php-(listar veiculos)
 |   |
-|   ├── 📄 add_agendamento.php(adicionar agendamento)
-|   ├── 📄 addcar.php(cadastrar veiculo)
+|   ├── 📄 add_agendamento.php-(adicionar agendamento)
+|   ├── 📄 addcar.php-(cadastrar veiculo)
 |   ├── 📄 logout.php-(lógica do logout do sistema)
 |   ├── 📄 new_pass.php-(lógica de alterarv a senha do usuario)
 │   ├── 📄 processa.php- (lógica do cadastro)
-|   ├── 📄 removecar.php(remover veiculo)
-|   ├── 📄 remover_agendamento.php(remover agendamento)
-│   └── 📄 salvar_veiculo.php(cadastrar veiculo no banco)
+|   ├── 📄 removecar.php-(remover veiculo)
+|   ├── 📄 remover_agendamento.php-(remover agendamento)
+│   ├── 📄 salvar_veiculo.php-(cadastrar veiculo no banco)
+│   └── 📄 update_status.php-(script que atualiza status de agendamentos)
 |
 |
 ├── 📂 model/
@@ -142,10 +143,14 @@ composer install
 │   ├── 📄 admin_usuarios.php-(Àrea logada Admin)
 │   ├── 📄 alter_pass.php-(Página de alterar a senha)
 │   ├── 📄 cadastro.-(Página de cadastro de clientes)
+│   ├── 📄 dashboard_admin.php-(Dashboard do admin)
+│   ├── 📄 dashboard_user.php-(Àrea logada usuario cliente)
 │   ├── 📄 index.php-(Página Home)ok
-│   ├── 📄 login.php- (Página de login de usuários)ok
+│   ├── 📄 login.php- (Página de login de usuários)
+│   ├── 📄 perfil_user.php-(Página de perfil do usuario)
 │   ├── 📄 recovery.php-(Página de recuperação de senha)
-│   └── 📄 welcome.php-(Àrea logada usuario cliente)
+|   └── 📄 sucsses.php-(Página de sucesso pos add nova senha)
+│    
 │
 │
 ├── 📄 .env-(variáveis de ambiente)

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28/05/2025 às 20:38
+-- Tempo de geração: 29/05/2025 às 17:48
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -45,7 +45,8 @@ CREATE TABLE `agendamentos` (
 --
 
 INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`) VALUES
-(26, 1, 29, '2025-05-30', '13:40:00', 1, 0, 'polimento');
+(31, 22, 30, '2025-05-29', '16:20:00', 1, 0, 'lavagem_externa'),
+(32, 22, 31, '2025-05-29', '13:00:00', 0, 0, 'lavagem_externa');
 
 -- --------------------------------------------------------
 
@@ -85,7 +86,8 @@ INSERT INTO `enderecos` (`idenderecos`, `usuarios_idusuarios`, `rua`, `numero`, 
 (13, 18, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
 (14, 19, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
 (15, 20, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
-(16, 21, 'rua dois', '001', 'jardim das laranjeiras', '13609-400');
+(16, 21, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
+(17, 22, 'rua dois', '001', 'jardim das laranjeiras', '13609-400');
 
 -- --------------------------------------------------------
 
@@ -111,8 +113,15 @@ CREATE TABLE `status_ag` (
   `idstatus_ag` int(10) UNSIGNED NOT NULL,
   `agendamentos_idagendamentos` int(10) UNSIGNED NOT NULL,
   `status_pg` varchar(10) NOT NULL,
-  `executado` tinyint(1) NOT NULL
+  `executado` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `status_ag`
+--
+
+INSERT INTO `status_ag` (`idstatus_ag`, `agendamentos_idagendamentos`, `status_pg`, `executado`) VALUES
+(8, 31, '', 'Fila de espera');
 
 -- --------------------------------------------------------
 
@@ -146,7 +155,8 @@ INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha
 (18, 'testetop', '38398477634', '19996689435', 'teste11@teste11.com.br', '$2y$10$z8s.XglGJWWtDxSZr8zpu.qprA0mbCouTGBRPLIRtnwVH1.VpbzTe', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (19, 'teste', '38398477616', '19996689435', 'madruguinha.racing@gmail.com', '$2y$10$7B.C6nc0zaoP55ag.S8bLO9Mkfc.7mVujeDlZllTV1jyCK0NAznim', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (20, 'teste', '38398477619', '19996689446', 'lucastradingbit@gmail.com', '$2y$10$ZuShyc5IVxojJ2R0R3R0jOYFNc5aIeELH6PghBY5zVqLhR546yPqC', 'cliente', 1, '$2y$10$L4rJ87etbmT7THN6x13vpermeQsk.dBxw0/LweYtP0a0oNov4KIeC', '2025-05-18 22:12:04', '2025-05-19 00:12:04'),
-(21, 'teste', '38398477617', '19996689446', 'Renanmarques894@gmail.com', '$2y$10$j5n6yWXs15uVu.MaNudXUucWcnGMPKm4BflLW5A841e0uCWT4Ke4O', 'cliente', 1, '$2y$10$cRi25MePEjvHpCYFi9i5LOHPWA7/2Nsn4EgQGDLNlbyw1yv.EroPm', '2025-05-18 19:57:31', '2025-05-18 21:57:31');
+(21, 'teste', '38398477617', '19996689446', 'Renanmarques894@gmail.com', '$2y$10$j5n6yWXs15uVu.MaNudXUucWcnGMPKm4BflLW5A841e0uCWT4Ke4O', 'cliente', 1, '$2y$10$cRi25MePEjvHpCYFi9i5LOHPWA7/2Nsn4EgQGDLNlbyw1yv.EroPm', '2025-05-18 19:57:31', '2025-05-18 21:57:31'),
+(22, 'Lucas eduardo rosolemm', '383957937845', '19996689483', 'madruguinha.racing+teste@gmail.com', '$2y$10$Zd3WcWRFa44WkfNInbCdMuYWZ7LB6UEmScygFAAiQdmQb2TAz3Xga', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -170,7 +180,10 @@ CREATE TABLE `veiculos` (
 INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`) VALUES
 (27, 1, 'titan 150', 'FFF-1234', 'honda', 'moto'),
 (28, 1, '440', 'KKK-1234', 'volvo', 'caminhao'),
-(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro');
+(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro'),
+(30, 22, 'gol', 'AAA-1234', 'volkswagen', 'carro'),
+(31, 22, 'cg 125', 'SSS-1234', 'honda', 'moto'),
+(32, 22, '440', 'GGG-1234', 'scania', 'caminhao');
 
 --
 -- Índices para tabelas despejadas
@@ -181,7 +194,6 @@ INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, 
 --
 ALTER TABLE `agendamentos`
   ADD PRIMARY KEY (`idagendamentos`),
-  ADD UNIQUE KEY `unique_data_hora` (`data_agendamento`,`hora_agendamento`),
   ADD KEY `agendamentos_FKIndex1` (`veiculos_idveiculos`),
   ADD KEY `agendamentos_FKIndex2` (`usuarios_idusuarios`);
 
@@ -235,7 +247,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -247,7 +259,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de tabela `pagamentos`
@@ -259,19 +271,19 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Restrições para tabelas despejadas
