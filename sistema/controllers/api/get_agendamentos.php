@@ -46,7 +46,8 @@ if (isset($_GET['data'])) {
 // JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
 // ORDER BY a.data_agendamento, a.hora_agendamento";
 
-$sql = "SELECT 
+$sql = "
+SELECT 
     a.idagendamentos,
     a.data_agendamento,
     a.hora_agendamento,
@@ -60,9 +61,19 @@ $sql = "SELECT
 FROM agendamentos a
 JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
 JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
-LEFT JOIN status_ag s ON s.agendamentos_idagendamentos = a.idagendamentos
+LEFT JOIN (
+    SELECT s1.*
+    FROM status_ag s1
+    INNER JOIN (
+        SELECT agendamentos_idagendamentos, MAX(idstatus_ag) AS max_id
+        FROM status_ag
+        GROUP BY agendamentos_idagendamentos
+    ) s2 ON s1.idstatus_ag = s2.max_id
+) s ON s.agendamentos_idagendamentos = a.idagendamentos
 WHERE u.idusuarios = ?
-ORDER BY a.data_agendamento, a.hora_agendamento";
+ORDER BY a.data_agendamento, a.hora_agendamento
+";
+
 
 
 
@@ -87,7 +98,7 @@ while ($row = $result->fetch_assoc()) {
         'executado' => $row['executado'] 
     ];
 }
-
+//var_dump($agendamentos);
 echo json_encode($agendamentos);
 exit;
 

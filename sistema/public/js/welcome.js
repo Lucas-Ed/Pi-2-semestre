@@ -311,6 +311,15 @@ document.getElementById('appointmentForm').addEventListener('submit', async (e) 
 // função para adicionar agendamento
 async function addAppointment(appointmentData) {
   try {
+    // Verifica se a data e hora são válidas
+    const agendamentoDataHora = new Date(`${appointmentData.data_agendamento}T${appointmentData.hora_agendamento}`);
+    const agora = new Date();
+
+    if (agendamentoDataHora < agora) {
+      Swal.fire('Data inválida', 'Você não pode agendar para o passado.', 'error');
+      return;
+    }
+
     const res = await fetch('../controllers/add_agendamento.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -319,7 +328,6 @@ async function addAppointment(appointmentData) {
     });
 
     const text = await res.text();
-    //console.log('Resposta bruta do servidor:', text);
 
     let data;
     try {
@@ -337,19 +345,18 @@ async function addAppointment(appointmentData) {
         timer: 2000,
         showConfirmButton: false
       }).then(() => {
-            window.location.href = '../views/dashboard_user.php';
-        });
-      //await loadAppointments(); // Atualiza os agendamentos após sucesso
+        window.location.href = '../views/dashboard_user.php';
+      });
     } else {
       throw new Error(data.message || 'Falha ao agendar.');
     }
   } catch (error) {
     Swal.fire('Erro ao agendar', error.message, 'error').then(() => {
-            window.location.href = '../views/dashboard_user.php';
-        });
+      window.location.href = '../views/dashboard_user.php';
+    });
   }
 }
-
+// ======================================================================================================================
 // Carregar agendamentos
 async function loadAppointments() {
   try {
@@ -365,8 +372,6 @@ async function loadAppointments() {
   }
 }
 
-
-
 // Função para sanitizar strings
 function sanitize(str) {
   return String(str)
@@ -376,6 +381,7 @@ function sanitize(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
 // Exibir agendamentos
 function displayAppointments(appointmentsData) {
   appointmentsList.innerHTML = '';
@@ -388,19 +394,35 @@ function displayAppointments(appointmentsData) {
       const levaETrazHTML = appointment.leva_e_traz
         ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
         : '';
-      // Verifica se o campo 'executado' existe e define o status
-      const status = appointment.executado || 'pendente';
 
-      // Badge de status com base no campo 'executado'
+      // Normalizar o status
+      const rawStatus = appointment.executado || 'pendente';
+      const status = rawStatus.trim().toLowerCase();
+
+      // Mostrar o status no console (debug)
+      //console.log('Status recebido:', rawStatus);
+
+      // Badge de status com base no valor normalizado
       let statusBadge = '';
-      switch (appointment.executado) {
+      switch (status) {
         case 'pendente':
+        case '':
           statusBadge = '<span class="badge bg-warning text-dark me-2">Pendente</span>';
           break;
-        case 'em_andamento':
+        case 'Confirmado':
+        case 'confirmado':
+          statusBadge = '<span class="badge bg-secondary me-2">Confirmado</span>';
+          break;
+        case 'fila de espera':
+          statusBadge = '<span class="badge bg-warning text-dark me-2">Fila de espera</span>';
+          break;
+        case 'em andamento':
           statusBadge = '<span class="badge bg-info text-dark me-2">Em andamento</span>';
           break;
-        case 'concluido':
+        case 'concluida':
+        case 'concluído':
+        case 'concluída':
+       case 'Concluída':
           statusBadge = '<span class="badge bg-success me-2">Concluído</span>';
           break;
         case 'cancelado':
@@ -442,11 +464,7 @@ function displayAppointments(appointmentsData) {
     appointmentsList.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
   }
 }
-
-
-
-
-
+// ======================================================================================================================
 // Cancelar agendamento
 async function removeAppointment(appointmentId) {
   const result = await Swal.fire({
@@ -464,7 +482,7 @@ async function removeAppointment(appointmentId) {
     const res = await fetch('../controllers/remover_agendamento.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: appointmentId })
+      body: JSON.stringify({ id: appointmentId })  // Envio do ID via POST no corpo
     });
     const data = await res.json();
 
@@ -472,13 +490,13 @@ async function removeAppointment(appointmentId) {
       Swal.fire('Cancelado!', 'Agendamento cancelado com sucesso.', 'success');
       await loadAppointments();
     } else {
-      // Mensagem de cancelamento caso passe menos de 1 hora do agendamento.
+      // Mensagem de cancelamento
       if (data.message.includes('1 hora de antecedência')) {
         Swal.fire({
           icon: 'error',
           title: 'Cancelamento não permitido',
           text: 'Você só pode cancelar agendamentos com no mínimo 1 hora de antecedência do horário agendado.'
-        });         // Mensagem de cancelamento caso passe menos de 1 dia do agendamento.
+        });
       } else if (data.message.includes('data futura')) {
         Swal.fire({
           icon: 'info',
@@ -486,7 +504,6 @@ async function removeAppointment(appointmentId) {
           text: 'Você só pode cancelar agendamentos com data a partir de amanhã.'
         });
       } else {
-        // Erros genéricos
         Swal.fire({
           icon: 'error',
           title: 'Erro ao cancelar',

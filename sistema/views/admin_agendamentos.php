@@ -166,6 +166,13 @@ function tipoVeiculo($modelo) {
                                         data-bairro="<?= htmlspecialchars($row['bairro']) ?>"
                                         style="color: #00a3c7;">
                                     </i>
+                                    <!-- Botão de remover -->
+                                     <i class="bi bi-trash icon-action btn-remover"
+                                        title="Remover"
+                                        data-id="<?= $row['idagendamentos'] ?>"
+                                        style="color: red; cursor: pointer;">
+                                    </i>
+
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -214,6 +221,13 @@ function tipoVeiculo($modelo) {
                                 data-numero="<?= htmlspecialchars($row['numero']) ?>"
                                 data-bairro="<?= htmlspecialchars($row['bairro']) ?>">
                             </i>
+                            <!-- Botão de remover -->
+                             <i class="bi bi-trash icon-action btn-remover"
+                                title="Remover"
+                                data-id="<?= $row['idagendamentos'] ?>"
+                                style="color: red; cursor: pointer;">
+                            </i>
+
                         </div>
                     </div>
                 </div>
@@ -404,6 +418,51 @@ document.querySelectorAll('#modalEditar .btn-status').forEach(button => {
     });
 });
 </script>>
+
+<!-- alertas de remover -->
+ <script>
+document.querySelectorAll('.btn-remover').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const agendamentoId = btn.dataset.id;
+
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Essa ação não pode ser desfeita!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, remover!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('../controllers/admin_delete_agendamento.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: agendamentoId })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Removido!',
+                            text: 'O agendamento foi removido com sucesso.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire('Erro', data.message || 'Erro ao remover o agendamento.', 'error');
+                    }
+                })
+                .catch(() => {
+                    Swal.fire('Erro', 'Erro na requisição.', 'error');
+                });
+            }
+        });
+    });
+});
+</script>
 
 
 <!-- Bootstrap JS -->
