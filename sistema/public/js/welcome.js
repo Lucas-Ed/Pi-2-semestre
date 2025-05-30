@@ -12,8 +12,21 @@ document.getElementById('name').value = sessionStorage.getItem('userName') || ''
 let appointments = [];
 
 // Formatadores
-function formatDate(date) {
-  return new Date(date).toLocaleDateString('pt-BR');
+// function formatDate(date) {
+//   return new Date(date).toLocaleDateString('pt-BR');
+// }
+function formatDate(dateString) {
+  // Divide manualmente a string no formato 'YYYY-MM-DD'
+  const parts = dateString.split('-');
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // mês começa de 0
+  const day = parseInt(parts[2], 10);
+
+  // Cria a data no fuso local, sem risco de conversão UTC
+  const date = new Date(year, month, day);
+
+  // Formata no padrão brasileiro
+  return date.toLocaleDateString('pt-BR');
 }
 
 function getServiceName(serviceValue) {
@@ -375,8 +388,29 @@ function displayAppointments(appointmentsData) {
       const levaETrazHTML = appointment.leva_e_traz
         ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
         : '';
+      // Verifica se o campo 'executado' existe e define o status
+      const status = appointment.executado || 'pendente';
 
-      // HTML 
+      // Badge de status com base no campo 'executado'
+      let statusBadge = '';
+      switch (appointment.executado) {
+        case 'pendente':
+          statusBadge = '<span class="badge bg-warning text-dark me-2">Pendente</span>';
+          break;
+        case 'em_andamento':
+          statusBadge = '<span class="badge bg-info text-dark me-2">Em andamento</span>';
+          break;
+        case 'concluido':
+          statusBadge = '<span class="badge bg-success me-2">Concluído</span>';
+          break;
+        case 'cancelado':
+          statusBadge = '<span class="badge bg-danger me-2">Cancelado</span>';
+          break;
+        default:
+          statusBadge = '<span class="badge bg-secondary me-2">Desconhecido</span>';
+          break;
+      }
+
       card.innerHTML = `
         <div class="card-body">
           <h5 class="card-title">${sanitize(appointment.nome)}</h5>
@@ -394,7 +428,7 @@ function displayAppointments(appointmentsData) {
             </div>
           </div>
           <div class="mt-3">
-            <span class="badge bg-warning text-dark me-2">Pendente</span>
+            ${statusBadge}
             <button class="btn btn-danger btn-sm" onclick="removeAppointment(${appointment.idagendamentos})">
               <i class="bi bi-x-circle"></i> Cancelar
             </button>
@@ -408,6 +442,7 @@ function displayAppointments(appointmentsData) {
     appointmentsList.innerHTML = '<p>Nenhum agendamento encontrado.</p>';
   }
 }
+
 
 
 
@@ -586,7 +621,13 @@ function openScheduleModal() {
 
 // Definir data mínima
 const dateInput = document.getElementById('date');
-dateInput.min = new Date().toISOString().split('T')[0];
+// dateInput.min = new Date().toISOString().split('T')[0];
+const today = new Date();
+const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+  .toISOString()
+  .split('T')[0];
+dateInput.min = localDate;
+
 
 // Inicialização
 window.addEventListener('DOMContentLoaded', () => {

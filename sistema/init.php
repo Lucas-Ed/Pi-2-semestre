@@ -34,4 +34,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // incluir outros arquivos de configuração:
 require_once __DIR__ . '/model/db.php';
 // require_once BASE_PATH . '/config/global.php';
+// define como variavel global
+global $conn;
+
 ?>

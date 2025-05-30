@@ -55,12 +55,16 @@ $sql = "SELECT
     u.nome AS nome_usuario,
     u.telefone,
     v.modelo AS modelo_carro,
-    v.placa
+    v.placa,
+    s.executado
 FROM agendamentos a
 JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
 JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
+LEFT JOIN status_ag s ON s.agendamentos_idagendamentos = a.idagendamentos
 WHERE u.idusuarios = ?
 ORDER BY a.data_agendamento, a.hora_agendamento";
+
+
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $idUsuario);
@@ -79,7 +83,8 @@ while ($row = $result->fetch_assoc()) {
         'car_modelo' => $row['modelo_carro'],
         'servico' => $row['servico'],
         'car_placa' => $row['placa'],
-        'leva_e_traz' => (bool)$row['leva_e_tras']
+        'leva_e_traz' => (bool)$row['leva_e_tras'],
+        'executado' => $row['executado'] 
     ];
 }
 

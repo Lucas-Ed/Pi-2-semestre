@@ -76,7 +76,7 @@ Para rodar o sistema localmente, siga os passos abaixo:
 0. Requisito, ter o composer instalado na máquina, caso não tenha baixe [aqui.](https://getcomposer.org/download/)
 1. Clone o repositório.
 2. Ligue o servidor/Mysql local (XAMPP ou WAMP).
-3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
+3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP, e a renomeia para sistema_41 .
 4. Dentro da pasta sistema, pelo terminal, instale as dependências com o comando:
 
 ```bash
@@ -87,7 +87,7 @@ composer install
 6. Edite o arquivo `.env` com os suas credenciais smtp e senha de app do gmail, para o envio de e-mail para recuperação de senha do usuario.
 
 
-7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema`.
+7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema_41`.
 8. Abra o sistema clicando na pasta views.
 9. Pronto você verá a página Home do sistema.
 

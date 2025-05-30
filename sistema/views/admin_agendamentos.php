@@ -1,6 +1,6 @@
 <?php
-session_start();
-require_once __DIR__ . '/../init.php'; // Inicia a sessão e inclui o arquivo de inicialização
+session_start(); //  Inicia a sessão
+require_once __DIR__ . '/../init.php'; // e inclui o arquivo de inicialização
 require_once __DIR__ . '/components/header.php'; // Inclui o cabeçalho
 
 // Verifica se o usuário está logado
@@ -94,6 +94,15 @@ function tipoVeiculo($modelo) {
             <i class="bi bi-power me-1"></i> Sair
         </a>
     </header>
+
+            <!-- Botão Voltar -->
+            <div class="d-flex justify-content-center my-4">
+                <a href="../views/dashboard_admin.php"
+                    class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
+                    style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                    Voltar
+                </a>
+            </div>
 
     <main class="flex-grow-1 py-4">
         <h5 class="text-center fw-semibold mb-4" style="color: #444;">Agendamentos</h5>

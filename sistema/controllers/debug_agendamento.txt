@@ -1,8 +1,8 @@
 Array
 (
-    [veiculos_idveiculos] => 31
-    [data_agendamento] => 2025-05-29
-    [hora_agendamento] => 13:00
+    [veiculos_idveiculos] => 30
+    [data_agendamento] => 2025-05-30
+    [hora_agendamento] => 10:20
     [leva_e_tras] => 
-    [servico] => lavagem_externa
+    [servico] => hidratacao_couro
 )
