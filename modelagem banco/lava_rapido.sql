@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29/05/2025 às 17:48
+-- Tempo de geração: 30/05/2025 às 19:29
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -39,14 +39,6 @@ CREATE TABLE `agendamentos` (
   `pagamento_na_hora` tinyint(1) NOT NULL,
   `servico` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `agendamentos`
---
-
-INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`) VALUES
-(31, 22, 30, '2025-05-29', '16:20:00', 1, 0, 'lavagem_externa'),
-(32, 22, 31, '2025-05-29', '13:00:00', 0, 0, 'lavagem_externa');
 
 -- --------------------------------------------------------
 
@@ -115,13 +107,6 @@ CREATE TABLE `status_ag` (
   `status_pg` varchar(10) NOT NULL,
   `executado` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `status_ag`
---
-
-INSERT INTO `status_ag` (`idstatus_ag`, `agendamentos_idagendamentos`, `status_pg`, `executado`) VALUES
-(8, 31, '', 'Fila de espera');
 
 -- --------------------------------------------------------
 
@@ -224,6 +209,7 @@ ALTER TABLE `pagamentos`
 --
 ALTER TABLE `status_ag`
   ADD PRIMARY KEY (`idstatus_ag`),
+  ADD UNIQUE KEY `unique_status` (`agendamentos_idagendamentos`,`executado`),
   ADD KEY `status_ag_FKIndex1` (`agendamentos_idagendamentos`);
 
 --
@@ -247,7 +233,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -271,7 +257,7 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
