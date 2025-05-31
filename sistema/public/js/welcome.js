@@ -479,6 +479,7 @@ function displayAppointments(appointmentsData) {
 }
 // ======================================================================================================================
 // Cancelar agendamento
+// Cancelar agendamento
 async function removeAppointment(appointmentId) {
   const result = await Swal.fire({
     title: 'Cancelar agendamento?',
@@ -492,41 +493,65 @@ async function removeAppointment(appointmentId) {
   if (!result.isConfirmed) return;
 
   try {
-    const res = await fetch('../controllers/remover_agendamento.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: appointmentId })  // Envio do ID via POST no corpo
-    });
-    const data = await res.json();
+  const res = await fetch('../controllers/remover_agendamento.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: appointmentId })
+  });
 
-    if (data.success) {
-      Swal.fire('Cancelado!', 'Agendamento cancelado com sucesso.', 'success');
-      await loadAppointments();
-    } else {
-      // Mensagem de cancelamento
-      if (data.message.includes('1 hora de antecedência')) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Cancelamento não permitido',
-          text: 'Você só pode cancelar agendamentos com no mínimo 1 hora de antecedência do horário agendado.'
-        });
-      } else if (data.message.includes('data futura')) {
-        Swal.fire({
-          icon: 'info',
-          title: 'Cancelamento inválido',
-          text: 'Você só pode cancelar agendamentos com data a partir de amanhã.'
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro ao cancelar',
-          text: data.message || 'Falha ao cancelar o agendamento.'
-        });
-      }
-    }
-  } catch (error) {
-    Swal.fire('Erro ao cancelar', error.message, 'error');
+  const isJson = res.headers.get('content-type')?.includes('application/json');
+
+  if (!res.ok || !isJson) {
+    throw new Error('Resposta inválida do servidor.');
   }
+
+  const data = await res.json();
+
+  if (data.success) {
+    Swal.fire({
+      icon: "success",
+      title: "Cancelado!",
+      text: "Agendamento cancelado com sucesso.",
+      showConfirmButton: false,
+      timer: 2000
+    }).then(() => {
+      window.location.href = '../views/dashboard_user.php';
+    });
+      // Swal.fire('Cancelado!', 'Agendamento cancelado com sucesso.', 'success')
+      //   .then(() => {
+      //     window.location.href = '../views/dashboard_user.php'; // Redireciona após fechar o alerta
+      //   });
+  } else {
+    // Tratamento de erros específicos
+    const msg = data.message.toLowerCase();
+    let icon = 'error';
+    let title = 'Erro ao cancelar';
+    let text = data.message;
+
+    if (msg.includes('1 hora')) {
+      title = 'Cancelamento não permitido';
+      text = 'Você só pode cancelar agendamentos com no mínimo 1 hora de antecedência.';
+    } else if (msg.includes('fila de espera')) {
+      title = 'Cancelamento não permitido';
+      text = 'Agendamentos com status na fila de espera não podem ser cancelados.';
+    } else if (msg.includes('em andamento')) {
+      title = 'Cancelamento não permitido';
+      text = 'Agendamentos com status em andamento não podem ser cancelados.';
+    }
+
+    Swal.fire({ icon, title, text }).then(() => {
+      window.location.href = '../views/dashboard_user.php';
+    });
+  }
+} catch (error) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Erro inesperado',
+    text: error.message || 'Erro ao processar a requisição.'
+  }).then(() => {
+    window.location.href = '../views/dashboard_user.php';
+  });
+}
 }
 
 // ======================================================================================================================
