@@ -30,22 +30,8 @@ if (isset($_GET['data'])) {
 
     echo json_encode($horariosOcupados);
     exit;
-} //--
-
-// $sql = "SELECT 
-//     a.idagendamentos,
-//     a.data_agendamento,
-//     a.hora_agendamento,
-//     a.leva_e_tras,
-//     u.nome AS nome_usuario,
-//     u.telefone,
-//     v.modelo AS modelo_carro,
-//     v.placa
-// FROM agendamentos a
-// JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
-// JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
-// ORDER BY a.data_agendamento, a.hora_agendamento";
-
+}
+// Consulta para buscar os agendamentos do usuário autenticado
 $sql = "
 SELECT 
     a.idagendamentos,
@@ -53,6 +39,7 @@ SELECT
     a.hora_agendamento,
     a.leva_e_tras,
     a.servico,
+    a.preco,  -- Coluna que contém o preço do serviço
     u.nome AS nome_usuario,
     u.telefone,
     v.modelo AS modelo_carro,
@@ -62,7 +49,7 @@ FROM agendamentos a
 JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
 JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
 LEFT JOIN (
-    SELECT s1.*
+    SELECT s1.* 
     FROM status_ag s1
     INNER JOIN (
         SELECT agendamentos_idagendamentos, MAX(idstatus_ag) AS max_id
@@ -73,10 +60,7 @@ LEFT JOIN (
 WHERE u.idusuarios = ?
 ORDER BY a.data_agendamento, a.hora_agendamento
 ";
-
-
-
-
+// Prepara e executa a consulta
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
@@ -93,6 +77,7 @@ while ($row = $result->fetch_assoc()) {
         'hora' => $row['hora_agendamento'],
         'car_modelo' => $row['modelo_carro'],
         'servico' => $row['servico'],
+        'preco_servico' => $row['preco'],
         'car_placa' => $row['placa'],
         'leva_e_traz' => (bool)$row['leva_e_tras'],
         'executado' => $row['executado'] 
@@ -101,35 +86,4 @@ while ($row = $result->fetch_assoc()) {
 //var_dump($agendamentos);
 echo json_encode($agendamentos);
 exit;
-
-// $result = $conn->query($sql);
-// $agendamentos = [];
-
-// if ($result && $result->num_rows > 0) {
-//     while ($row = $result->fetch_assoc()) {
-//         $agendamentos[] = [
-//             'id' => $row['idagendamentos'],
-//             'nome' => $row['nome_usuario'],
-//             'telefone' => $row['telefone'],
-//             'data' => $row['data_agendamento'],
-//             'hora' => $row['hora_agendamento'],
-//             'veiculo' => [
-//                 'modelo' => $row['modelo_carro'],
-//                 'placa' => $row['placa']
-//             ],
-//             'levaETraz' => $row['leva_e_tras']
-//         ];
-//     }
-// } else {
-//     $agendamentos = []; // Nenhum agendamento encontrado
-//     echo 'Nenhum agendamento encontrado';
-//     exit;
-// }
-
-// header('Content-Type: application/json');
-// echo json_encode($agendamentos);
-// exit();
-
-// buscar horários já agendados
-
 ?>

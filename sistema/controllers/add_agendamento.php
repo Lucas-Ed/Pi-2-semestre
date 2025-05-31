@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Log simples para confirmar que o script foi chamado
-file_put_contents('log.txt', "Chamou o PHP\n", FILE_APPEND);
+//file_put_contents('log.txt', "Chamou o PHP\n", FILE_APPEND);
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['idusuarios'])) {
@@ -21,17 +21,18 @@ if (!isset($_SESSION['idusuarios'])) {
 // Captura e decodifica os dados JSON enviados
 $data = json_decode(file_get_contents("php://input"), true);
 
+// log para verificar os dados recebidos
+//file_put_contents('debug_agendamento.txt', print_r($data, true)); 
+
+
 // Validação básica dos campos obrigatórios
-$camposObrigatorios = ['veiculos_idveiculos', 'data_agendamento', 'hora_agendamento', 'servico'];
+$camposObrigatorios = ['veiculos_idveiculos', 'data_agendamento', 'hora_agendamento', 'servico', 'preco'];
 foreach ($camposObrigatorios as $campo) {
     if (!isset($data[$campo]) || trim($data[$campo]) === '') {
         echo json_encode(['success' => false, 'message' => "Campo obrigatório ausente: $campo"]);
         exit;
     }
 }
-
-// Salva os dados recebidos para depuração
-file_put_contents('debug_agendamento.txt', print_r($data, true));
 
 // Prepara os dados
 $usuario = $_SESSION['idusuarios'];
@@ -40,6 +41,7 @@ $data_agendamento = $data['data_agendamento'];
 $hora_agendamento = $data['hora_agendamento'];
 $leva_e_tras = !empty($data['leva_e_tras']) ? 1 : 0;
 $servico = $data['servico'];
+$preco = (float) $data['preco'];
 
 // Verifica se a data e hora do agendamento são válidas (futuro)
 try {
@@ -84,12 +86,15 @@ $sql = "INSERT INTO agendamentos (
     data_agendamento,
     hora_agendamento,
     leva_e_tras,
-    servico
-) VALUES (?, ?, ?, ?, ?, ?)";
+    servico,
+    preco
+) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
 $stmt = $conn->prepare($sql);
 if ($stmt) {
-    $stmt->bind_param("iissis", $usuario, $veiculo, $data_agendamento, $hora_agendamento, $leva_e_tras, $servico);
+    $stmt->bind_param("iissisd", $usuario, $veiculo, $data_agendamento, $hora_agendamento, $leva_e_tras, $servico, $preco);
+
 
     if ($stmt->execute()) {
         echo json_encode(['success' => true]);

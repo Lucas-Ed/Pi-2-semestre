@@ -1,8 +1,9 @@
 Array
 (
-    [veiculos_idveiculos] => 31
-    [data_agendamento] => 2025-05-31
-    [hora_agendamento] => 16:20
+    [veiculos_idveiculos] => 30
+    [data_agendamento] => 2025-06-06
+    [hora_agendamento] => 15:00
     [leva_e_tras] => 
-    [servico] => polimento
+    [servico] => lavagem_interna
+    [preco] => 35
 )

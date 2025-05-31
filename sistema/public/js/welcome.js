@@ -119,6 +119,9 @@ selectedCarSelect.addEventListener("change", function () {
   });
 });
 
+
+
+
 // =====================================================================================================
 // Select de data e horário.
 // evento de mudança no input de data
@@ -286,32 +289,42 @@ function displayCars(cars) {
 document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const selectedCarId = document.getElementById('selectedCar').value;
+  const selectedCar = document.getElementById('selectedCar');
+  const selectedCarId = selectedCar.value;
+  const vehicleType = selectedCar.options[selectedCar.selectedIndex].getAttribute('data-tipo');
+
   const service = document.getElementById('serviceSelect').value;
   const date = document.getElementById('date').value;
   const time = document.getElementById('time').value;
-  const levaETraz = document.getElementById('leva_tras').checked;// comentar essa linha caso leva e tras não tenha n form
+  const levaETraz = document.getElementById('leva_tras').checked;
 
   if (!selectedCarId || !service || !date || !time) {
     Swal.fire('Campos obrigatórios!', 'Preencha todos os campos.', 'warning');
     return;
   }
 
+  const tipoNormalizado = normalizarTipo(vehicleType);
+  const preco = servicos[service]?.[tipoNormalizado] ?? 0;
+  // debugar 
+  console.log({ service, tipoNormalizado, precoCalculado: servicos[service]?.[tipoNormalizado] });
+
+
   const appointmentData = {
     veiculos_idveiculos: selectedCarId,
     data_agendamento: date,
     hora_agendamento: time,
-    leva_e_tras: levaETraz, // Para ativar essa opção no form colocar levaETraz ou false  para não pegar essa opção
-    servico: service
+    leva_e_tras: levaETraz,
+    servico: service,
+    preco: preco
   };
 
   await addAppointment(appointmentData);
 });
 
-// função para adicionar agendamento
 async function addAppointment(appointmentData) {
+  // log para prço
+  console.log(appointmentData); // Verifique se "preco" aparece corretamente
   try {
-    // Verifica se a data e hora são válidas
     const agendamentoDataHora = new Date(`${appointmentData.data_agendamento}T${appointmentData.hora_agendamento}`);
     const agora = new Date();
 
@@ -395,14 +408,9 @@ function displayAppointments(appointmentsData) {
         ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
         : '';
 
-      // Normalizar o status
       const rawStatus = appointment.executado || 'pendente';
       const status = rawStatus.trim().toLowerCase();
 
-      // Mostrar o status no console (debug)
-      //console.log('Status recebido:', rawStatus);
-
-      // Badge de status com base no valor normalizado
       let statusBadge = '';
       switch (status) {
         case 'pendente':
@@ -422,7 +430,7 @@ function displayAppointments(appointmentsData) {
         case 'concluida':
         case 'concluído':
         case 'concluída':
-       case 'Concluída':
+        case 'Concluída':
           statusBadge = '<span class="badge bg-success me-2">Concluído</span>';
           break;
         case 'cancelado':
@@ -432,6 +440,10 @@ function displayAppointments(appointmentsData) {
           statusBadge = '<span class="badge bg-secondary me-2">Desconhecido</span>';
           break;
       }
+
+      // Garantir que o preço seja um número, caso contrário, atribuir valor zero
+      const preco = parseFloat(appointment.preco_servico);
+      const precoFormatado = !isNaN(preco) ? preco.toFixed(2) : '0,00';
 
       card.innerHTML = `
         <div class="card-body">
@@ -446,6 +458,7 @@ function displayAppointments(appointmentsData) {
               <p><strong>Data:</strong> ${formatDate(appointment.data)}</p>
               <p><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
               <p><strong>Serviço:</strong> ${sanitize(appointment.servico)}</p>
+              <p><strong>Preço:</strong> R$ ${precoFormatado}</p>  <!-- Exibindo o preço -->
               ${levaETrazHTML}
             </div>
           </div>

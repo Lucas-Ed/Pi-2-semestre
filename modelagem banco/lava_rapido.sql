@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/05/2025 às 19:29
+-- Tempo de geração: 31/05/2025 às 16:33
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -37,8 +37,16 @@ CREATE TABLE `agendamentos` (
   `hora_agendamento` time NOT NULL,
   `leva_e_tras` tinyint(1) NOT NULL,
   `pagamento_na_hora` tinyint(1) NOT NULL,
-  `servico` varchar(255) NOT NULL
+  `servico` varchar(255) NOT NULL,
+  `preco` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `agendamentos`
+--
+
+INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`, `preco`) VALUES
+(53, 22, 31, '2025-05-31', '11:00:00', 0, 0, 'lavagem_externa', 0.00);
 
 -- --------------------------------------------------------
 
@@ -179,6 +187,7 @@ INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, 
 --
 ALTER TABLE `agendamentos`
   ADD PRIMARY KEY (`idagendamentos`),
+  ADD UNIQUE KEY `unique_data_hora` (`data_agendamento`,`hora_agendamento`),
   ADD KEY `agendamentos_FKIndex1` (`veiculos_idveiculos`),
   ADD KEY `agendamentos_FKIndex2` (`usuarios_idusuarios`);
 
@@ -233,7 +242,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
