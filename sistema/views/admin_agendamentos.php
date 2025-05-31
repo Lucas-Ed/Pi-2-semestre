@@ -128,7 +128,12 @@ function tipoVeiculo($modelo) {
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['nome']) ?></td>
-                                <td><?= htmlspecialchars($row['telefone']) ?></td>
+                                <!-- <td>?<= htmlspecialchars($row['telefone']) ?></td> -->
+                                 <td>
+                                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: none;">
+                                        <?= htmlspecialchars($row['telefone']) ?>
+                                    </a>
+                                </td>
                                 <td><?= htmlspecialchars($row['modelo']) ?> [<?= htmlspecialchars($row['placa']) ?>]</td>
                                 <!-- <td>?<= htmlspecialchars($row['servico']) ?></td> -->
                                  <td><?= $nomesServicos[$row['servico']] ?? ucfirst($row['servico']) ?></td>
@@ -189,7 +194,13 @@ function tipoVeiculo($modelo) {
                 <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
                     <div class="card-body position-relative">
                         <p><strong>Nome:</strong> <?= htmlspecialchars($row['nome']) ?></p>
-                        <p><strong>Telefone:</strong> <?= htmlspecialchars($row['telefone']) ?></p>
+                        <!-- <p><strong>Telefone:</strong> ?<= htmlspecialchars($row['telefone']) ?></p> -->
+                         <p>
+                            <strong>Telefone:</strong>
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
+                                <?= htmlspecialchars($row['telefone']) ?>
+                            </a>
+                        </p>
                         <p><strong>Veículo:</strong> <?= htmlspecialchars($row['modelo']) ?> (<?= htmlspecialchars($row['placa']) ?>)</p>
                         <p><strong>Serviço:</strong> <?= htmlspecialchars($row['servico']) ?></p>
                         <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>

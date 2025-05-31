@@ -42,6 +42,13 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 Veja o layout completo  [aqui.](https://www.figma.com/design/PpyOYg0jN5SyXKjDlWTspq/Fatec-Projeto-Integrador-2%C2%BA-S?node-id=0-1&p=f)
 
+<p> Páginas principais apenas:</p>
+
+
+![](/img/index.png)
+
+![](/img/dashboard_user.JPG)
+
 
  <!-- ## 🛠 Metodologia ágil
 
@@ -107,27 +114,30 @@ composer install
 |   |
 |   ├── 📄 add_agendamento.php-(adicionar agendamento)
 |   ├── 📄 addcar.php-(cadastrar veiculo)
+|   ├── 📄 admin_delete_agendamento.php-(fc. cancelar agendamento do admin)
 |   ├── 📄 logout.php-(lógica do logout do sistema)
 |   ├── 📄 new_pass.php-(lógica de alterarv a senha do usuario)
-│   ├── 📄 processa.php- (lógica do cadastro)
+│   ├── 📄 processa.php-(lógica do cadastro)
 |   ├── 📄 removecar.php-(remover veiculo)
 |   ├── 📄 remover_agendamento.php-(remover agendamento)
 │   ├── 📄 salvar_veiculo.php-(cadastrar veiculo no banco)
+|   ├── 📄 send_token.php-(script que envia token de recuperação de senha do usuario)
 │   └── 📄 update_status.php-(script que atualiza status de agendamentos)
 |
 |
 ├── 📂 model/
-│   └── 📄 db.php (configuração do banco)
+│   └── 📄 db.php-(configuração do banco)
 │
 ├── 📂 public/
-|   └── 📂 css/ (estilos personalizados)
+|   └── 📂 css/-(estilos personalizados)
 |   |
 │   └── 📂 js/
-│   |     ├── 📄 new_pass__alerts.js- (alerts de recuperação de senha)
-│   |     ├── 📄 recuperacao_alerts.js- (alerts de envio de e-mail com token)
-|   |     ├── 📄 val_cads.js- (validações do form de cadastro)
-│   |     ├── 📄 validacao_veiculo.js- (validação de veículos)
-│   |     └── 📄 welcome.js- (funcionalidades de area logada)
+│   |     ├── 📄 cadastro_veiculo.php-(lógica de cadastrar veículo)
+│   |     ├── 📄 new_pass__alerts.js-(alerts de recuperação de senha)
+│   |     ├── 📄 recuperacao_alerts.js-(alerts de envio de e-mail com token)
+|   |     ├── 📄 val_cads.js-(validações do form de cadastro)
+│   |     ├── 📄 validacao_veiculo.js-(validação de veículos)
+│   |     └── 📄 welcome.js-(funcionalidades de area logada)
 |   |
 │   └── 📂 uploads/ (imagens e outros)
 |
@@ -142,11 +152,11 @@ composer install
 │   ├── 📄 admin_agendamentos.php-(Àrea logada Admin)
 │   ├── 📄 admin_usuarios.php-(Àrea logada Admin)
 │   ├── 📄 alter_pass.php-(Página de alterar a senha)
-│   ├── 📄 cadastro.-(Página de cadastro de clientes)
+│   ├── 📄 cadastro.php-(Página de cadastro de clientes)
 │   ├── 📄 dashboard_admin.php-(Dashboard do admin)
 │   ├── 📄 dashboard_user.php-(Àrea logada usuario cliente)
 │   ├── 📄 index.php-(Página Home)ok
-│   ├── 📄 login.php- (Página de login de usuários)
+│   ├── 📄 login.php-(Página de login de usuários)
 │   ├── 📄 perfil_user.php-(Página de perfil do usuario)
 │   ├── 📄 recovery.php-(Página de recuperação de senha)
 |   └── 📄 sucsses.php-(Página de sucesso pos add nova senha)

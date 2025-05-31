@@ -95,9 +95,28 @@ $stmt = $conn->prepare($sql);
 if ($stmt) {
     $stmt->bind_param("iissisd", $usuario, $veiculo, $data_agendamento, $hora_agendamento, $leva_e_tras, $servico, $preco);
 
-
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+        $idAgendamento = $stmt->insert_id;
+
+        // Insere o status como "pendente" na tabela status_ag
+        $statusSql = "INSERT INTO status_ag (agendamentos_idagendamentos, executado) VALUES (?, ?)";
+        $statusStmt = $conn->prepare($statusSql);
+
+        if ($statusStmt) {
+            $executado = 'pendente';
+            $statusStmt->bind_param("is", $idAgendamento, $executado);
+
+            if ($statusStmt->execute()) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Agendamento salvo, mas erro ao salvar status: ' . $statusStmt->error]);
+            }
+
+            $statusStmt->close();
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Agendamento salvo, mas erro ao preparar status: ' . $conn->error]);
+        }
+
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro ao salvar agendamento: ' . $stmt->error]);
     }

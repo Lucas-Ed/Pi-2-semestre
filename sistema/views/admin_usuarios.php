@@ -76,7 +76,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                         <?php foreach ($clientes as $cliente): ?>
                         <tr>
                             <td><?= htmlspecialchars($cliente['nome']) ?></td>
-                            <td><?= htmlspecialchars($cliente['telefone']) ?></td>
+                            <!-- <td>?<= htmlspecialchars($cliente['telefone']) ?></td> -->
+                             <td>
+                                <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: none;">
+                                    <?= htmlspecialchars($cliente['telefone']) ?>
+                                </a>
+                            </td>
                             <td><?= htmlspecialchars($cliente['cpf']) ?></td>
                             <td>
                                 <i class="bi bi-card-text" role="button" style="color: #00a3c7;"
@@ -95,7 +100,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
                     <div class="card-body position-relative">
                         <p><strong>Nome:</strong> <?= htmlspecialchars($cliente['nome']) ?></p>
-                        <p><strong>Telefone:</strong> <?= htmlspecialchars($cliente['telefone']) ?></p>
+                        <!-- <p><strong>Telefone:</strong> ?<= htmlspecialchars($cliente['telefone']) ?></p> -->
+                        <p><strong>Telefone:</strong> 
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
+                                <?= htmlspecialchars($cliente['telefone']) ?>
+                            </a>
+                        </p>
                         <p><strong>CPF:</strong> <?= htmlspecialchars($cliente['cpf']) ?></p>
                         <div class="position-absolute top-0 end-0 m-2">
                             <i class="bi bi-pencil-square me-2" role="button"></i>
