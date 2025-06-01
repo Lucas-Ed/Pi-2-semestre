@@ -321,8 +321,6 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
     <script type="module" src="../public/js/welcome.js"></script>
     <!--- carrega a base url do projeto -->
     <!-- <script src="config/base_url.php"></script> -->
-    <!-- validação de veiculos -->
-    <script src="../public/js/validacao_veiculo.js"></script>
     <!-- cadastro de veiculos -->
      <script src="../public/js/cadastro_veiculo.js"></script>
 

@@ -3,8 +3,8 @@ session_start(); // Inicia a sessão
 require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
 require_once __DIR__ . '/components/header.php'; // Inclui o cabeçalho
 
-// Consulta a tabela de usuários do tipo cliente
-$sql = "SELECT * FROM usuarios WHERE tipo = 'cliente'";
+// Consulta a tabela de usuários do tipo cliente e ordena por ordem alfabética com ORDER BY nome ASC.
+$sql = "SELECT * FROM usuarios WHERE tipo = 'cliente' ORDER BY nome ASC";
 $result = mysqli_query($conn, $sql);
 
 $clientes = [];
@@ -135,7 +135,10 @@ if ($result && mysqli_num_rows($result) > 0) {
                     <h5 class="text-center fw-bold mb-4">Dados do Cliente</h5>
                     <div class="border p-2 mb-4 rounded">
                         <p><strong>Nome:</strong> <span id="modalNome"></span></p>
-                        <p><strong>Telefone:</strong> <span id="modalTelefone"></span></p>
+                        <!-- <p><strong>Telefone:</strong> <span id="modalTelefone"></span></p> -->
+                        <p><strong>Telefone:</strong> 
+                            <a id="modalTelefone" href="#" target="_blank" style="color: #fff; text-decoration: underline;"></a>
+                        </p>
                         <p><strong>E-mail:</strong> <span id="modalEmail"></span></p>
                         <p><strong>CPF:</strong> <span id="modalCpf"></span></p>
                     </div>
@@ -162,7 +165,12 @@ if ($result && mysqli_num_rows($result) > 0) {
         const data = JSON.parse(button.getAttribute('data-cliente'));
 
         document.getElementById('modalNome').textContent = data.nome;
-        document.getElementById('modalTelefone').textContent = data.telefone;
+        // document.getElementById('modalTelefone').textContent = data.telefone;
+        const telefoneEl = document.getElementById('modalTelefone');
+        const numeroLimpo = data.telefone.replace(/\D/g, ''); // remove espaços, traços etc
+        telefoneEl.href = `https://wa.me/55${numeroLimpo}`;
+        telefoneEl.textContent = data.telefone;
+
         document.getElementById('modalEmail').textContent = data.email;
         document.getElementById('modalCpf').textContent = data.cpf;
     });

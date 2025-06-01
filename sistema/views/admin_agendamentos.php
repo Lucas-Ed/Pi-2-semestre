@@ -9,7 +9,37 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-// Consulta os agendamentos e os dados dos usuários
+// Consulta os agendamentos e os dados dos usuários sem filtros
+// $sql = "
+// SELECT 
+//     a.idagendamentos,
+//     u.nome,
+//     u.telefone,
+//     u.email,
+//     u.cpf,
+//     e.cep,
+//     e.rua,
+//     e.numero,
+//     e.bairro,
+//     v.modelo,
+//     v.placa,
+//     a.servico,
+//     p.valor,
+//     a.data_agendamento,
+//     a.hora_agendamento,
+//     a.leva_e_tras,
+//     s.executado
+// FROM agendamentos a
+// INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
+// LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
+// LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
+// LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
+// LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
+// ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
+// ";
+
+// Consulta os agendamentos e exibie somente os agendamentos do dia atual
+// e ordená-los do mais próximo para o mais distante no tempo
 $sql = "
 SELECT 
     a.idagendamentos,
@@ -35,9 +65,10 @@ LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
 LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
 LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
 LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
-ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
+WHERE a.data_agendamento = CURDATE()
+ORDER BY a.hora_agendamento ASC
 ";
-
+// Conecta ao banco de dados
 $result = $conn->query($sql);
 if (!$result) {
     die("Erro na consulta: " . $conn->error);
@@ -75,6 +106,20 @@ function tipoVeiculo($modelo) {
     if (str_contains($modeloLower, 'caminhao')) return 'caminhao';
     if (str_contains($modeloLower, 'van')) return 'van';
     return 'carro'; // padrão
+}
+
+// Calcula a soma dos valores dos agendamentos
+$total_valor_dia = 0;
+$agendamentos = [];
+
+while ($row = $result->fetch_assoc()) {
+    $tipo = tipoVeiculo($row['modelo']);
+    $servico = $row['servico'];
+    $valor = $servicos[$servico][$tipo] ?? 0;
+
+    $row['valor'] = $valor;
+    $agendamentos[] = $row;
+    $total_valor_dia += $valor;
 }
 ?>
 
@@ -125,7 +170,8 @@ function tipoVeiculo($modelo) {
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        <?php while ($row = $result->fetch_assoc()): ?>
+                        <!-- ?<php while ($row = $result->fetch_assoc()): ?> -->
+                            <?php foreach ($agendamentos as $row): ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['nome']) ?></td>
                                 <!-- <td>?<= htmlspecialchars($row['telefone']) ?></td> -->
@@ -180,7 +226,16 @@ function tipoVeiculo($modelo) {
 
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <!-- ?<php endwhile; ?> -->
+                        <?php endforeach; ?>
+                            <!-- Exibe o total do dia -->
+                            <tr>
+                                <tr>
+                                    <td colspan="7" class="text-end fw-bold text-black">Total do Dia:</td>
+                                    <td class="fw-bold text-black"><?= number_format($total_valor_dia, 2, ',', '.') ?> R$</td>
+                                    <td colspan="2"></td>
+                                </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -244,6 +299,13 @@ function tipoVeiculo($modelo) {
                 </div>
             <?php endwhile; ?>
             </div>
+        </div>
+        <!-- Exibe o total do dia (apenas no mobile) -->
+        <div class="text-center mt-4 d-md-none">
+            <h6 class="fw-bold" style="color: black;">Total do Dia</h6>
+            <p class="fw-bold" style="color: black; font-size: 1.2rem;">
+                <?= number_format($total_valor_dia, 2, ',', '.') ?> R$
+            </p>
         </div>
     </main>
 

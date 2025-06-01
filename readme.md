@@ -19,7 +19,7 @@ Projeto Interdisciplinar 2° semestre, do curso <a href="https://fatecararas.cps
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) -->
 
 <!-- <h3 align="center">✅ Concluído ✅</h3> -->
-<h3 align="center">🚧🚧 Em construção! 🏗 👷 🧱🚧..........</h3>
+<h3 align="center">🚧🚧 Em construção! 🏗 👷 🧱🚧</h3>
 
 
 
@@ -84,8 +84,8 @@ Para rodar o sistema localmente, siga os passos abaixo:
 0. Requisito, ter o composer instalado na máquina, caso não tenha baixe [aqui.](https://getcomposer.org/download/)
 1. Clone o repositório.
 2. Ligue o servidor/Mysql local (XAMPP ou WAMP).
-3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP, e a renomeia para sistema_41 .
-4. Dentro da pasta sistema, pelo terminal, instale as dependências com o comando:
+3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP, e a renomeie-a para sistema_41 .
+4. Dentro da pasta sistema_41, pelo terminal, instale as dependências com o comando:
 
 ```bash
 composer install

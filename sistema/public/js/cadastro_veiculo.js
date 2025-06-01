@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-  console.log("Script Cadastro Veículo carregado com sucesso!");
+  //console.log("Script Cadastro Veículo carregado com sucesso!");
 
   const tipoSelect = document.getElementById('tipo');
   const marcaSelect = document.getElementById('marca');
 
   const marcasPorTipo = {
-    carro: ['lexus','audi','alfa_romeo','rolls_royce','Fiat', 'volkswagen', 'vhevrolet', 'toyota', 'honda', 'hyundai', 'ford', 'renault', 'nissan', 'citroen', 'peugeot', 'kia', 'mitsubishi', 'chery', 'lifan', 'jac', 'volvo'],
+    carro: ['lexus','audi','alfa_romeo','rolls_royce','Fiat', 'volkswagen', 'chevrolet', 'toyota', 'honda', 'hyundai', 'ford', 'renault', 'nissan', 'citroen', 'peugeot', 'kia', 'mitsubishi', 'chery', 'lifan', 'jac', 'volvo'],
     moto: ['husqvarna', 'mv_augusta','honda', 'yamaha',"triumph", 'suzuki', 'kawasaki', 'ducati', 'triumph', 'shineray', 'dafra', 'sundown', 'bmw', 'royal_enfield', 'harley_davidson', 'ktm', 'voltz', 'gws'],
     caminhao: ['man','foton','scania', 'mercedes-Benz', 'Volvo', 'Iveco', 'daf', 'ford', 'chevrolet', 'fiat', 'volkswagen'],
     van: ['fiat', 'renault', 'mercedes_benz', 'ford', 'volkswagen', 'chevrolet', 'citroen', 'peugeot', 'nissan', 'hyundai', 'kia'],

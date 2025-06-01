@@ -119,9 +119,6 @@ selectedCarSelect.addEventListener("change", function () {
   });
 });
 
-
-
-
 // =====================================================================================================
 // Select de data e horário.
 // evento de mudança no input de data
@@ -564,7 +561,7 @@ async function removeAppointment(appointmentId) {
 }
 
 // ======================================================================================================================
-// Funcionalidade de adicionar carro
+// Funcionalidade de adicionar veículo.
 carForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const formData = {
@@ -598,7 +595,7 @@ function isValidPlate(placa) {
 async function addCar(car) {
   try {
     if (!isValidPlate(car.placa)) {
-      throw new Error('Placa inválida! Use o formato AAA-1234');
+      throw new Error('Placa inválida! Use o formato AAA-1234 ou AAA1A23');
     }
 
     const res = await fetch('../controllers/salvar_veiculo.php', {
@@ -611,13 +608,24 @@ async function addCar(car) {
     const data = await res.json();
 
     if (data.success) {
-      Swal.fire('Veículo salvo!', `${car.modelo} - ${car.placa}`, 'success');
-      await loadUserCars();
+      Swal.fire({
+        icon: 'success',
+        title: 'Veículo salvo!',
+        text: `${car.modelo} - ${car.placa}`,
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = '../views/dashboard_user.php';
+      });
     } else {
       throw new Error(data.message || 'Erro ao salvar o veículo.');
     }
   } catch (error) {
-    Swal.fire('Erro', error.message, 'error');
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: error.message,
+    });
   }
 }
 
@@ -646,9 +654,20 @@ async function removeCar(carId) {
     //const text = await res.text(); // <-- NÃO usa res.json() ainda
     //console.log('Resposta bruta do PHP:', text); // <-- Veja o conteúdo no console
     if (data.success) {
-      Swal.fire('Removido!', 'Veículo removido com sucesso.', 'success').then(() => {
-    window.location.href = '../views/dashboard_user.php';
-  });
+      Swal.fire({
+        icon: 'success',
+        title: 'Veículo removido!',
+        text: 'O veículo foi removido com sucesso.',
+        timer: 2000,
+        showConfirmButton: false
+      }).then(() => {
+        window.location.href = '../views/dashboard_user.php';
+      });
+  //     Swal.fire('Removido!',
+  //                'Veículo removido com sucesso.',
+  //               'success').then(() => {
+  //   window.location.href = '../views/dashboard_user.php';
+  // });
       await loadUserCars();
       await loadAppointments();
     } else {
