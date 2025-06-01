@@ -18,10 +18,16 @@ $stmt = $conn->prepare("SELECT
     v.modelo     AS modelo,
     v.placa      AS placa,
     v.tipo       AS tipo,
-    v.marca      AS marca
+    v.marca      AS marca,
+    v.ativo      AS ativo
+-- FROM veiculos v
+-- WHERE v.usuarios_idusuarios = ?
+-- ORDER BY v.modelo
 FROM veiculos v
-WHERE v.usuarios_idusuarios = ?
+WHERE v.usuarios_idusuarios = ? AND v.ativo = 1
 ORDER BY v.modelo");
+
+
 
 $stmt->bind_param("i", $idUsuario); // "i" indica que $idUsuario é um inteiro
 $stmt->execute();
@@ -45,6 +51,7 @@ if ($result && $result->num_rows > 0) {
              'modelo' => $row['modelo'],
              'placa' => $row['placa'],
              'tipo' => $row['tipo'],
+            //  'ativo' => $row['ativo'],
              'marca'  => isset($row['marca']) ? $row['marca'] : 'default',
              //'marca' => array_key_exists('marca', $row) ? $row['marca'] : 'default',
          ];

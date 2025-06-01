@@ -19,6 +19,7 @@ Projeto Interdisciplinar 2° semestre, do curso <a href="https://fatecararas.cps
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/) -->
 
 <!-- <h3 align="center">✅ Concluído ✅</h3> -->
+<h3 align="center">🚧🚧 Em construção! 🏗 👷 🧱🚧..........</h3>
 
 
 
@@ -251,6 +252,31 @@ Para mais informações acesse o link:
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
+
+<!---- Regras p\ canceamento de agendamentos ------>
+
+<!--- Regras atualizadas para permitir cancelamento:
+O usuário pode cancelar o agendamento se TODAS as seguintes condições forem verdadeiras:
+
+Falta mais de 1 hora para o horário agendado.
+
+O status (executado) na tabela status_ag é qualquer um dos seguintes:
+
+Pendente
+
+Confirmado
+
+Concluída
+
+O usuário não pode cancelar se:
+
+Está dentro do intervalo de 1 hora antes do horário agendado, ou já passou do horário agendado.
+
+Ou o status é:
+
+Fila de espera
+
+Em andamento----->
 ---
 
 

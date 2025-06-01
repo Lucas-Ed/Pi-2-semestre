@@ -21,14 +21,26 @@ $_SESSION['LAST_ACTIVITY'] = time();
 
 $userId = $_SESSION['idusuarios']; // ou o nome correto do ID na session
 
-// Consulta para obter o número de veículos do usuário.
-$query = "SELECT COUNT(*) AS total FROM veiculos WHERE usuarios_idusuarios = ?";
+//-- Descomentar  o Select abaixo p/ exibir todos os veículos do usuário cadastrado, ativos e inativos.
+// // Consulta para obter o número de veículos do usuário.
+// $query = "SELECT COUNT(*) AS total FROM veiculos WHERE usuarios_idusuarios = ?";
+// $stmt = $conn->prepare($query);
+// $stmt->bind_param("i", $userId);
+// $stmt->execute();
+// $result = $stmt->get_result();
+// $row = $result->fetch_assoc();
+// $qtdVeiculos = $row['total'];
+
+// Consulta para obter o número de veículos ATIVOS do usuário.
+$query = "SELECT COUNT(*) AS total FROM veiculos WHERE usuarios_idusuarios = ? AND ativo = 1";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
 $qtdVeiculos = $row['total'];
+
+
 
 // Consulta para obter o tipo de veículos do usuário.
 $stmt = $conn->prepare("SELECT idveiculos, modelo, tipo FROM veiculos WHERE usuarios_idusuarios = ?");
@@ -101,8 +113,12 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
                             <i class="bi bi-plus-lg"></i> Adicionar Veículo
                             </button>
                         </div>
-                        <small class="text-muted" style="font-size: 13px;">
+                        <!-- Descomentar  o código abaixo p/ exibir todos os veículos do usuário cadastrado, ativos e inativos. -->
+                        <!-- <small class="text-muted" style="font-size: 13px;">
                           <?= $qtdVeiculos ?> veículo<?= $qtdVeiculos == 1 ? '' : 's' ?> cadastrado<?= $qtdVeiculos == 1 ? '' : 's' ?>
+                        </small> -->
+                        <small class="text-muted" style="font-size: 13px;">
+                          <?= $qtdVeiculos ?> veículo<?= $qtdVeiculos == 1 ? '' : 's' ?> ativo<?= $qtdVeiculos == 1 ? '' : 's' ?>
                         </small>
 
                         <div id="carsList"></div>

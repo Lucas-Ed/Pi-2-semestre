@@ -24,9 +24,12 @@ if (empty($tipo) || empty($marca) || empty($modelo) || empty($placa)) {
     exit;
 }
 
-$stmt = $conn->prepare("INSERT INTO veiculos (tipo, marca, modelo, placa, usuarios_idusuarios) VALUES (?, ?, ?, ?, ?)");
+// Adicionando valor fixo para 'ativo'
+$ativo = 1;
+
+$stmt = $conn->prepare("INSERT INTO veiculos (tipo, marca, modelo, placa, usuarios_idusuarios, ativo) VALUES (?, ?, ?, ?, ?, ?)");
 if ($stmt) {
-    $stmt->bind_param("ssssi", $tipo, $marca, $modelo, $placa, $idUsuario);
+    $stmt->bind_param("ssssii", $tipo, $marca, $modelo, $placa, $idUsuario, $ativo);
 
     if ($stmt->execute()) {
         echo json_encode(["success" => true, "message" => "Veículo salvo com sucesso."]);

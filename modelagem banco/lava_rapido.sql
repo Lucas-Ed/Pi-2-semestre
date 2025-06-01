@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 31/05/2025 às 16:33
+-- Tempo de geração: 01/06/2025 às 03:07
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -40,13 +40,6 @@ CREATE TABLE `agendamentos` (
   `servico` varchar(255) NOT NULL,
   `preco` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `agendamentos`
---
-
-INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`, `preco`) VALUES
-(53, 22, 31, '2025-05-31', '11:00:00', 0, 0, 'lavagem_externa', 0.00);
 
 -- --------------------------------------------------------
 
@@ -163,20 +156,18 @@ CREATE TABLE `veiculos` (
   `modelo` varchar(30) NOT NULL,
   `placa` varchar(10) NOT NULL,
   `marca` varchar(30) NOT NULL,
-  `tipo` varchar(50) NOT NULL
+  `tipo` varchar(50) NOT NULL,
+  `ativo` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `veiculos`
 --
 
-INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`) VALUES
-(27, 1, 'titan 150', 'FFF-1234', 'honda', 'moto'),
-(28, 1, '440', 'KKK-1234', 'volvo', 'caminhao'),
-(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro'),
-(30, 22, 'gol', 'AAA-1234', 'volkswagen', 'carro'),
-(31, 22, 'cg 125', 'SSS-1234', 'honda', 'moto'),
-(32, 22, '440', 'GGG-1234', 'scania', 'caminhao');
+INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`, `ativo`) VALUES
+(27, 1, 'titan 150', 'FFF-1234', 'honda', 'moto', 0),
+(28, 1, '440', 'KKK-1234', 'volvo', 'caminhao', 0),
+(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro', 0);
 
 --
 -- Índices para tabelas despejadas
@@ -242,7 +233,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -266,7 +257,7 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`

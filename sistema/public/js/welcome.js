@@ -193,21 +193,47 @@ function preencherSelectHorarios(horarios) {
 
 // =====================================================================================================
 // Carrega veículos
+
+// função comentada pois não inclui veiculos ativo
+// async function loadUserCars() {
+//   try {
+//     showSpinner(carsList);
+//     const res = await fetch('http://localhost/sistema_41/controllers/api/get_veiculos.php', {
+//       credentials: 'include'
+//     });
+//     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+//     const data = await res.json();
+//     // console.log('Dados recebidos:', data); // Para depuração
+//     console.log('Veículos carregados:', data);
+//     displayCars(data);
+//   } catch (error) {
+//     Swal.fire('Erro ao carregar veículos', error.message, 'error');
+//   }
+// }
+
+// Carrega veículos do usuário que estão ativos.
 async function loadUserCars() {
   try {
-    showSpinner(carsList);
+    showSpinner(carsList); // Mostra carregando
+
     const res = await fetch('http://localhost/sistema_41/controllers/api/get_veiculos.php', {
       credentials: 'include'
     });
     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
     const data = await res.json();
     // console.log('Dados recebidos:', data); // Para depuração
-    console.log('Veículos carregados:', data);
+    //     console.log('Veículos carregados:', data);
+    if (!Array.isArray(data)) throw new Error('Resposta inválida do servidor');
+
+    //console.log('Veículos carregados:', data); // Remova este log em produção
+
     displayCars(data);
   } catch (error) {
     Swal.fire('Erro ao carregar veículos', error.message, 'error');
+    carsList.innerHTML = '<p class="text-danger">Falha ao carregar veículos.</p>';
   }
 }
+
 
 // sanitiza e normaliza a marca
 function normalizarMarca(marca) {
@@ -232,7 +258,7 @@ function pastaDaMarcaPorTipo(tipo) {
       return 'logo_carros'; 
   }
 }
-
+// Exibe os veículos
 function displayCars(cars) {
   carsList.innerHTML = '';
   if (Array.isArray(cars) && cars.length > 0) {
@@ -268,24 +294,9 @@ function displayCars(cars) {
   }
   updateCarSelect(cars);
 }
-
 // =====================================================================================================
 
 // Efetuar Agendamento
-// appointmentForm.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   const formData = {
-//     name: document.getElementById('name').value,
-//     phone: document.getElementById('phone').value,
-//     date: document.getElementById('date').value,
-//     time: document.getElementById('time').value,
-//     service: document.getElementById('service').value
-//   };
-//   addAppointment(formData);
-//   appointmentForm.reset();
-//   scheduleModal.hide();
-// });
-
 document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -306,8 +317,7 @@ document.getElementById('appointmentForm').addEventListener('submit', async (e) 
   const tipoNormalizado = normalizarTipo(vehicleType);
   const preco = servicos[service]?.[tipoNormalizado] ?? 0;
   // debugar 
-  console.log({ service, tipoNormalizado, precoCalculado: servicos[service]?.[tipoNormalizado] });
-
+  //console.log({ service, tipoNormalizado, precoCalculado: servicos[service]?.[tipoNormalizado] });
 
   const appointmentData = {
     veiculos_idveiculos: selectedCarId,
@@ -322,8 +332,8 @@ document.getElementById('appointmentForm').addEventListener('submit', async (e) 
 });
 
 async function addAppointment(appointmentData) {
-  // log para prço
-  console.log(appointmentData); // Verifique se "preco" aparece corretamente
+  // log para preço
+  //console.log(appointmentData); // Verifique se "preco" aparece corretamente
   try {
     const agendamentoDataHora = new Date(`${appointmentData.data_agendamento}T${appointmentData.hora_agendamento}`);
     const agora = new Date();
@@ -458,7 +468,7 @@ function displayAppointments(appointmentsData) {
               <p><strong>Data:</strong> ${formatDate(appointment.data)}</p>
               <p><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
               <p><strong>Serviço:</strong> ${sanitize(appointment.servico)}</p>
-              <p><strong>Preço:</strong> R$ ${precoFormatado}</p>  <!-- Exibindo o preço -->
+              <p><strong>Preço:</strong> R$ ${precoFormatado}</p>
               ${levaETrazHTML}
             </div>
           </div>
@@ -478,7 +488,6 @@ function displayAppointments(appointmentsData) {
   }
 }
 // ======================================================================================================================
-// Cancelar agendamento
 // Cancelar agendamento
 async function removeAppointment(appointmentId) {
   const result = await Swal.fire({
@@ -556,7 +565,6 @@ async function removeAppointment(appointmentId) {
 
 // ======================================================================================================================
 // Funcionalidade de adicionar carro
-// Submissão do formulário de carro
 carForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const formData = {
@@ -614,7 +622,7 @@ async function addCar(car) {
 }
 
 // ======================================================================================================================
-// Remove carro
+// Remove veículo
 async function removeCar(carId) {
   const result = await Swal.fire({
     title: 'Tem certeza?',
@@ -634,9 +642,13 @@ async function removeCar(carId) {
       credentials: 'include',
       body: JSON.stringify({ id: carId })
     });
-    const data = await res.json();
+     const data = await res.json();
+    //const text = await res.text(); // <-- NÃO usa res.json() ainda
+    //console.log('Resposta bruta do PHP:', text); // <-- Veja o conteúdo no console
     if (data.success) {
-      Swal.fire('Removido!', 'O carro foi removido com sucesso.', 'success');
+      Swal.fire('Removido!', 'Veículo removido com sucesso.', 'success').then(() => {
+    window.location.href = '../views/dashboard_user.php';
+  });
       await loadUserCars();
       await loadAppointments();
     } else {
