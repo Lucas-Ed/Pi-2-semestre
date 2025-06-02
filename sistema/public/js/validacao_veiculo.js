@@ -49,15 +49,24 @@ document.addEventListener("DOMContentLoaded", function () {
         const result = await response.json();
   
         if (result.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Sucesso!",
-            text: "Veículo cadastrado com sucesso!",
-          }).then(() => {
-            form.reset();
-            const modal = bootstrap.Modal.getInstance(document.getElementById("addCarModal"));
-            modal.hide();
-          });
+            // Swal.fire({
+            //   icon: 'success',
+            //   title: 'Veículo salvo!',
+            //   text: `${car.modelo} - ${car.placa}`,
+            //   timer: 2000,
+            //   showConfirmButton: false
+            // }).then(() => {
+            //   window.location.href = '../views/dashboard_user.php';
+            // });
+           Swal.fire({
+             icon: "success",
+             title: "Sucesso!",
+             text: "Veículo cadastrado com sucesso!",
+           }).then(() => {
+             form.reset();
+             const modal = bootstrap.Modal.getInstance(document.getElementById("addCarModal"));
+             modal.hide();
+           });
         } else {
           Swal.fire({
             icon: "error",

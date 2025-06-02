@@ -150,7 +150,9 @@ while ($row = $result->fetch_assoc()) {
             </div>
 
     <main class="flex-grow-1 py-4">
-        <h5 class="text-center fw-semibold mb-4" style="color: #444;">Agendamentos</h5>
+        <h5 class="text-center fw-semibold mb-4" style="color: #444;">
+            Agendamentos do dia <span id="data-dia"></span>
+            </h5>
         <div class="container px-3">
 
             <div class="table-responsive d-none d-md-block">
@@ -537,6 +539,21 @@ document.querySelectorAll('.btn-remover').forEach(btn => {
 });
 </script>
 
+<!-- Script para exibir a data atual -->
+ <script>
+  // Obter a data atual
+  const hoje = new Date();
+
+  // Formatar a data como dd/mm/yyyy
+  const dataFormatada = hoje.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  // Inserir a data no elemento com id="data-dia"
+  document.getElementById('data-dia').textContent = dataFormatada;
+</script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

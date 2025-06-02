@@ -195,7 +195,7 @@ function preencherSelectHorarios(horarios) {
 // async function loadUserCars() {
 //   try {
 //     showSpinner(carsList);
-//     const res = await fetch('http://localhost/sistema_41/controllers/api/get_veiculos.php', {
+//     const res = await fetch('../controllers/api/get_veiculos.php', {
 //       credentials: 'include'
 //     });
 //     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
@@ -213,7 +213,7 @@ async function loadUserCars() {
   try {
     showSpinner(carsList); // Mostra carregando
 
-    const res = await fetch('http://localhost/sistema_41/controllers/api/get_veiculos.php', {
+    const res = await fetch('../controllers/api/get_veiculos.php', {
       credentials: 'include'
     });
     if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);

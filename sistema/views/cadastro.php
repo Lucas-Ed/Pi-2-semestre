@@ -33,11 +33,15 @@ if (empty($_SESSION['csrf_token'])) {
 
             <!-- Telefone -->
             <div class="mb-2">
+                <!-- Mensagem ao usuário -->
+                    <small class="text-muted d-block mb-1" style="font-size: 0.85rem; opacity: 0.7;">
+                        Insira o DDD+número do celular, por exemplo: 11 para São Paulo.
+                    </small>
                 <div class="d-flex align-items-center"
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-telephone" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="text" name="telefone" id="telefone" class="form-control border-0 shadow-none placeholder-light"
-                        placeholder="*Telefone"
+                        placeholder="*Celular (com DDD)"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>

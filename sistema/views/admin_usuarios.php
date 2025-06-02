@@ -13,6 +13,15 @@ if ($result && mysqli_num_rows($result) > 0) {
         $clientes[] = $row;
     }
 }
+
+// Consulta a quantidade total de clientes
+$sqlTotalClientes = "SELECT COUNT(*) AS total FROM usuarios WHERE tipo = 'cliente'";
+$resultTotalClientes = mysqli_query($conn, $sqlTotalClientes);
+$totalClientes = 0;
+
+if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalClientes)) {
+    $totalClientes = $rowTotalClientes['total'];
+}
 ?>
 
 <title>Lista de Clientes</title>
@@ -43,12 +52,13 @@ if ($result && mysqli_num_rows($result) > 0) {
         <!-- Barra de pesquisa (sem funcionalidade por enquanto) -->
         <div class="container mb-4 d-flex justify-content-center">
             <div class="input-group w-50">
-                <input type="text" class="form-control" placeholder="Pesquisar cliente..." aria-label="Pesquisar cliente">
-                <button class="btn" type="button" style="background-color: #00a3c7; color: white;">
+                <input type="text" id="campoBusca" class="form-control" placeholder="Pesquisar cliente..." aria-label="Pesquisar cliente">
+                <button id="botaoBusca" class="btn" type="button" style="background-color: #00a3c7; color: white;">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
         </div>
+
 
             <!-- Botão Voltar -->
             <div class="d-flex justify-content-center my-4">
@@ -59,8 +69,14 @@ if ($result && mysqli_num_rows($result) > 0) {
                     Voltar
                 </a>
             </div>
-
+        
         <div class="container px-3">
+            <!-- Exibe o total de clientes cadastrados -->
+            <div class="d-flex justify-content-end pe-3 mb-2">
+                <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
+                    Total de clientes cadastrados: <?= $totalClientes ?>
+                </small>
+            </div>
             <!-- Tabela para desktop -->
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle">
@@ -156,6 +172,11 @@ if ($result && mysqli_num_rows($result) > 0) {
 
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- script para buscar clientes -->
+ <script src="../public/js/buscar_clientes.js"></script>
 
 <!-- Modal Script -->
 <script>

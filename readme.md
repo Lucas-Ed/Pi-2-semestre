@@ -110,11 +110,11 @@ composer install
 │
 ├── 📂 controllers/-(lógica de negócios - salvar, listar, excluir)
 │   ├── 📂 Api/
-│   │    ├── 📄 get_agndamentos.php-(listar agendamentos)
+│   │    ├── 📄 buscar_clientes.php-(buscar usuarios no DB.)
+│   │    ├── 📄 get_agendamentos.php-(listar agendamentos)
 │   │    └── 📄 get_veiculos.php-(listar veiculos)
 |   |
 |   ├── 📄 add_agendamento.php-(adicionar agendamento)
-|   ├── 📄 addcar.php-(cadastrar veiculo)
 |   ├── 📄 admin_delete_agendamento.php-(fc. cancelar agendamento do admin)
 |   ├── 📄 logout.php-(lógica do logout do sistema)
 |   ├── 📄 new_pass.php-(lógica de alterarv a senha do usuario)
@@ -133,11 +133,11 @@ composer install
 |   └── 📂 css/-(estilos personalizados)
 |   |
 │   └── 📂 js/
+│   |     ├── 📄 buscar_clientes.js-(busca clientes pela api)
 │   |     ├── 📄 cadastro_veiculo.php-(lógica de cadastrar veículo)
 │   |     ├── 📄 new_pass__alerts.js-(alerts de recuperação de senha)
 │   |     ├── 📄 recuperacao_alerts.js-(alerts de envio de e-mail com token)
 |   |     ├── 📄 val_cads.js-(validações do form de cadastro)
-│   |     ├── 📄 validacao_veiculo.js-(validação de veículos)
 │   |     └── 📄 welcome.js-(funcionalidades de area logada)
 |   |
 │   └── 📂 uploads/ (imagens e outros)

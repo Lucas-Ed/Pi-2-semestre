@@ -128,18 +128,26 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
 
                     <!-- Card de Agendamentos -->
                     <div class="col-12 col-md-6">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-body">
-                        <div class="d-flex align-items-center mb-4">
-                            <i class="bi bi-calendar3 me-3" style="font-size: 2rem; color: #009bbf;"></i>
-                            <h2 class="h4 m-0">Agendamentos</h2>
-                        </div>
-                        <div id="appointmentsList"></div>
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <!-- Cabeçalho do card -->
+                                <div class="mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-calendar3 me-3" style="font-size: 2rem; color: #009bbf;"></i>
+                                        <h2 class="h4 m-0">Agendamentos</h2>
+                                    </div>
+                                    <!-- Subtítulo sutil abaixo do título -->
+                                    <small class="text-muted" style="font-size: 13px;">
+                                        4 agendamentos mais recentes.
+                                    </small>
+                                </div>
+
+                                <!-- Lista de agendamentos -->
+                                <div id="appointmentsList"></div>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                </div>
-                </div>
+
 
     </main>
 
