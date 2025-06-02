@@ -6,7 +6,8 @@ require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
 require_once __DIR__ . '/components/header.php'; 
 
 // Contar agendamentos ativos
-$queryAgendamentos = "SELECT COUNT(*) AS total FROM agendamentos";
+//$queryAgendamentos = "SELECT COUNT(*) AS total FROM agendamentos"; // busca todos os agendamentos
+$queryAgendamentos = "SELECT COUNT(*) AS total FROM agendamentos WHERE data_agendamento = CURDATE()"; // busca todos os agendamentos do dia atual
 $resultAgendamentos = $conn->query($queryAgendamentos);
 $agendamentosAtivos = $resultAgendamentos->fetch_assoc()['total'] ?? 0;
 
@@ -56,6 +57,7 @@ $totalUsuarios = $resultUsuarios->fetch_assoc()['total'] ?? 0;
                                 <div class="text-start">
                                     <h6 class="mb-0 fw-bold" style="color: #333;">Agendamentos</h6>
                                     <small class="text-muted" style="font-size: 13px;">
+                                        <!-- mostra os agendamentos ativos do dia -->
                                         <?= $agendamentosAtivos ?> agendamento<?= $agendamentosAtivos != 1 ? 's' : '' ?> ativo<?= $agendamentosAtivos != 1 ? 's' : '' ?>
                                     </small>
                                 </div>

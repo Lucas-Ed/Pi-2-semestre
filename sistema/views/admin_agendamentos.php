@@ -121,6 +121,9 @@ while ($row = $result->fetch_assoc()) {
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
+// conta o total de agendamentos do dia
+$total_agend = count($agendamentos);
+
 ?>
 
 <title>Listagem Agendamentos</title>
@@ -154,7 +157,12 @@ while ($row = $result->fetch_assoc()) {
             Agendamentos do dia <span id="data-dia"></span>
             </h5>
         <div class="container px-3">
-
+            <!-- Exibe o total de agendamentos do dia -->
+            <div class="d-flex justify-content-end pe-3 mb-2">
+                <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
+                    Total de agendamentod do dia: <?= $total_agend ?>
+                </small>
+            </div>
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle table-agendamento">
                     <thead class="text-nowrap text-center">
@@ -244,15 +252,21 @@ while ($row = $result->fetch_assoc()) {
 
             <!-- VISÃO MOBILE -->
             <div class="d-md-none">
-            <?php
-                $result->data_seek(0);
-                while ($row = $result->fetch_assoc()):
-            ?>
+                <!-- Total de agendamentos do dia (VISÃO MOBILE) -->
+                <div class="d-flex justify-content-end pe-3 mb-2">
+                    <small class="text-white" style="font-size: 0.85rem; opacity: 0.9;">
+                        Total de agendamentos do dia: <?= $total_agend ?>
+                    </small>
+                </div>
+
+                <?php
+                    $result->data_seek(0);
+                    while ($row = $result->fetch_assoc()):
+                ?>
                 <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
                     <div class="card-body position-relative">
                         <p><strong>Nome:</strong> <?= htmlspecialchars($row['nome']) ?></p>
-                        <!-- <p><strong>Telefone:</strong> ?<= htmlspecialchars($row['telefone']) ?></p> -->
-                         <p>
+                        <p>
                             <strong>Telefone:</strong>
                             <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
                                 <?= htmlspecialchars($row['telefone']) ?>
@@ -263,11 +277,16 @@ while ($row = $result->fetch_assoc()) {
                         <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>
                         <p><strong>Hora:</strong> <?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></p>
                         <p><strong>Leva e Traz:</strong> <?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></p>
-                        <p><strong>Preço:</strong> <?= number_format($row['valor'], 2, ',', '.') ?> R$</p>
+                        <!-- <p><strong>Preço:</strong> <?= number_format($row['valor'], 2, ',', '.') ?> R$</p> -->
+                        <p><strong>Preço:</strong> <?php
+                                                    $tipo = tipoVeiculo($row['modelo']);
+                                                    $servico = $row['servico'];
+                                                    $valor = $servicos[$servico][$tipo] ?? 0;
+                                                ?>
+                                                <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
                         <p><strong>Status:</strong> <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
 
                         <div class="position-absolute top-0 end-0 m-3">
-                            <!-- Botão de editar -->
                             <i class="bi bi-pencil-square me-2 icon-action btn-editar"
                                 title="Editar"
                                 data-id="<?= $row['idagendamentos'] ?>"
@@ -276,7 +295,6 @@ while ($row = $result->fetch_assoc()) {
                                 style="color: #00a3c7;">
                             </i>
 
-                            <!-- Botão de detalhes -->
                             <i class="bi bi-card-text btn-detalhes" 
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalDetalhes"
@@ -289,27 +307,18 @@ while ($row = $result->fetch_assoc()) {
                                 data-numero="<?= htmlspecialchars($row['numero']) ?>"
                                 data-bairro="<?= htmlspecialchars($row['bairro']) ?>">
                             </i>
-                            <!-- Botão de remover -->
-                             <i class="bi bi-trash icon-action btn-remover"
+
+                            <i class="bi bi-trash icon-action btn-remover"
                                 title="Remover"
                                 data-id="<?= $row['idagendamentos'] ?>"
                                 style="color: red; cursor: pointer;">
                             </i>
-
                         </div>
                     </div>
                 </div>
-            <?php endwhile; ?>
+                <?php endwhile; ?>
             </div>
-        </div>
-        <!-- Exibe o total do dia (apenas no mobile) -->
-        <div class="text-center mt-4 d-md-none">
-            <h6 class="fw-bold" style="color: black;">Total do Dia</h6>
-            <p class="fw-bold" style="color: black; font-size: 1.2rem;">
-                <?= number_format($total_valor_dia, 2, ',', '.') ?> R$
-            </p>
-        </div>
-    </main>
+
 
     <footer class="text-center py-3 small" style="color: #bbb;">
         &copy; <?= date('Y') ?> Embelezamento Automotivo. Todos os direitos reservados.
