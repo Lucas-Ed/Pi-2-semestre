@@ -42,13 +42,19 @@ document.addEventListener("DOMContentLoaded", function () {
     //  Alert para sucesso no cadastro
     else if (status === 'sucesso') {
         Swal.fire({
-            icon: 'success',
-            title: 'Cadastro realizado!',
-            text: 'Seu cadastro foi concluído com sucesso.',
-            confirmButtonText: 'OK'
+            // icon: 'success',
+            // title: 'Cadastro realizado!',
+            // text: 'Seu cadastro foi concluído com sucesso.',
+            // confirmButtonText: 'OK'
+            icon: "success",
+            title: "Cadastro realizado!",
+            text: "Seu cadastro foi concluído com sucesso.",
+            showConfirmButton: false,
+            timer: 2000
         }).then(() => {
             history.replaceState(null, '', window.location.pathname); // remove parâmetro da URL
-            window.location.href = '../views/index.php'; // redireciona após confirmação
+            window.location.href = '../views/dashboard_user.php'; // redireciona o usuário e já logado para  o dashboard do usuário.
+            // window.location.href = '../views/index.php'; // redireciona após confirmação
         });
     }// alert de senha redefinida com sucesso
 //     else if (status === 'senha_redefinida') {

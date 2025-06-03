@@ -40,6 +40,36 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 // Consulta os agendamentos e exibie somente os agendamentos do dia atual
 // e ordená-los do mais próximo para o mais distante no tempo
+// $sql = "
+// SELECT 
+//     a.idagendamentos,
+//     u.nome,
+//     u.telefone,
+//     u.email,
+//     u.cpf,
+//     e.cep,
+//     e.rua,
+//     e.numero,
+//     e.bairro,
+//     v.modelo,
+//     v.placa,
+//     a.servico,
+//     p.valor,
+//     a.data_agendamento,
+//     a.hora_agendamento,
+//     a.leva_e_tras,
+//     s.executado
+// FROM agendamentos a
+// INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
+// LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
+// LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
+// LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
+// LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
+// WHERE a.data_agendamento = CURDATE()
+// ORDER BY a.hora_agendamento ASC
+// ";
+
+// Consulta os agendamentos e exibie somente os agendamentos da semana atual (segunda a domingo).
 $sql = "
 SELECT 
     a.idagendamentos,
@@ -65,9 +95,11 @@ LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
 LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
 LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
 LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
-WHERE a.data_agendamento = CURDATE()
-ORDER BY a.hora_agendamento ASC
+WHERE a.data_agendamento BETWEEN DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)
+                            AND DATE_ADD(CURDATE(), INTERVAL (6 - WEEKDAY(CURDATE())) DAY)
+ORDER BY a.data_agendamento ASC, a.hora_agendamento ASC
 ";
+
 // Conecta ao banco de dados
 $result = $conn->query($sql);
 if (!$result) {
@@ -153,20 +185,26 @@ $total_agend = count($agendamentos);
             </div>
 
     <main class="flex-grow-1 py-4">
-        <h5 class="text-center fw-semibold mb-4" style="color: #444, margin-top: -20px;">
-            Agendamentos do dia <span id="data-dia"></span>
-            </h5>
-            <div class="container px-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <!--- Link para agendamentos da semana -->
-                    <a href="../views/admin_agendamentos_semanal.php"
-                    style="font-size: 0.85rem; color: #00a3c7; text-decoration: underline;">
-                        Agendamentos da semana
-                    </a>
-                    <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
-                        Total de agendamentos do dia: <?= $total_agend ?>
-                    </small>
-                </div>
+        <?php
+        $inicioSemana = date('d/m/Y', strtotime('monday this week'));
+        $fimSemana = date('d/m/Y', strtotime('sunday this week'));
+        ?>
+        <h5 class="text-center fw-semibold mb-1" style="color: #444;">
+            Agendamentos da semana (<?= $inicioSemana ?> - <?= $fimSemana ?>)
+        </h5>
+
+        <div class="container px-3">
+            <!-- Exibe o total de agendamentos da semana -->
+            <div class="d-flex justify-content-between align-items-center mb-2 px-3">
+                <!--- Link para agendamentos do dia -->
+                <a href="../views/admin_agendamentos.php"
+                style="font-size: 0.85rem; color: #00a3c7; text-decoration: underline;">
+                    Agendamentos do dia
+                </a>
+                <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
+                    Total de agendamentos da semana: <?= $total_agend ?>
+                </small>
+            </div>
 
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle table-agendamento">
@@ -246,7 +284,8 @@ $total_agend = count($agendamentos);
                             <!-- Exibe o total do dia -->
                             <tr>
                                 <tr>
-                                    <td colspan="7" class="text-end fw-bold text-black">Total do Dia:</td>
+                                    <td colspan="7" class="text-end fw-bold text-black">Total da Semana:</td>
+
                                     <td class="fw-bold text-black"><?= number_format($total_valor_dia, 2, ',', '.') ?> R$</td>
                                     <td colspan="2"></td>
                                 </tr>
@@ -257,10 +296,10 @@ $total_agend = count($agendamentos);
 
             <!-- VISÃO MOBILE -->
             <div class="d-md-none">
-                <!-- Total de agendamentos do dia (VISÃO MOBILE) -->
+                <!-- Total de agendamentos da semana (VISÃO MOBILE) -->
                 <div class="d-flex justify-content-end pe-3 mb-2">
                     <small class="text-white" style="font-size: 0.85rem; opacity: 0.9;">
-                        Total de agendamentos do dia: <?= $total_agend ?>
+                        Total de agendamentos da semana: <?= $total_agend ?>
                     </small>
                 </div>
 

@@ -103,13 +103,32 @@ if ($senha_cap !== $senha_cap_conf) {
 
             $stmtEndereco->bind_param("issss", $usuarios_idusuarios, $rua, $numero, $bairro, $cep);
 
+            // if ($stmtEndereco->execute()) {
+            //     // header("Location: cadastrado.php?status=sucesso");
+            //     header("Location: ../views/cadastro.php?status=sucesso");
+            //     exit();
+            // }
+            // 
             if ($stmtEndereco->execute()) {
-                // header("Location: cadastrado.php?status=sucesso");
+                // Inicia a sessão
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                // Define variáveis de sessão simulando o login
+                $_SESSION['usuario_id'] = $usuarios_idusuarios;
+                $_SESSION['nome'] = $nome;
+                $_SESSION['usuario_email'] = $email;
+                $_SESSION['usuario_tipo'] = $tipo;
+                $_SESSION['idusuarios'] = $usuarios_idusuarios; // importante se dashboard usa $_SESSION['idusuarios']
+                $_SESSION["loggedin"] = true;
+
+                // Redireciona com SweetAlert de sucesso
                 header("Location: ../views/cadastro.php?status=sucesso");
                 exit();
-            } else {
-                echo "Erro ao cadastrar endereço: " . $stmtEndereco->error;
-            }
+                } else {
+                        echo "Erro ao cadastrar endereço: " . $stmtEndereco->error;
+                }
 
             $stmtEndereco->close();
 
