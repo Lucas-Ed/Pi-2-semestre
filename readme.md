@@ -84,8 +84,8 @@ Para rodar o sistema localmente, siga os passos abaixo:
 0. Requisito, ter o composer instalado na máquina, caso não tenha baixe [aqui.](https://getcomposer.org/download/)
 1. Clone o repositório.
 2. Ligue o servidor/Mysql local (XAMPP ou WAMP).
-3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP, e a renomeie-a para sistema_41 .
-4. Dentro da pasta sistema_41, pelo terminal, instale as dependências com o comando:
+3. Coloque a pasta sistema, na pasta "htdocs" do XAMPP ou WAMP.
+4. Dentro da pasta sistema, pelo terminal, instale as dependências com o comando:
 
 ```bash
 composer install
@@ -95,7 +95,7 @@ composer install
 6. Edite o arquivo `.env` com os suas credenciais smtp e senha de app do gmail, para o envio de e-mail para recuperação de senha do usuario.
 
 
-7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema_41`.
+7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
 8. Abra o sistema clicando na pasta views.
 9. Pronto você verá a página Home do sistema.
 
@@ -150,6 +150,7 @@ composer install
 |   |    └── 📄 header.php-(cabeçalho do sistema)
 |   |
 |   |
+|   ├── 📄 admin_agendamentos_semanal.php-(Àrea logada Admin)
 │   ├── 📄 admin_agendamentos.php-(Àrea logada Admin)
 │   ├── 📄 admin_usuarios.php-(Àrea logada Admin)
 │   ├── 📄 alter_pass.php-(Página de alterar a senha)
@@ -159,8 +160,7 @@ composer install
 │   ├── 📄 index.php-(Página Home)ok
 │   ├── 📄 login.php-(Página de login de usuários)
 │   ├── 📄 perfil_user.php-(Página de perfil do usuario)
-│   ├── 📄 recovery.php-(Página de recuperação de senha)
-|   └── 📄 sucsses.php-(Página de sucesso pos add nova senha)
+│   └── 📄 recovery.php-(Página de recuperação de senha)
 │    
 │
 │

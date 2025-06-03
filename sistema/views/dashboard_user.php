@@ -16,6 +16,10 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] >1
     header("location: ../controllers/logout.php");
     exit;
 }
+// Alerta de sucesso.
+$alerta = $_SESSION['alert_success'] ?? null;
+unset($_SESSION['alert_success']); // limpa após usar
+
 
 $_SESSION['LAST_ACTIVITY'] = time();
 
@@ -313,8 +317,6 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
-
-
     <!--Spinner-de-carregabdo-->
     <div id="loadingSpinner" class="text-center my-4" style="display: none;">
       <div class="spinner-border text-primary" role="status">
@@ -331,6 +333,26 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
     <!-- <script src="config/base_url.php"></script> -->
     <!-- cadastro de veiculos -->
      <script src="../public/js/cadastro_veiculo.js"></script>
+    <!-- lib sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Script para exibir mensagens de alerta -->
+<?php if ($alerta === 'senha_redefinida'): ?>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+              icon: "success",
+              title: "Senha redefinida!",
+              text: "Login automático autorizado",
+              showConfirmButton: false,
+              timer: 3000
+        }); //.then(() => {
+        //       window.location.href = '../views/dashboard_user.php';
+        // });
+    });
+</script>
+<?php endif; ?>
+
 
 
 </section>

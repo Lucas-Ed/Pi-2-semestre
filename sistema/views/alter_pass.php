@@ -46,7 +46,7 @@ $nomeUsuario = $usuario['nome'] ?? 'Usuário';
 
 <script>
     const phpStatus = <?= json_encode($status) ?>;
-    console.log("phpStatus:", phpStatus);
+    //console.log("phpStatus:", phpStatus);
 </script>
 
 <title>Alterar senha</title>

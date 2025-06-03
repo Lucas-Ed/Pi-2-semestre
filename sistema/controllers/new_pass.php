@@ -49,7 +49,11 @@ if ($senha !== $nova_senha) {
     header("Location: ../views/alter_pass.php?erro=senhas_diferentes");
     exit;
 }
-
+// (Opcional) Validação extra de segurança de senha menor que 6 caracteres.
+if (strlen($senha) < 6) {
+    header("Location: ../views/alter_pass.php?erro=senha_muito_curta");
+    exit;
+}
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
 // Atualiza no banco
@@ -58,18 +62,43 @@ $update = $conn->prepare("UPDATE usuarios
     WHERE idusuarios = ?");
 $update->bind_param('si', $senhaHash, $userId);
 
+// if ($update->execute()) {
+//     unset($_SESSION['redefinir_usuario_id']);
+//     unset($_SESSION['csrf_token']); // Remove token após uso
+
+//     // $_SESSION['status'] = 'senha_redefinida';// aqui
+//     // header("Location: ../views/alter_pass.php");// aqui
+//     header("Location: ../views/sucsses.php");
+//     // echo "<script>window.location.href = '../views/alter_pass.php?status=senha_redefinida';</script>";
+//     //echo "<script>location.replace('../views/alter_pass.php?status=senha_redefinida');</script>";
+//     ob_end_flush(); // <-- libera o buffer se tudo ocorreu bem
+//     exit;
+
+// } 
+
+// redireciona o usuário para o dashboard após redefinição
 if ($update->execute()) {
+    // Login automático após redefinição
+    $_SESSION['loggedin'] = true;
+    $_SESSION['idusuarios'] = $userId;
+    $_SESSION['LAST_ACTIVITY'] = time();
+
+    // Recupera o nome do usuário para exibir no dashboard
+    $stmt = $conn->prepare("SELECT nome FROM usuarios WHERE idusuarios = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $usuario = $result->fetch_assoc();
+    $_SESSION['nome'] = $usuario['nome'] ?? 'Usuário';
+
     unset($_SESSION['redefinir_usuario_id']);
-    unset($_SESSION['csrf_token']); // Remove token após uso
+    unset($_SESSION['csrf_token']);
 
-    // $_SESSION['status'] = 'senha_redefinida';// aqui
-    // header("Location: ../views/alter_pass.php");// aqui
-    header("Location: ../views/sucsses.php");
-    // echo "<script>window.location.href = '../views/alter_pass.php?status=senha_redefinida';</script>";
-    //echo "<script>location.replace('../views/alter_pass.php?status=senha_redefinida');</script>";
-    ob_end_flush(); // <-- libera o buffer se tudo ocorreu bem
+    $_SESSION['alert_success'] = 'senha_redefinida';
+
+    header("Location: ../views/dashboard_user.php");
+    ob_end_flush();
     exit;
-
 } else {
     header("Location: ../views/alter_pass.php?erro=falha_redefinicao");
     exit;

@@ -33,10 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     } else if (status === 'codigo_enviado') {
         Swal.fire({
-            icon: 'success',
-            title: 'Código enviado!',
-            text: 'Verifique seu e-mail. Código válido por 2 horas.',
-            confirmButtonText: 'OK'
+                icon: "success",
+                title: "Código enviado!",
+                text: "Verifique seu e-mail. Código válido por 2 horas.",
+                showConfirmButton: false,
+                timer: 2000
+            // icon: 'success',
+            // title: 'Código enviado!',
+            // text: 'Verifique seu e-mail. Código válido por 2 horas.',
+            // confirmButtonText: 'OK'
         });
     } else if (status === 'codigo_validado') {
         Swal.fire({
