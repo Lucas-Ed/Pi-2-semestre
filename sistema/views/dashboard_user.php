@@ -1,5 +1,8 @@
 <?php
 session_start();
+// Gera um token CSRF, pra sessão para proteger contra ataques CSRF
+// $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
 require_once __DIR__ . '/../init.php'; // para garantir que a conexão esteja disponível
 // Chama o componente de cabeçalho da página
 require_once __DIR__ . '/components/header.php'; 
@@ -167,6 +170,8 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
       <form id="carForm" method="POST">
+        <!-- CSRF Token para segurança, input oculto -->
+        <!-- <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>"> -->
         <div class="modal-body px-4 py-4 text-white">
           <h5 class="text-center fw-bold mb-4">Novo Veículo</h5>
 

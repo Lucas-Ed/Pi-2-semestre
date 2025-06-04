@@ -1,5 +1,10 @@
 <?php
 session_start();
+// Verifica se o CSRF token está presente e é válido.
+// if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+//     die('CSRF token inválido.');
+// }
+
 require_once __DIR__ . '/../init.php';
 
 ini_set('display_errors', 1);

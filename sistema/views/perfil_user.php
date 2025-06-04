@@ -3,6 +3,12 @@ require_once '../init.php'; // <-- Inicia sessão
 // Chama o componente de cabeçalho da página
 require_once __DIR__ . '/components/header.php'; 
 
+// Verifica se o usuário está logado
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: ../views/index.php");
+    exit;
+}
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }

@@ -2,14 +2,25 @@
 // Inclui o arquivo de inicialização
 require_once __DIR__ . '/../../init.php';
 
+// Verifica se o usuário está autenticado
+if (!isset($_SESSION['idusuarios'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Usuário não autenticado']);
+    exit;
+}
+
+$idUsuario = $_SESSION['idusuarios'];
+
 $busca = trim($_GET['q'] ?? '');
 
 if ($busca === '') {
     echo json_encode(['erro' => 'Digite algo para pesquisar.']);
     exit;
 }
+
+
 // Verifica se o termo de busca contém apenas caracteres válidos, previnindo injeção de SQL e outros problemas de segurança.
-if (!preg_match('/^[a-zA-Z0-9@.\s+-]+$/', $busca)) {
+if (!preg_match('/^[\p{L}0-9@.\s+-]+$/u', $busca)) {
     echo json_encode([
         'erro' => 'Termo inválido. Só é possível buscar por nome, CPF, telefone ou e-mail.'
     ]);

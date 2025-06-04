@@ -1,4 +1,8 @@
 <?php 
+// Gera um token CSRF se não existir
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 include_once '../controllers/send_token.php';
 require_once __DIR__ . '/components/header.php'; 
 ?>
@@ -12,6 +16,8 @@ require_once __DIR__ . '/components/header.php';
 
             <!-- FORMULÁRIO 1: Enviar e-mail -->
             <form action="../controllers/send_token.php" method="POST" style="margin-bottom: 1rem;">
+                <!-- Input oculto token Csrf -->
+                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <div class="mb-3">
                     <div class="d-flex align-items-center gap-2">
                         <div class="d-flex align-items-center flex-grow-1"
@@ -35,6 +41,8 @@ require_once __DIR__ . '/components/header.php';
 
             <!-- FORMULÁRIO 2: Validar código -->
             <form action="../controllers/send_token.php" method="POST" id="formValidarCodigo">
+                <!-- Input oculto token Csrf -->
+                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <div class="mb-3">
                     <div class="d-flex align-items-center"
                          style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">

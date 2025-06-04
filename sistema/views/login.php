@@ -12,6 +12,10 @@ require_once BASE_PATH . '/model/db.php';
 // require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Verificação do token CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("Token CSRF inválido.");
+    }
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
         $password = trim($_POST['senha']);
@@ -92,11 +96,14 @@ if (empty($_SESSION['csrf_token'])) {
 
             <!-- Exibição de erro, apenas após submissão real do form -->
             <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login']) && !empty($error)): ?>
-                <div class="alert alert-danger"><?php echo $error; ?></div>
+                <!-- <div class="alert alert-danger"><php echo $error; ?></div> -->
+                 <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <p class="text-muted mb-2 small">Insira seus dados...</p>
+                <!-- Campo CSRF. envia via post, input oculto -->
+                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                 <!-- Campo Nome -->
                 <!-- <div class="mb-3">

@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../init.php';
 
 header('Content-Type: application/json'); //-- referente ao select de horario do modal agendamentos
 
-
+// Verifica se o usuário está autenticado
 if (!isset($_SESSION['idusuarios'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Usuário não autenticado']);

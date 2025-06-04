@@ -9,134 +9,131 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
     die('Falha na validação CSRF');
 }
-
 // Token válido, então invalida o atual
-unset($_SESSION['csrf_token']);
+unset($_SESSION['csrf_token']); // Invalida o token
 
-// Conectar ao banco de dados
-$servername = $_ENV["DB_HOST"];
-$dbUsername = $_ENV["DB_USER"];
-$dbPassword = $_ENV["DB_PASS"];
-$database = $_ENV["DB_NAME"];
-
-$conn = new mysqli($servername, $dbUsername, $dbPassword, $database);
-
+// Conexão ao banco
+$conn = new mysqli(
+    $_ENV["DB_HOST"],
+    $_ENV["DB_USER"],
+    $_ENV["DB_PASS"],
+    $_ENV["DB_NAME"]
+);
 // Verifica a conexão
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Captura os dados do formulário
-$nome = $_POST["nome"];
-$email = $_POST["email"];
-$senha_cap = $_POST["senha"]; // Captura a senha
-$senha_cap_conf = $_POST["confirma_senha"]; // Captura a confirmação da senha
-$senhaHash = password_hash($_POST["senha"], PASSWORD_DEFAULT); // Criptografa a senha
-$cpf = $_POST["cpf"];
-$telefone = $_POST["telefone"];
-$rua = $_POST["rua"];
-$numero = $_POST["numero"];
-$bairro = $_POST["bairro"];
-$cep = $_POST["cep"];
+//  Captura e sanitiza os dados do formulário.
+$nome = trim($_POST["nome"]);
+$email = trim($_POST["email"]);
+$cpf = preg_replace('/[^0-9]/', '', $_POST["cpf"]);
+$telefone = preg_replace('/[^0-9]/', '', $_POST["telefone"]);
+$rua = trim($_POST["rua"]);
+$numero = intval($_POST["numero"]);
+$bairro = trim($_POST["bairro"]);
+$cep = preg_replace('/[^0-9]/', '', $_POST["cep"]);
+$senha = $_POST["senha"];
+$senha_confirma = $_POST["confirma_senha"];
 $termos = isset($_POST["termos"]) ? 1 : 0;
 $tipo = 'cliente';
 
+//  Validações
 
-// Verifica se o e-mail contém ".com" ou ".com.br"
-if (!str_contains($email, '.com') && !str_contains($email, '.com.br')) {
+// E-mail
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     header("Location: ../views/cadastro.php?erro=email_invalido");
     exit();
 }
 
-// Verifica se a senha e a confirmação  de senha são iguais
-if ($senha_cap !== $senha_cap_conf) {
-    // echo "Erro: As senhas não coincidem!";
+// Senha (mínimo 8 caracteres, ao menos 1 letra e 1 número)
+if (strlen($senha) < 8 || !preg_match('/[A-Za-z]/', $senha) || !preg_match('/[0-9]/', $senha)) {
+    header("Location: ../views/cadastro.php?erro=senha_fraca");
+    exit();
+}
 
+// Confirmação de senha
+if ($senha !== $senha_confirma) {
     header("Location: ../views/cadastro.php?erro=senha");
+    exit();
+}
+
+// CPF: 11 dígitos
+if (!preg_match('/^\d{11}$/', $cpf)) {
+    header("Location: ../views/cadastro.php?erro=cpf_invalido");
+    exit();
+}
+
+// Telefone: 10 ou 11 dígitos
+if (!preg_match('/^\d{10,11}$/', $telefone)) {
+    header("Location: ../views/cadastro.php?erro=telefone_invalido");
+    exit();
+}
+
+// CEP: 8 dígitos
+if (!preg_match('/^\d{8}$/', $cep)) {
+    header("Location: ../views/cadastro.php?erro=cep_invalido");
+    exit();
+}
+
+// Criptografa a senha
+$senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+//  Verifica se e-mail ou CPF já estão cadastrados
+$sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ? OR cpf = ?";
+$stmtCheck = $conn->prepare($sqlCheck);
+$stmtCheck->bind_param("ss", $email, $cpf);
+$stmtCheck->execute();
+$stmtCheck->store_result();
+
+if ($stmtCheck->num_rows > 0) {
+    header("Location: ../views/cadastro.php?erro=email_ou_cpf");
+    $stmtCheck->close();
     $conn->close();
     exit();
-} else{
-        // Verificar se o e-mail ou cpf já existem
-        $sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ? OR cpf = ?";
-        $stmtCheck = $conn->prepare($sqlCheck);
+}
+$stmtCheck->close();
 
-        if ($stmtCheck === false) {
-            die("Erro na preparação da verificação de usuário: " . $conn->error);
+//  Insere usuário
+$sqlUsuario = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, termos, tipo) 
+               VALUES (?, ?, ?, ?, ?, ?, ?)";
+$stmtUsuario = $conn->prepare($sqlUsuario);
+$stmtUsuario->bind_param("sssssis", $nome, $email, $senhaHash, $cpf, $telefone, $termos, $tipo);
+
+if ($stmtUsuario->execute()) {
+    $usuarios_idusuarios = $conn->insert_id;
+
+    // Insere endereço
+    $sqlEndereco = "INSERT INTO enderecos (usuarios_idusuarios, rua, numero, bairro, cep) 
+                    VALUES (?, ?, ?, ?, ?)";
+    $stmtEndereco = $conn->prepare($sqlEndereco);
+    $stmtEndereco->bind_param("issss", $usuarios_idusuarios, $rua, $numero, $bairro, $cep);
+
+    if ($stmtEndereco->execute()) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
 
-        $stmtCheck->bind_param("ss", $email, $cpf);
-        $stmtCheck->execute();
-        $stmtCheck->store_result();
+        $_SESSION['usuario_id'] = $usuarios_idusuarios;
+        $_SESSION['nome'] = $nome;
+        $_SESSION['usuario_email'] = $email;
+        $_SESSION['telefone'] = $telefone;
+        $_SESSION['usuario_tipo'] = $tipo;
+        $_SESSION['idusuarios'] = $usuarios_idusuarios;
+        $_SESSION['loggedin'] = true;
 
-        if ($stmtCheck->num_rows > 0) {
-            // E-mail ou CPF já existem
-            // echo "Erro: E-mail ou CPF já cadastrado!";
-            header("Location: ../views/cadastro.php?erro=email_ou_cpf");
-            $stmtCheck->close();
-            $conn->close();
-            exit();
-        }
-        $stmtCheck->close();
+        header("Location: ../views/cadastro.php?status=sucesso");
+        exit();
+    } else {
+        echo "Erro ao cadastrar endereço: " . $stmtEndereco->error;
+    }
 
-        // 1. Inserir o usuário
-        $sqlUsuario = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, termos, tipo) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmtUsuario = $conn->prepare($sqlUsuario);
+    $stmtEndereco->close();
 
-        if ($stmtUsuario === false) {
-            die("Erro na preparação do cadastro de usuário: " . $conn->error);
-        }
+} else {
+    echo "Erro ao cadastrar usuário: " . $stmtUsuario->error;
+}
 
-        $stmtUsuario->bind_param("sssssis", $nome, $email, $senhaHash, $cpf, $telefone, $termos, $tipo);
-
-        if ($stmtUsuario->execute()) {
-            $usuarios_idusuarios = $conn->insert_id;
-
-            // 2. Inserir o endereço
-            $sqlEndereco = "INSERT INTO enderecos (usuarios_idusuarios, rua, numero, bairro, cep) 
-                            VALUES (?, ?, ?, ?, ?)";
-            $stmtEndereco = $conn->prepare($sqlEndereco);
-
-            if ($stmtEndereco === false) {
-                die("Erro na preparação do cadastro de endereço: " . $conn->error);
-            }
-
-            $stmtEndereco->bind_param("issss", $usuarios_idusuarios, $rua, $numero, $bairro, $cep);
-
-            // if ($stmtEndereco->execute()) {
-            //     // header("Location: cadastrado.php?status=sucesso");
-            //     header("Location: ../views/cadastro.php?status=sucesso");
-            //     exit();
-            // }
-            // 
-            if ($stmtEndereco->execute()) {
-                // Inicia a sessão
-                if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
-                }
-
-                // Define variáveis de sessão simulando o login
-                $_SESSION['usuario_id'] = $usuarios_idusuarios;
-                $_SESSION['nome'] = $nome;
-                $_SESSION['usuario_email'] = $email;
-                $_SESSION['usuario_tipo'] = $tipo;
-                $_SESSION['idusuarios'] = $usuarios_idusuarios; // importante se dashboard usa $_SESSION['idusuarios']
-                $_SESSION["loggedin"] = true;
-
-                // Redireciona com SweetAlert de sucesso
-                header("Location: ../views/cadastro.php?status=sucesso");
-                exit();
-                } else {
-                        echo "Erro ao cadastrar endereço: " . $stmtEndereco->error;
-                }
-
-            $stmtEndereco->close();
-
-        } else {
-            echo "Erro ao cadastrar usuário: " . $stmtUsuario->error;
-        }
-
-        $stmtUsuario->close();
-        $conn->close();
-} // fechando o else
+$stmtUsuario->close();
+$conn->close();
 ?>

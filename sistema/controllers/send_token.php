@@ -29,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
     // echo "<script>alert('PHP foi acionado');</script>";
     // var_dump($_POST); die();
     session_start(); // [MOD] Garantir sessão iniciada
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    die("Token CSRF inválido.");
+}
     $email = $_POST['email'];
 
     // Verifica se e-mail está cadastrado
@@ -111,7 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
     }
 }// validação de código
 else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['validar_codigo'])) {
-    session_start(); // [MOD] Garante que a sessão está ativa
+        session_start(); // [MOD] Garante que a sessão está ativa
+       if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("Token CSRF inválido.");
+    }
+    
     date_default_timezone_set('America/Sao_Paulo');
 
     $codigo = $_POST['codigo'];

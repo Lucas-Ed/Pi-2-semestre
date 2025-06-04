@@ -3,6 +3,12 @@ session_start(); // Inicia a sessão
 require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
 require_once __DIR__ . '/components/header.php'; // Inclui o cabeçalho
 
+// Verifica se o usuário está logado
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: ../views/index.php");
+    exit;
+}
+
 // Consulta a tabela de usuários do tipo cliente e ordena por ordem alfabética com ORDER BY nome ASC.
 $sql = "SELECT * FROM usuarios WHERE tipo = 'cliente' ORDER BY nome ASC";
 $result = mysqli_query($conn, $sql);
