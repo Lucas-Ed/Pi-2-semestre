@@ -29,14 +29,14 @@ function formatDate(dateString) {
   return date.toLocaleDateString('pt-BR');
 }
 
-function getServiceName(serviceValue) {
-  const services = {
-    'simples': 'Lavagem Simples - R$ 40,00',
-    'completa': 'Lavagem Completa - R$ 70,00',
-    'premium': 'Lavagem Premium - R$ 100,00'
-  };
-  return services[serviceValue] || 'Serviço não especificado';
-}
+// function getServiceName(serviceValue) {
+//   const services = {
+//     'simples': 'Lavagem Simples - R$ 40,00',
+//     'completa': 'Lavagem Completa - R$ 70,00',
+//     'premium': 'Lavagem Premium - R$ 100,00'
+//   };
+//   return services[serviceValue] || 'Serviço não especificado';
+// }
 
 // Spinner
 function showSpinner(container) {
@@ -50,27 +50,31 @@ function showSpinner(container) {
 // =====================================================================================================
 // Atualiza select
 const servicos = {
-  enceramento: { carro: 80, moto: 40, caminhao: 250 },
-  polimento: { carro: 180, moto: 40, caminhao: 350, van: 1200 },
-  cristalizacao: { carro: 280, van: 1200 },
-  vitrificacao: { carro: 730 },
+  enceramento: { carro:150, moto: 80, caminhao: 500, van: 1250 },
+  polimento: { carro: 250, moto: 120, caminhao: 600, van: 1250 },
+  cristalizacao: { carro: 350, van: 1250 },
+  vitrificacao: { carro: 800 },
   lavagem_motor: { carro: 60, van: 80 },
   hidratacao_couro: { carro: 180, caminhao: 250 },
-  higienizacao: { carro: 230, caminhao: 330, van: 800 },
+  higienizacao: { carro: 300, caminhao: 455, van: 850 },
   lavagem_externa: { carro: 70, moto: 40, caminhao: 250, van: 50 },
-  lavagem_interna: { carro: 35, caminhao: 125, van: 50 }
+  lavagem_completa: { van: 100 },
+  lavagem_polimento_cristalizacao: { van: 1250 },
+  lavagem_interna: { carro: 105, caminhao: 375, van: 100 }
 };
 
 const nomesServicos = {
-  enceramento: "Enceramento",
-  polimento: "Polimento",
-  cristalizacao: "Cristalização",
-  vitrificacao: "Vitrificação",
-  lavagem_motor: "Lavagem de motor",
-  hidratacao_couro: "Hidratação em couro",
-  higienizacao: "Higienização",
+  enceramento: "Lavagem  externa + enceramento",
+  polimento: "Lavagem  externa + polimento",
+  cristalizacao: "Lavagem  externa + cristalização",
+  vitrificacao: "Lavagem  externa + vitrificação",
+  lavagem_motor: "Lavagem de motor",//
+  hidratacao_couro: "Hidratação em couro",//
+  higienizacao: " Lavagem  externa + higienização",
   lavagem_externa: "Lavagem externa",
-  lavagem_interna: "Lavagem interna"
+  lavagem_completa: "Lavagem completa",
+  lavagem_polimento_cristalizacao: "Lavagem externa + polimento + cristalização",
+  lavagem_interna: "Lavagem  externa + lavagem interna"
 };
 
 function normalizarTipo(tipo) {
@@ -404,12 +408,16 @@ function sanitize(str) {
 
 // Exibir agendamentos
 function displayAppointments(appointmentsData) {
+  // Cria o elemento HTML de lista
   appointmentsList.innerHTML = '';
 
   if (Array.isArray(appointmentsData) && appointmentsData.length > 0) {
     appointmentsData.forEach((appointment) => {
       const card = document.createElement('div');
       card.className = 'card mb-3';
+      // nomes dos serviços
+      const servicoChave = appointment.servico;
+      const servicoFormatado = nomesServicos[servicoChave] || servicoChave.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
       const levaETrazHTML = appointment.leva_e_traz
         ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
@@ -464,7 +472,7 @@ function displayAppointments(appointmentsData) {
             <div class="col-md-6">
               <p><strong>Data:</strong> ${formatDate(appointment.data)}</p>
               <p><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
-              <p><strong>Serviço:</strong> ${sanitize(appointment.servico)}</p>
+              <p><strong>Serviço:</strong> ${sanitize(servicoFormatado)}</p>
               <p><strong>Preço:</strong> R$ ${precoFormatado}</p>
               ${levaETrazHTML}
             </div>

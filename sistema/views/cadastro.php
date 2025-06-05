@@ -89,7 +89,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <div class="d-flex align-items-center"
                         style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                         <i class="bi bi-geo" style="color: #00a3c7; font-size: 1.2rem;"></i>
-                        <input type="text" name="rua" class="form-control border-0 shadow-none placeholder-light"
+                        <input type="text" name="rua"  id="rua" class="form-control border-0 shadow-none placeholder-light"
                             placeholder="*Rua"
                             style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                             required>
@@ -113,7 +113,7 @@ if (empty($_SESSION['csrf_token'])) {
                 <div class="d-flex align-items-center"
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-geo-alt-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
-                    <input type="text" name="bairro" class="form-control border-0 shadow-none placeholder-light"
+                    <input type="text" name="bairro"  id="bairro" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Bairro"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
@@ -125,7 +125,7 @@ if (empty($_SESSION['csrf_token'])) {
                 <div class="d-flex align-items-center"
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-lock" style="color: #00a3c7; font-size: 1.2rem;"></i>
-                    <input type="password" name="senha" class="form-control border-0 shadow-none placeholder-light"
+                    <input type="password" name="senha" id="senha" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Nova senha"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
@@ -137,11 +137,13 @@ if (empty($_SESSION['csrf_token'])) {
                 <div class="d-flex align-items-center"
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-lock" style="color: #00a3c7; font-size: 1.2rem;"></i>
-                    <input type="password" name="confirma_senha"
+                    <input type="password" name="confirma_senha" id="confirma_senha"
                         class="form-control border-0 shadow-none placeholder-light" placeholder="*Confirmar nova senha"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
+                    <!-- Small de confirmar senha em raltime -->
+                    <small id="senha-feedback" class="text-danger d-block mt-1" style="font-size: 0.9rem;"></small>
             </div>
 
             <!-- Checkboxes -->
@@ -174,30 +176,7 @@ if (empty($_SESSION['csrf_token'])) {
 </section>
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Lib Inputmask -->
+     <script src="https://unpkg.com/imask"></script>
 <!-- // alerts de validação -->
 <script src="../public/js/val_cads.js"></script>
-
-
-<!-- jQuery e Inputmask -->
-<!-- jQuery -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-
-<!-- Inputmask Core -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script> -->
-
-<!-- Inputmask jQuery Adapter -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script> -->
-
-<!-- Script para aplicar as máscaras -->
-<!-- <script>
-    $(document).ready(function(){
-        $('#cpf').inputmask("999.999.999-99");
-        $('#telefone').inputmask("(99) 99999-9999");
-        $('#cep').inputmask("99999-999");
-    });
-</script> -->
-
-
-
-</body>
-</html>
