@@ -106,4 +106,4 @@ $nomeUsuario = $usuario['nome'] ?? 'Usuário';
   <script src="../public/js/new_pass_alerts.js" defer></script>
 
   <!-- Rodapé -->
-   <?php include_once '../views/footer.php'; ?>
+   <?php include_once '../views/components/footer.php'; ?>

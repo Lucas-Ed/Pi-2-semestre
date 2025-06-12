@@ -40,6 +40,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 // Consulta os agendamentos e exibie somente os agendamentos do dia atual
 // e ordená-los do mais próximo para o mais distante no tempo
+// Consulta os agendamentos SOMENTE do dia atual
 $sql = "
 SELECT 
     a.idagendamentos,
@@ -54,7 +55,7 @@ SELECT
     v.modelo,
     v.placa,
     a.servico,
-    p.valor,
+    a.preco,  -- <-- Aqui está o valor correto vindo do banco
     a.data_agendamento,
     a.hora_agendamento,
     a.leva_e_tras,
@@ -68,44 +69,11 @@ LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
 WHERE a.data_agendamento = CURDATE()
 ORDER BY a.hora_agendamento ASC
 ";
+
 // Conecta ao banco de dados
 $result = $conn->query($sql);
 if (!$result) {
     die("Erro na consulta: " . $conn->error);
-}
-
-// Tabela de preços baseada no welcome.js
-$servicos = [
-    "enceramento" => ["carro" => 80, "moto" => 40, "caminhao" => 250],
-    "polimento" => ["carro" => 180, "moto" => 40, "caminhao" => 350, "van" => 1200],
-    "cristalizacao" => ["carro" => 280, "van" => 1200],
-    "vitrificacao" => ["carro" => 730],
-    "lavagem_motor" => ["carro" => 60, "van" => 80],
-    "hidratacao_couro" => ["carro" => 180, "caminhao" => 250],
-    "higienizacao" => ["carro" => 230, "caminhao" => 330, "van" => 800],
-    "lavagem_externa" => ["carro" => 70, "moto" => 40, "caminhao" => 250, "van" => 50],
-    "lavagem_interna" => ["carro" => 35, "caminhao" => 125, "van" => 50]
-];
-
-$nomesServicos = [
-    "enceramento" => "Enceramento",
-    "polimento" => "Polimento",
-    "cristalizacao" => "Cristalização",
-    "vitrificacao" => "Vitrificação",
-    "lavagem_motor" => "Lavagem de motor",
-    "hidratacao_couro" => "Hidratação em couro",
-    "higienizacao" => "Higienização",
-    "lavagem_externa" => "Lavagem externa",
-    "lavagem_interna" => "Lavagem interna"
-];
-
-// Função auxiliar para obter tipo de veículo
-function tipoVeiculo($modelo) {
-    $modeloLower = strtolower($modelo);
-    if (str_contains($modeloLower, 'moto')) return 'moto';
-    if (str_contains($modeloLower, 'caminhao')) return 'caminhao';
-    if (str_contains($modeloLower, 'van')) return 'van';
-    return 'carro'; // padrão
 }
 
 // Calcula a soma dos valores dos agendamentos
@@ -113,15 +81,13 @@ $total_valor_dia = 0;
 $agendamentos = [];
 
 while ($row = $result->fetch_assoc()) {
-    $tipo = tipoVeiculo($row['modelo']);
-    $servico = $row['servico'];
-    $valor = $servicos[$servico][$tipo] ?? 0;
-
+    $valor = $row['preco'] ?? 0; // Usa o valor do banco
     $row['valor'] = $valor;
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
-// conta o total de agendamentos do dia
+
+// Conta o total de agendamentos do dia
 $total_agend = count($agendamentos);
 
 ?>
@@ -201,14 +167,7 @@ $total_agend = count($agendamentos);
                                 <td><?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></td>
                                 <td><?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></td>
                                 <td><?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></td>
-                                <!-- <td>?<= number_format($row['valor'], 2, ',', '.') ?> R$</td> -->
-                                 <?php
-                                        $tipo = tipoVeiculo($row['modelo']);
-                                        $servico = $row['servico'];
-                                        $valor = $servicos[$servico][$tipo] ?? 0;
-                                    ?>
-                                    <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
-
+                                <td>R$ <?= number_format($row['valor'], 2, ',', '.') ?></td>
                                 <td><?= htmlspecialchars($row['executado'] ?? 'Não definido') ?></td>
                                 <td>
                                     <i class="bi bi-pencil-square me-2 icon-action btn-editar"
@@ -247,7 +206,7 @@ $total_agend = count($agendamentos);
                             <tr>
                                 <tr>
                                     <td colspan="7" class="text-end fw-bold text-black">Total do Dia:</td>
-                                    <td class="fw-bold text-black"><?= number_format($total_valor_dia, 2, ',', '.') ?> R$</td>
+                                    <td class="fw-bold text-black">R$ <?= number_format($total_valor_dia, 2, ',', '.') ?></td>
                                     <td colspan="2"></td>
                                 </tr>
 

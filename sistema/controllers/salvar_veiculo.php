@@ -1,9 +1,14 @@
 <?php
 session_start();
 // Verifica se o CSRF token está presente e é válido.
-// if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-//     die('CSRF token inválido.');
-// }
+// Captura o token enviado via header
+$headers = getallheaders();
+$csrfTokenHeader = $headers['X-CSRF-Token'] ?? '';
+
+if (!$csrfTokenHeader || $csrfTokenHeader !== $_SESSION['csrf_token']) {
+    echo json_encode(["success" => false, "message" => "CSRF token inválido."]);
+    exit;
+}
 
 require_once __DIR__ . '/../init.php';
 

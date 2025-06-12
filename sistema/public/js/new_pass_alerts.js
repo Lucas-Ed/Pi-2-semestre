@@ -46,11 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }).then(() => {
             window.location.href = '../views/recovery.php';
         });
-    } else if (erro === 'senha_muito_curta') {
+    } else if (erro === 'senha_fraca') {
             Swal.fire({
                 icon: 'warning',
                 title: 'Senha muito curta',
-                text: 'A senha deve ter pelo menos 6 caracteres.',
+                text: 'A senha deve ter pelo menos 8 caracteres e conter letras e números.',
                 showConfirmButton: false,
                 timer: 3000
             }).then(() => {

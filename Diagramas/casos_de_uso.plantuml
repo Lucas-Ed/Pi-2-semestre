@@ -3,36 +3,44 @@ left to right direction
 actor "Cliente" as cliente
 actor "Administrador" as administrador
 rectangle Aplicação-Lava-Rápido {
-  usecase "Login/logout" as login
+  usecase "Login" as login
+  usecase "Logout" as logout
   usecase "Cadastro" as cadastro
   usecase "Recuperação de Senha" as recuperacao
   usecase "Agendar serviço" as agendamento
   usecase "Cancelar Agendamento" as cancelarAgendamento
   usecase "Cadastrar veiculos" as veiculos
-  usecase "Consultar Serviços" as consultarServicos
-  usecase "Alterar Agendamento" as alterarAgendamento
+  usecase "Remover veiculos" as remov_veiculos
+  'usecase "Consultar Serviços" as consultarServicos
+  'usecase "Alterar Agendamento" as alterarAgendamento
   usecase "Consultar Agendamentos" as consultarAgendamentos
   usecase "Consultar Clientes" as consultarClientes
-  usecase "Cadastrar cartão" as cartoes
+  'usecase "Cadastrar cartão" as cartoes
+  'usecase "Remover cartão" as remov_cartoes
 
 
 
 }
 
 cliente --> login
+cliente --> logout
 cliente --> cadastro
 cliente --> agendamento
-cliente --> alterarAgendamento
+'cliente --> alterarAgendamento
 cliente --> cancelarAgendamento
 cliente --> recuperacao
 cliente --> cancelarAgendamento
-cliente --> consultarServicos
+'cliente --> consultarServicos
 cliente --> consultarAgendamentos
 cliente --> veiculos
-cliente --> cartoes
+cliente --> remov_veiculos
+'cliente --> cartoes
+'cliente --> remov_cartoes
+
 
 administrador --> consultarAgendamentos
 administrador --> consultarClientes
 administrador --> cancelarAgendamento
 administrador --> login
+'administrador -->alterarAgendamento
 @enduml

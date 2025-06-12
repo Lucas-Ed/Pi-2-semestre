@@ -5,10 +5,9 @@ session_start();
 // }
 
 // Certifique-se de que init.php foi incluído ANTES deste arquivo.
-require_once '../init.php'; // Se este arquivo for o ponto de entrada
+require_once '../init.php'; // Se este arquivo for o ponto de 
 require_once __DIR__ . '/components/header.php';
-
-require_once BASE_PATH . '/model/db.php';
+//require_once BASE_PATH . '/model/db.php';
 // require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -31,17 +31,15 @@ document.addEventListener("DOMContentLoaded", function () {
             text: 'O código expirou. Solicite um novo.',
             confirmButtonText: 'OK'
         });
-    } else if (status === 'codigo_enviado') {
+    } else if (status === 'codigo_enviado') { // Alert para o envio de e-mail com o código
         Swal.fire({
                 icon: "success",
                 title: "Código enviado!",
                 text: "Verifique seu e-mail. Código válido por 2 horas.",
                 showConfirmButton: false,
                 timer: 2000
-            // icon: 'success',
-            // title: 'Código enviado!',
-            // text: 'Verifique seu e-mail. Código válido por 2 horas.',
-            // confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '../views/validacao_cod.php'; 
         });
     } else if (status === 'codigo_validado') {
         Swal.fire({

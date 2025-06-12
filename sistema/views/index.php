@@ -19,6 +19,9 @@ $pagina = $caminho[0] ?? 'index';
 ?>
 <title>Home</title>
 
+<!-- Favicon -->
+ <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+
 <!-- CSS personalizado -->
 <link rel="stylesheet" href="../public/css/index.css">
 

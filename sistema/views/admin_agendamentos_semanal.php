@@ -84,7 +84,7 @@ SELECT
     v.modelo,
     v.placa,
     a.servico,
-    p.valor,
+    a.preco,  -- <-- Aqui está o campo correto
     a.data_agendamento,
     a.hora_agendamento,
     a.leva_e_tras,
@@ -106,32 +106,7 @@ if (!$result) {
     die("Erro na consulta: " . $conn->error);
 }
 
-// Tabela de preços baseada no welcome.js
-$servicos = [
-    "enceramento" => ["carro" => 80, "moto" => 40, "caminhao" => 250],
-    "polimento" => ["carro" => 180, "moto" => 40, "caminhao" => 350, "van" => 1200],
-    "cristalizacao" => ["carro" => 280, "van" => 1200],
-    "vitrificacao" => ["carro" => 730],
-    "lavagem_motor" => ["carro" => 60, "van" => 80],
-    "hidratacao_couro" => ["carro" => 180, "caminhao" => 250],
-    "higienizacao" => ["carro" => 230, "caminhao" => 330, "van" => 800],
-    "lavagem_externa" => ["carro" => 70, "moto" => 40, "caminhao" => 250, "van" => 50],
-    "lavagem_interna" => ["carro" => 35, "caminhao" => 125, "van" => 50]
-];
-
-$nomesServicos = [
-    "enceramento" => "Enceramento",
-    "polimento" => "Polimento",
-    "cristalizacao" => "Cristalização",
-    "vitrificacao" => "Vitrificação",
-    "lavagem_motor" => "Lavagem de motor",
-    "hidratacao_couro" => "Hidratação em couro",
-    "higienizacao" => "Higienização",
-    "lavagem_externa" => "Lavagem externa",
-    "lavagem_interna" => "Lavagem interna"
-];
-
-// Função auxiliar para obter tipo de veículo
+// Função auxiliar opcional (se ainda quiser manter para outros usos)
 function tipoVeiculo($modelo) {
     $modeloLower = strtolower($modelo);
     if (str_contains($modeloLower, 'moto')) return 'moto';
@@ -145,15 +120,13 @@ $total_valor_dia = 0;
 $agendamentos = [];
 
 while ($row = $result->fetch_assoc()) {
-    $tipo = tipoVeiculo($row['modelo']);
-    $servico = $row['servico'];
-    $valor = $servicos[$servico][$tipo] ?? 0;
-
-    $row['valor'] = $valor;
+    $valor = $row['preco'] ?? 0; // <-- Usa o campo correto vindo do banco
+    $row['valor'] = $valor;      // Para exibir na view de forma genérica
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
-// conta o total de agendamentos do dia
+
+// Conta o total de agendamentos da semana
 $total_agend = count($agendamentos);
 
 ?>
@@ -240,13 +213,7 @@ $total_agend = count($agendamentos);
                                 <td><?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></td>
                                 <td><?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></td>
                                 <!-- <td>?<= number_format($row['valor'], 2, ',', '.') ?> R$</td> -->
-                                 <?php
-                                        $tipo = tipoVeiculo($row['modelo']);
-                                        $servico = $row['servico'];
-                                        $valor = $servicos[$servico][$tipo] ?? 0;
-                                    ?>
-                                    <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
-
+                                <td>R$ <?= number_format($row['valor'], 2, ',', '.') ?></td>
                                 <td><?= htmlspecialchars($row['executado'] ?? 'Não definido') ?></td>
                                 <td>
                                     <i class="bi bi-pencil-square me-2 icon-action btn-editar"
@@ -286,7 +253,7 @@ $total_agend = count($agendamentos);
                                 <tr>
                                     <td colspan="7" class="text-end fw-bold text-black">Total da Semana:</td>
 
-                                    <td class="fw-bold text-black"><?= number_format($total_valor_dia, 2, ',', '.') ?> R$</td>
+                                    <td class="fw-bold text-black"> R$ <?= number_format($total_valor_dia, 2, ',', '.') ?></td>
                                     <td colspan="2"></td>
                                 </tr>
 
@@ -321,13 +288,7 @@ $total_agend = count($agendamentos);
                         <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>
                         <p><strong>Hora:</strong> <?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></p>
                         <p><strong>Leva e Traz:</strong> <?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></p>
-                        <!-- <p><strong>Preço:</strong> <?= number_format($row['valor'], 2, ',', '.') ?> R$</p> -->
-                        <p><strong>Preço:</strong> <?php
-                                                    $tipo = tipoVeiculo($row['modelo']);
-                                                    $servico = $row['servico'];
-                                                    $valor = $servicos[$servico][$tipo] ?? 0;
-                                                ?>
-                                                <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
+                        <p><strong>Preço:</strong>R$ <?= number_format($row['valor'], 2, ',', '.') ?></p>
                         <p><strong>Status:</strong> <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
 
                         <div class="position-absolute top-0 end-0 m-3">

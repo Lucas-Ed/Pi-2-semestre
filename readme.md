@@ -94,6 +94,7 @@ composer install
 5. Importe o backup do banco de dados "lava_rapido.sql" que esta na pasta `modelagem de banco` no phpmyadmin.
 6. Edite o arquivo `.env` com os suas credenciais smtp e senha de app do gmail, para o envio de e-mail para recuperação de senha do usuario.
 
+**OBS:** caso fique na dúvida de como preencher os dados do SMTP no arquivo .env, veja o seguinte [tutorial.](https://www.tabnews.com.br/LucasEd/como-enviar-e-mails-usando-phpmailer-e-gmail-no-xampp-ambiente-de-desenvolvimento-e-producao)
 
 7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
 8. Abra o sistema clicando na pasta views.
@@ -160,7 +161,9 @@ composer install
 │   ├── 📄 index.php-(Página Home)ok
 │   ├── 📄 login.php-(Página de login de usuários)
 │   ├── 📄 perfil_user.php-(Página de perfil do usuario)
-│   └── 📄 recovery.php-(Página de recuperação de senha)
+│   ├── 📄 recovery.php-(Página de recuperação de senha)
+│   ├── 📄 sucsses.php-(Página de sucesso pos add nova senha)
+|   └── 📄 validacao_cod.php-(Página de validação do token)
 │    
 │
 │

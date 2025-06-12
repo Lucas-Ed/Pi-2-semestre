@@ -50,10 +50,21 @@ if ($senha !== $nova_senha) {
     exit;
 }
 // (Opcional) Validação extra de segurança de senha menor que 6 caracteres.
-if (strlen($senha) < 6) {
-    header("Location: ../views/alter_pass.php?erro=senha_muito_curta");
+// if (strlen($senha) < 6) {
+//     header("Location: ../views/alter_pass.php?erro=senha_muito_curta");
+//     exit;
+// }
+
+// Validação de senha forte: pelo menos 8 caracteres, contendo letras e números
+if (
+    strlen($senha) < 8 ||                      // menos de 8 caracteres → inválido
+    !preg_match('/[A-Za-z]/', $senha) ||       // deve conter pelo menos uma letra
+    !preg_match('/\d/', $senha)                // deve conter pelo menos um número
+) {
+    header("Location: ../views/alter_pass.php?erro=senha_fraca");
     exit;
 }
+
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
 // Atualiza no banco

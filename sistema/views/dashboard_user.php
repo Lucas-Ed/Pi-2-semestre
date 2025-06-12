@@ -2,6 +2,9 @@
 session_start();
 // Gera um token CSRF, pra sessão para proteger contra ataques CSRF
 // $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 require_once __DIR__ . '/../init.php'; // para garantir que a conexão esteja disponível
 // Chama o componente de cabeçalho da página
@@ -163,7 +166,8 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
         &copy; <?= date('Y') ?> Embelezamento Automotivo. Todos os direitos reservados.
     </footer>
 
-
+<!-- csrf-token para segurança -->
+<meta name="csrf-token" content="<?= $_SESSION['csrf_token']; ?>">
 
 <!-- Modal: Novo Veículo -->
 <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
@@ -215,7 +219,7 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
               style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
               Voltar
             </button>
-            <button type="submit" class="btn w-50 ms-2"
+            <button type="submit" class="btn w-50 ms-2" id="submitCarBtn"
               style="background-color: white; color: #444; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;">
               Salvar
             </button>

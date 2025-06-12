@@ -1,27 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
-    const erro = params.get('erro');
+    //const erro = params.get('erro');
     const status = params.get('status');
 
     //  Alertas de erro
-    const errorMap = {
-        'senha': 'As senhas não coincidem.',
-        'email_ou_cpf': 'E-mail ou CPF já cadastrado!',
-        'email_invalido': 'O e-mail informado é inválido.',
-        'senha_fraca': 'A senha deve ter no mínimo 8 caracteres, contendo letras e números.',
-        'cpf_invalido': 'O CPF informado é inválido. Informe apenas números (11 dígitos).',
-        'telefone_invalido': 'Telefone inválido. Use o formato com DDD e número (10 a 11 dígitos).',
-        'cep_invalido': 'CEP inválido. Informe 8 dígitos numéricos.'
-    };
+    // const errorMap = {
+    //     'senha': 'As senhas não coincidem.',
+    //     'email_ou_cpf': 'E-mail ou CPF já cadastrado!',
+    //     'email_invalido': 'O e-mail informado é inválido.',
+    //     'senha_fraca': 'A senha deve ter no mínimo 8 caracteres, contendo letras e números.',
+    //     'cpf_invalido': 'O CPF informado é inválido. Informe apenas números (11 dígitos).',
+    //     'telefone_invalido': 'Telefone inválido. Use o formato com DDD e número (10 a 11 dígitos).',
+    //     'cep_invalido': 'CEP inválido. Informe 8 dígitos numéricos.'
+    // };
 
-    if (erro && errorMap[erro]) {
+    // if (erro && errorMap[erro]) {
+    //     Swal.fire({
+    //         icon: 'error',
+    //         title: 'Oops...',
+    //         text: errorMap[erro],
+    //         confirmButtonText: 'OK'
+    //     }).then(() => {
+    //         history.replaceState(null, '', window.location.pathname);
+    //     });
+    // Exibe erros vindos do PHP via window.formErrors (injetado no HTML via PHP)
+    if (window.formErrors && Array.isArray(window.formErrors) && window.formErrors.length > 0) {
+        const htmlList = window.formErrors.map(erro => `<li>${erro}</li>`).join('');
         Swal.fire({
             icon: 'error',
-            title: 'Oops...',
-            text: errorMap[erro],
+            title: 'Erro ao cadastrar',
+            html: `<ul style="text-align: left;">${htmlList}</ul>`,
             confirmButtonText: 'OK'
-        }).then(() => {
-            history.replaceState(null, '', window.location.pathname);
         });
     } else if (status === 'sucesso') {
         Swal.fire({

@@ -250,15 +250,22 @@ function normalizarMarca(marca) {
 function pastaDaMarcaPorTipo(tipo) {
   switch ((tipo ?? '').toLowerCase()) {
     case 'carro':
-      return 'logo_carros';
+      return 'carro';
     case 'moto':
-      return 'logo_motos';
+      return 'moto';
     case 'caminhao':
-      return 'logo_caminhoes';
+      return 'caminhao';
+    case 'van':
+      return 'van';
+    case 'onibus':
+      return 'onibus';
+    case 'caminhonete':
+      return 'caminhonete';
     default:
-      return 'logo_carros'; 
+      return 'carro';
   }
 }
+
 // Exibe os veículos
 function displayCars(cars) {
   carsList.innerHTML = '';
@@ -572,12 +579,19 @@ async function removeAppointment(appointmentId) {
 // Funcionalidade de adicionar veículo.
 carForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  // const formData = {
+  // tipo: document.getElementById('tipo').value,
+  // marca: document.getElementById('marca').value,
+  // modelo: document.getElementById('modelo').value,
+  // placa: document.getElementById('placa').value.toUpperCase()
+  //};
+
   const formData = {
-  tipo: document.getElementById('tipo').value,
-  marca: document.getElementById('marca').value,
-  modelo: document.getElementById('modelo').value,
-  placa: document.getElementById('placa').value.toUpperCase()
-  };
+  tipo: document.getElementById('tipo').value.trim(),
+  marca: document.getElementById('marca').value.trim(),
+  modelo: document.getElementById('modelo').value.trim(),
+  placa: document.getElementById('placa').value.trim().toUpperCase()
+}
 
   // testando
 //   console.log({
@@ -587,28 +601,68 @@ carForm.addEventListener('submit', (e) => {
 //   placa: document.getElementById('placa').value.toUpperCase()
 // });
 
+if (!formData.tipo || !formData.marca || !formData.modelo || !formData.placa) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Campos obrigatórios',
+    text: 'Por favor, preencha todos os campos antes de salvar.'
+  });
+  return;
+}
   addCar(formData);
-  carForm.reset();
-  addCarModal.hide();
+  // carForm.reset(); //  Resetaro form.
+  // addCarModal.hide(); // Fechar modal
 });
 
 // Validar placa
+// function isValidPlate(placa) {
+//   const oldFormat = /^[A-Z]{3}-\d{4}$/;
+//   const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
+//   return oldFormat.test(placa) || newFormat.test(placa);
+// }
 function isValidPlate(placa) {
-  const oldFormat = /^[A-Z]{3}-\d{4}$/;
-  const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
-  return oldFormat.test(placa) || newFormat.test(placa);
+  if (typeof placa !== 'string') return false;
+
+  const normalized = placa.trim().toUpperCase();
+
+  const oldFormatWithHyphen = /^[A-Z]{3}-\d{4}$/;
+  const oldFormatNoHyphen   = /^[A-Z]{3}\d{4}$/;
+  const newMercosulFormat   = /^[A-Z]{3}\d[A-Z]\d{2}$/;
+
+  return (
+    oldFormatWithHyphen.test(normalized) ||
+    oldFormatNoHyphen.test(normalized) ||
+    newMercosulFormat.test(normalized)
+  );
 }
+// placas válidas:
+// ABC-1234 ✅
+
+// ABC1234 ✅
+
+// ABC1D23 ✅
+
+// abc1234 (deve funcionar após toUpperCase()) ✅
+
+// AB1-2345, A1B2C3, 123-ABCD ❌ (inválidos)
 
 // Adicionar carro
 async function addCar(car) {
   try {
     if (!isValidPlate(car.placa)) {
-      throw new Error('Placa inválida! Use o formato AAA-1234 ou AAA1A23');
+      throw new Error('Placa inválida! Use o formato ABC-1234, ABC1234 ou ABC1D23');
     }
-
+    //Desabilitar o botão de envio para evitar múltiplos cliques
+    const submitBtn = document.getElementById('submitCarBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Salvando...'; // opcional
+    // Adicionar token CSRF se necessário
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const res = await fetch('../controllers/salvar_veiculo.php', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+                  'X-CSRF-Token': csrfToken // Adiciona o token CSRF
+       },
       credentials: 'include',
       body: JSON.stringify(car)
     });
@@ -623,6 +677,8 @@ async function addCar(car) {
         timer: 2000,
         showConfirmButton: false
       }).then(() => {
+        carForm.reset();         //  Resetar só após sucesso
+        addCarModal.hide();      // Fechar modal só após sucesso
         window.location.href = '../views/dashboard_user.php';
       });
     } else {
@@ -634,6 +690,10 @@ async function addCar(car) {
       title: 'Erro',
       text: error.message,
     });
+  } finally {
+    // Reativar botão sempre (sucesso ou erro)
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Salvar';
   }
 }
 

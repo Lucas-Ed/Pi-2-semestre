@@ -1,11 +1,20 @@
 <?php
 require_once '../init.php'; // <-- Inicia sessão
+//  captura os dados do formulário e os armazena na sessão.
+$form_data = $_SESSION['form_data'] ?? [];
+$form_errors = $_SESSION['form_errors'] ?? [];
+unset($_SESSION['form_data'], $_SESSION['form_errors']);
+
+// Exporta para JavaScript
+echo "<script>window.formErrors = " . json_encode($form_errors) . ";</script>";
+
 // Chama o componente de cabeçalho da página
 require_once __DIR__ . '/components/header.php'; 
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+
 ?>
 
 <title>Cadastro</title>
@@ -13,6 +22,18 @@ if (empty($_SESSION['csrf_token'])) {
 <link rel="stylesheet" href="../public/css/cadastrar_se/cadastro.css">
 
 <section class="bg-white d-flex flex-column min-vh-100">
+<!-- Mensagem de erro -->
+<!-- <?php if (!empty($form_errors)): ?>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($form_errors as $erro): ?>
+                <li><?= htmlspecialchars($erro) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?> -->
+
+
     <main class="container my-auto px-3" style="max-width: 500px;">
         <h4 class="text-center fw-bold mb-5 mt-4" style="color: #444">Cadastro</h4>
 
@@ -26,6 +47,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-person" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input  type="text" name="nome" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Nome completo"
+                        value="<?= htmlspecialchars($form_data['nome'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -42,6 +64,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-telephone" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="text" name="telefone" id="telefone" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Celular (com DDD)"
+                        value="<?= htmlspecialchars($form_data['telefone'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -54,6 +77,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-envelope" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="email" name="email" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Endereço de e-mail"
+                        value="<?= htmlspecialchars($form_data['email'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -66,6 +90,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-credit-card" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="text" name="cpf" id="cpf" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*CPF"
+                        value="<?= htmlspecialchars($form_data['cpf'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -78,6 +103,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-geo-alt" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="text"  name="cep" id="cep" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*CEP"
+                        value="<?= htmlspecialchars($form_data['cep'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -91,6 +117,7 @@ if (empty($_SESSION['csrf_token'])) {
                         <i class="bi bi-geo" style="color: #00a3c7; font-size: 1.2rem;"></i>
                         <input type="text" name="rua"  id="rua" class="form-control border-0 shadow-none placeholder-light"
                             placeholder="*Rua"
+                            value="<?= htmlspecialchars($form_data['rua'] ?? '') ?>"
                             style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                             required>
                     </div>
@@ -102,6 +129,7 @@ if (empty($_SESSION['csrf_token'])) {
                         <input type="number" name="numero"
                             class="form-control border-0 shadow-none text-center placeholder-light"
                             placeholder="*Número"
+                            value="<?= htmlspecialchars($form_data['numero'] ?? '') ?>"
                             style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                             required>
                     </div>
@@ -115,6 +143,7 @@ if (empty($_SESSION['csrf_token'])) {
                     <i class="bi bi-geo-alt-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="text" name="bairro"  id="bairro" class="form-control border-0 shadow-none placeholder-light"
                         placeholder="*Bairro"
+                        value="<?= htmlspecialchars($form_data['bairro'] ?? '') ?>"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -126,7 +155,7 @@ if (empty($_SESSION['csrf_token'])) {
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-lock" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="password" name="senha" id="senha" class="form-control border-0 shadow-none placeholder-light"
-                        placeholder="*Nova senha"
+                        placeholder="*Nova senha-(8 caracteres, letras e números)"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -138,7 +167,7 @@ if (empty($_SESSION['csrf_token'])) {
                     style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
                     <i class="bi bi-lock" style="color: #00a3c7; font-size: 1.2rem;"></i>
                     <input type="password" name="confirma_senha" id="confirma_senha"
-                        class="form-control border-0 shadow-none placeholder-light" placeholder="*Confirmar nova senha"
+                        class="form-control border-0 shadow-none placeholder-light" placeholder="*Confirmar nova senha -(8 caracteres, letras e números)"
                         style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
                         required>
                 </div>
@@ -148,7 +177,8 @@ if (empty($_SESSION['csrf_token'])) {
 
             <!-- Checkboxes -->
             <div class="form-check mb-2">
-                <input class="form-check-input" style="border: 2px solid #00a3c7;" type="checkbox" name="termos" id="termos" required>
+                <input class="form-check-input" style="border: 2px solid #00a3c7;" type="checkbox" name="termos" id="termos"
+                <?= isset($form_data['termos']) ? 'checked' : '' ?> required>
                 <label class="form-check-label" for="termos">Aceito os <a href="termos.html" target="_blank">Termos de Uso</a></label>
             </div>
 

@@ -1,6 +1,5 @@
 <?php
-require_once '../init.php';
-require_once '../model/db.php';
+require_once __DIR__ . '/../init.php';    // Inicializa o ambiente e a conexão com o banco de dados
 require_once '../Vendor/autoload.php'; // Autoload do Composer para PHPMailer e outros
 
 // Carrega as variáveis do .env
