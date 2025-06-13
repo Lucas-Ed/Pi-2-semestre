@@ -49,7 +49,7 @@ if (empty($_SESSION['csrf_token'])) {
 
 
                 <div class="d-flex justify-content-between">
-                    <a href="./login.php" class="btn d-flex align-items-center justify-content-center w-50 me-2"
+                    <a href="./recovery.php" class="btn d-flex align-items-center justify-content-center w-50 me-2"
                        style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
                         Voltar
                     </a>

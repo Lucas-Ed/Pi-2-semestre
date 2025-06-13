@@ -111,13 +111,20 @@ if (!empty($erros)) {
     exit();
 }
 
-// Criptografa a senha
+// Criptografa a senha e cpf
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+$key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
+if ($key === false) die('Erro: chave CPF inválida.');
+
+$cpfCriptografado = openssl_encrypt($cpf, 'AES-128-ECB', $key);
+if ($cpfCriptografado === false) die('Erro: falha ao criptografar.');
+
+
 
 //  Verifica se e-mail ou CPF já estão cadastrados
 $sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ? OR cpf = ?";
 $stmtCheck = $conn->prepare($sqlCheck);
-$stmtCheck->bind_param("ss", $email, $cpf);
+$stmtCheck->bind_param("ss", $email, $cpfCriptografado);
 $stmtCheck->execute();
 $stmtCheck->store_result();
 
@@ -141,7 +148,7 @@ if ($stmtCheck->num_rows > 0) {
 $sqlUsuario = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, termos, tipo) 
                VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmtUsuario = $conn->prepare($sqlUsuario);
-$stmtUsuario->bind_param("sssssis", $nome, $email, $senhaHash, $cpf, $telefone, $termos, $tipo);
+$stmtUsuario->bind_param("sssssis", $nome, $email, $senhaHash, $cpfCriptografado, $telefone, $termos, $tipo);
 
 if ($stmtUsuario->execute()) {
     $usuarios_idusuarios = $conn->insert_id;

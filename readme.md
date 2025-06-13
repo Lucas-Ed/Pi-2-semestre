@@ -96,9 +96,15 @@ composer install
 
 **OBS:** caso fique na dúvida de como preencher os dados do SMTP no arquivo .env, veja o seguinte [tutorial.](https://www.tabnews.com.br/LucasEd/como-enviar-e-mails-usando-phpmailer-e-gmail-no-xampp-ambiente-de-desenvolvimento-e-producao)
 
-7. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
-8. Abra o sistema clicando na pasta views.
-9. Pronto você verá a página Home do sistema.
+7. No arquivo .env, em `CHAVE_CPF=sua-chave-privada`, você deve adicionar a sua chave privada própria, você pode gerar a chave com o seguinte comando no terminal: 
+
+```bash
+openssl rand -base64 16
+```
+
+8. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
+9. Abra o sistema clicando na pasta views.
+10. Pronto você verá a página Home do sistema.
 
 ## 📂 Arquitetura(MVC) e funcionalidades do Projeto
 

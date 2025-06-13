@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 01/06/2025 às 03:07
+-- Tempo de geração: 13/06/2025 às 17:19
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -69,19 +69,6 @@ CREATE TABLE `enderecos` (
   `cep` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `enderecos`
---
-
-INSERT INTO `enderecos` (`idenderecos`, `usuarios_idusuarios`, `rua`, `numero`, `bairro`, `cep`) VALUES
-(11, 16, 'rua oito', '008', 'jardim das primas', '13609-300'),
-(12, 17, 'rua dez', '001', 'jardim das laranjeiras', '13609-400'),
-(13, 18, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
-(14, 19, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
-(15, 20, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
-(16, 21, 'rua dois', '001', 'jardim das laranjeiras', '13609-400'),
-(17, 22, 'rua dois', '001', 'jardim das laranjeiras', '13609-400');
-
 -- --------------------------------------------------------
 
 --
@@ -118,7 +105,7 @@ CREATE TABLE `status_ag` (
 CREATE TABLE `usuarios` (
   `idusuarios` int(10) UNSIGNED NOT NULL,
   `nome` varchar(45) NOT NULL,
-  `cpf` varchar(15) NOT NULL,
+  `cpf` varchar(255) DEFAULT NULL,
   `telefone` varchar(15) NOT NULL,
   `email` varchar(45) NOT NULL,
   `senha` varchar(255) NOT NULL,
@@ -128,21 +115,6 @@ CREATE TABLE `usuarios` (
   `criacao_token` datetime NOT NULL,
   `expiracao_token` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `usuarios`
---
-
-INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha`, `tipo`, `termos`, `token_hash`, `criacao_token`, `expiracao_token`) VALUES
-(1, 'Lucas eduardo rosolem', '0', '19998235078', '', '$2y$10$pMDgFCfWgoPwp.9sEjPMFutmvWpw8i41gjUhdVbXVPmshkjWB2aoK', '', 0, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, 'admin', '2147483647', '11999999999', 'admin@seudominio.com', '$2y$10$VpptMUovchWAR30UMdHCTumI9Y4eThiD/ghuoeb3b.v5VNp.cLgfq', 'admin', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(16, 'test', '38398477623', '19996689410', 'teste6@teste6.com.br', '$2y$10$z169FAWCoi1yZI2xG6SjjuAuvzao249BcwUioqQPXwYpQoCwkW8ve', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(17, 'testando', '55454545454545', '19996689435', 'teste@testandocom.br', '$2y$10$uTNBZ/cJImF8Yp4jyBrmCuXtvjw8ykijB5hZas5FcycA3T4aimYQC', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(18, 'testetop', '38398477634', '19996689435', 'teste11@teste11.com.br', '$2y$10$z8s.XglGJWWtDxSZr8zpu.qprA0mbCouTGBRPLIRtnwVH1.VpbzTe', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 'teste', '38398477616', '19996689435', 'madruguinha.racing@gmail.com', '$2y$10$7B.C6nc0zaoP55ag.S8bLO9Mkfc.7mVujeDlZllTV1jyCK0NAznim', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 'teste', '38398477619', '19996689446', 'lucastradingbit@gmail.com', '$2y$10$ZuShyc5IVxojJ2R0R3R0jOYFNc5aIeELH6PghBY5zVqLhR546yPqC', 'cliente', 1, '$2y$10$L4rJ87etbmT7THN6x13vpermeQsk.dBxw0/LweYtP0a0oNov4KIeC', '2025-05-18 22:12:04', '2025-05-19 00:12:04'),
-(21, 'teste', '38398477617', '19996689446', 'Renanmarques894@gmail.com', '$2y$10$j5n6yWXs15uVu.MaNudXUucWcnGMPKm4BflLW5A841e0uCWT4Ke4O', 'cliente', 1, '$2y$10$cRi25MePEjvHpCYFi9i5LOHPWA7/2Nsn4EgQGDLNlbyw1yv.EroPm', '2025-05-18 19:57:31', '2025-05-18 21:57:31'),
-(22, 'Lucas eduardo rosolemm', '383957937845', '19996689483', 'madruguinha.racing+teste@gmail.com', '$2y$10$Zd3WcWRFa44WkfNInbCdMuYWZ7LB6UEmScygFAAiQdmQb2TAz3Xga', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -159,15 +131,6 @@ CREATE TABLE `veiculos` (
   `tipo` varchar(50) NOT NULL,
   `ativo` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `veiculos`
---
-
-INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`, `ativo`) VALUES
-(27, 1, 'titan 150', 'FFF-1234', 'honda', 'moto', 0),
-(28, 1, '440', 'KKK-1234', 'volvo', 'caminhao', 0),
-(29, 1, 'gol', 'HHH-1234', 'volkswagen', 'carro', 0);
 
 --
 -- Índices para tabelas despejadas
@@ -233,7 +196,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -245,7 +208,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de tabela `pagamentos`
@@ -257,19 +220,19 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Restrições para tabelas despejadas

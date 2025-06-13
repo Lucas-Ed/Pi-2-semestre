@@ -15,12 +15,24 @@ $result = mysqli_query($conn, $sql);
 
 $clientes = [];
 if ($result && mysqli_num_rows($result) > 0) {
+    $key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
+    if ($key === false) die('Erro: chave CPF inválida.');
+
     while ($row = mysqli_fetch_assoc($result)) {
+        $dec = openssl_decrypt($row['cpf'], 'AES-128-ECB', $key);
+        if ($dec === false) {
+            error_log('Falha ao descriptografar CPF para ID '.$row['idusuarios']);
+            $dec = '[Erro ao descriptografar]';
+        }
+        $row['cpf'] = $dec;
         $clientes[] = $row;
     }
+
+    // while ($row = mysqli_fetch_assoc($result)) {
+    //     $clientes[] = $row;
+    // }
 }
 
-// Consulta a quantidade total de clientes
 $sqlTotalClientes = "SELECT COUNT(*) AS total FROM usuarios WHERE tipo = 'cliente'";
 $resultTotalClientes = mysqli_query($conn, $sqlTotalClientes);
 $totalClientes = 0;
@@ -29,12 +41,20 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
     $totalClientes = $rowTotalClientes['total'];
 }
 ?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="../public/css/tabelas.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
-<title>Lista de Clientes</title>
-
-<link rel="stylesheet" href="../public/css/tabelas.css">
-
-<section class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
@@ -66,15 +86,7 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
         </div>
 
 
-            <!-- Botão Voltar -->
-            <div class="d-flex justify-content-center my-4">
-                <a href="../views/dashboard_admin.php"
-                   class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
-                   style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px;
-                   box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
-                    Voltar
-                </a>
-            </div>
+            
         
         <div class="container px-3">
             <!-- Exibe o total de clientes cadastrados -->
@@ -105,6 +117,7 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                                 </a>
                             </td>
                             <td><?= htmlspecialchars($cliente['cpf']) ?></td>
+
                             <td>
                                 <i class="bi bi-card-text" role="button" style="color: #00a3c7;"
                                    data-bs-toggle="modal" data-bs-target="#modalDetalhes"
@@ -124,13 +137,13 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                         <p><strong>Nome:</strong> <?= htmlspecialchars($cliente['nome']) ?></p>
                         <!-- <p><strong>Telefone:</strong> ?<= htmlspecialchars($cliente['telefone']) ?></p> -->
                         <p><strong>Telefone:</strong> 
-                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: white; text-decoration: underline;">
                                 <?= htmlspecialchars($cliente['telefone']) ?>
                             </a>
                         </p>
                         <p><strong>CPF:</strong> <?= htmlspecialchars($cliente['cpf']) ?></p>
                         <div class="position-absolute top-0 end-0 m-2">
-                            <i class="bi bi-pencil-square me-2" role="button"></i>
+                            <!-- <i class="bi bi-pencil-square me-2" role="button"></i> -->
                             <i class="bi bi-card-text" role="button"
                                data-bs-toggle="modal" data-bs-target="#modalDetalhes"
                                data-cliente='<?= json_encode($cliente, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'></i>
@@ -140,7 +153,15 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                 <?php endforeach; ?>
             </div>
 
-
+            <!-- Botão Voltar -->
+            <div class="d-flex justify-content-center my-4 fixed-bottom">
+                <a href="../views/dashboard_admin.php"
+                   class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
+                   style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px;
+                   box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                    Voltar
+                </a>
+            </div>
         </div>
     </main>
 
@@ -174,7 +195,6 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
             </div>
         </div>
     </div>
-</section>
 
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -202,3 +222,6 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
         document.getElementById('modalCpf').textContent = data.cpf;
     });
 </script>
+
+</body>
+</html>

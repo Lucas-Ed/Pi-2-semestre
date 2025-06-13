@@ -72,6 +72,7 @@ SELECT
     a.preco,
     u.nome AS nome_usuario,
     u.telefone,
+    u.cpf,
     v.modelo AS modelo_carro,
     v.placa,
     s.executado
@@ -104,13 +105,28 @@ $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
+
+function descriptografarCPF($cpf_criptografado, $chave) {
+    $cipher = "AES-256-CBC";
+    $key = hash('sha256', $chave, true);
+    $cpf_criptografado = base64_decode($cpf_criptografado);
+    $iv = substr($cpf_criptografado, 0, 16);
+    $ciphertext = substr($cpf_criptografado, 16);
+    return openssl_decrypt($ciphertext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+}
+
+
 $agendamentos = [];
 
 while ($row = $result->fetch_assoc()) {
+    // Descriptografa o CPF
+    $cpf_descriptografado = descriptografarCPF($row['cpf'], $key);
     $agendamentos[] = [
         'idagendamentos' => $row['idagendamentos'],
         'nome' => $row['nome_usuario'],
         'telefone' => $row['telefone'],
+        'cpf' => $cpf_descriptografado,
         'data' => $row['data_agendamento'],
         'hora' => $row['hora_agendamento'],
         'car_modelo' => $row['modelo_carro'],

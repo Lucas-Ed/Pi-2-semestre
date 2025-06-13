@@ -1,7 +1,6 @@
 <?php
 session_start(); //  Inicia a sessão
 require_once __DIR__ . '/../init.php'; // e inclui o arquivo de inicialização
-require_once __DIR__ . '/components/header.php'; // Inclui o cabeçalho
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -76,26 +75,52 @@ if (!$result) {
     die("Erro na consulta: " . $conn->error);
 }
 
+$key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
+
+function descriptografarCPF($cpf_criptografado, $chave) {
+    $cipher = "AES-128-ECB";
+    return openssl_decrypt($cpf_criptografado, $cipher, $chave);
+}
+
 // Calcula a soma dos valores dos agendamentos
 $total_valor_dia = 0;
 $agendamentos = [];
 
 while ($row = $result->fetch_assoc()) {
-    $valor = $row['preco'] ?? 0; // Usa o valor do banco
+    $valor = $row['preco'] ?? 0;
     $row['valor'] = $valor;
+
+    // Descriptografa o CPF antes de passar para o array
+    $row['cpf'] = descriptografarCPF($row['cpf'], $key);
+
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
+// while ($row = $result->fetch_assoc()) {
+//     $valor = $row['preco'] ?? 0; // Usa o valor do banco
+//     $row['valor'] = $valor;
+//     $agendamentos[] = $row;
+//     $total_valor_dia += $valor;
+// }
 
 // Conta o total de agendamentos do dia
 $total_agend = count($agendamentos);
 
 ?>
 
-<title>Listagem Agendamentos</title>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem Agendamentos</title>
 <link rel="stylesheet" href="../public/css/tabelas.css">
-
-<section class="bg-white d-flex flex-column" style="min-height: 100vh;">
+<!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
@@ -232,7 +257,7 @@ $total_agend = count($agendamentos);
                         <p><strong>Nome:</strong> <?= htmlspecialchars($row['nome']) ?></p>
                         <p>
                             <strong>Telefone:</strong>
-                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: white; text-decoration: underline;">
                                 <?= htmlspecialchars($row['telefone']) ?>
                             </a>
                         </p>
@@ -241,13 +266,8 @@ $total_agend = count($agendamentos);
                         <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>
                         <p><strong>Hora:</strong> <?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></p>
                         <p><strong>Leva e Traz:</strong> <?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></p>
-                        <!-- <p><strong>Preço:</strong> <?= number_format($row['valor'], 2, ',', '.') ?> R$</p> -->
-                        <p><strong>Preço:</strong> <?php
-                                                    $tipo = tipoVeiculo($row['modelo']);
-                                                    $servico = $row['servico'];
-                                                    $valor = $servicos[$servico][$tipo] ?? 0;
-                                                ?>
-                                                <td><?= number_format($valor, 2, ',', '.') ?> R$</td>
+                        <p><strong>Preço:</strong> R$ <?= number_format($row['preco'], 2, ',', '.') ?></p>
+
                         <p><strong>Status:</strong> <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
 
                         <div class="position-absolute top-0 end-0 m-3">
@@ -256,7 +276,7 @@ $total_agend = count($agendamentos);
                                 data-id="<?= $row['idagendamentos'] ?>"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalEditar"
-                                style="color: #00a3c7;">
+                                style="color: white;">
                             </i>
 
                             <i class="bi bi-card-text btn-detalhes" 
@@ -367,7 +387,6 @@ $total_agend = count($agendamentos);
             </div>
         </div>
     </div>
-</section>
 
 <!-- Script para preencher o modal dinamicamente -->
 <script>
@@ -511,7 +530,7 @@ document.querySelectorAll('.btn-remover').forEach(btn => {
     });
 });
 </script>
-
+    
 <!-- Script para exibir a data atual -->
  <script>
   // Obter a data atual
@@ -530,3 +549,6 @@ document.querySelectorAll('.btn-remover').forEach(btn => {
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
