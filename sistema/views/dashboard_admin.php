@@ -2,9 +2,6 @@
 session_start(); // Inicia a sessão
 require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
 
-// Chama o componente de cabeçalho da página
-require_once __DIR__ . '/components/header.php'; 
-
 // Contar agendamentos ativos
 //$queryAgendamentos = "SELECT COUNT(*) AS total FROM agendamentos"; // busca todos os agendamentos
 $queryAgendamentos = "SELECT COUNT(*) AS total FROM agendamentos WHERE data_agendamento = CURDATE()"; // busca todos os agendamentos do dia atual
@@ -12,16 +9,27 @@ $resultAgendamentos = $conn->query($queryAgendamentos);
 $agendamentosAtivos = $resultAgendamentos->fetch_assoc()['total'] ?? 0;
 
 // Contar clientes cadastrados
-$queryUsuarios = "SELECT COUNT(*) AS total FROM usuarios";
+$queryUsuarios = "SELECT COUNT(*) AS total FROM usuarios WHERE tipo != 'admin'";
 $resultUsuarios = $conn->query($queryUsuarios);
 $totalUsuarios = $resultUsuarios->fetch_assoc()['total'] ?? 0;
 ?>
+<!DOCTYPE html>
+<html lang="pt-br">
 
-<title>Dashboard</title>
-<!-- CSS personalizado -->
-<link rel="stylesheet" href="../public/css/dashboard_admin.css">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Dashboard</title>
 
-<section class="bg-white d-flex flex-column" style="min-height: 100vh;">
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../public/css/dashboard_admin.css">
+</head>
+
+<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
@@ -94,9 +102,9 @@ $totalUsuarios = $resultUsuarios->fetch_assoc()['total'] ?? 0;
     <footer class="text-center py-3 small" style="color: #bbb;">
         &copy; <?= date('Y') ?>  Embelezamento Automotivo. Todos os direitos reservados.
     </footer>
-</section>
-
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 

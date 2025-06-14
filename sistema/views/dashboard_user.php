@@ -62,12 +62,25 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
 
 
 ?>
-    <!-- carrega o css da página -->
-    <link rel="stylesheet" href="../public/css/dashboard_user.css">
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Home</title>
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-<section class="bg-white d-flex flex-column" style="min-height: 100vh;">
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../public/css/dashboard_user.css">  
+</head>
+     
+<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
     <!-- Header -->
     <section class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
         style="background-color: #009bbf; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
@@ -361,7 +374,5 @@ $veiculos = $result->fetch_all(MYSQLI_ASSOC);
     });
 </script>
 <?php endif; ?>
-
-
-
-</section>
+</body>
+</html>

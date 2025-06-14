@@ -43,21 +43,26 @@ $usuario = $result->fetch_assoc();
 $nomeUsuario = $usuario['nome'] ?? 'Usuário';
 
 ?>
+<!DOCTYPE html>
+<html lang="pt-br">
 
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Alterar senha</title>
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+  <!-- CSS personalizado -->
+<link rel="stylesheet" href="../public/css/recuperar_senha/alterar_senha.css">
+</head>
+
+<body class="bg-white d-flex flex-column min-vh-100 position-relative">
 <script>
     const phpStatus = <?= json_encode($status) ?>;
     //console.log("phpStatus:", phpStatus);
 </script>
-
-<title>Alterar senha</title>
-
-  <!-- CSS personalizado -->
-<link rel="stylesheet" href="../public/css/recuperar_senha/alterar_senha.css">
-<!-- blibioteca de sweetalert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-<section class="bg-white d-flex flex-column min-vh-100 position-relative">
   <main class="d-flex flex-grow-1 align-items-center justify-content-center px-3">
     <div style="width: 100%; max-width: 400px;">
       <h4 class="text-center fw-bold mb-1" style="color: #444;">Olá <?= htmlspecialchars($nomeUsuario) ?>,</h4>
@@ -101,9 +106,13 @@ $nomeUsuario = $usuario['nome'] ?? 'Usuário';
       </form>
     </div>
   </main>
-</section>
+
   <!--Script para validação de nova senha-->
   <script src="../public/js/new_pass_alerts.js" defer></script>
 
+  <!-- blibioteca de sweetalert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Rodapé -->
    <?php include_once '../views/components/footer.php'; ?>
+</body>
+</html>

@@ -152,9 +152,6 @@ openssl rand -base64 16
 ├── 📂 vendor/
 |
 ├── 📂 views/
-|   ├── 📂 components/
-|   |    ├── 📄 footer.php-(rodapé do sistema)
-|   |    └── 📄 header.php-(cabeçalho do sistema)
 |   |
 |   |
 |   ├── 📄 admin_agendamentos_semanal.php-(Àrea logada Admin)
@@ -168,7 +165,6 @@ openssl rand -base64 16
 │   ├── 📄 login.php-(Página de login de usuários)
 │   ├── 📄 perfil_user.php-(Página de perfil do usuario)
 │   ├── 📄 recovery.php-(Página de recuperação de senha)
-│   ├── 📄 sucsses.php-(Página de sucesso pos add nova senha)
 |   └── 📄 validacao_cod.php-(Página de validação do token)
 │    
 │

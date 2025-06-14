@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 // if (session_status() !== PHP_SESSION_ACTIVE) {
 //     die("Sessão não iniciada!");
@@ -6,7 +10,6 @@ session_start();
 
 // Certifique-se de que init.php foi incluído ANTES deste arquivo.
 require_once '../init.php'; // Se este arquivo for o ponto de 
-require_once __DIR__ . '/components/header.php';
 //require_once BASE_PATH . '/model/db.php';
 // require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
 
@@ -40,21 +43,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["telefone"] = $db_telefone; // Adiciona o telefone à sessão
                 $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
                 
-                // Redireciona conforme o tipo.
+                // Define controle para alerta e redirecionamento
                 $redirectUrl = ($db_tipo === 'admin') ? '../views/dashboard_admin.php' : '../views/dashboard_user.php';
-                        echo '
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        <script>
-                            Swal.fire({
-                                icon: "success",
-                                title: "Login feito com sucesso!",
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                window.location.href = "' . $redirectUrl . '";
-                            });
-                        </script>';
-                        exit();
+                $_SESSION['login_success'] = true;
+                $_SESSION['redirect_url'] = $redirectUrl;
+
+                // Redireciona para o mesmo arquivo (evita reenvio do POST)
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
 
             } else {
                 $_SESSION['loggedin'] = FALSE;
@@ -78,9 +74,23 @@ if (empty($_SESSION['csrf_token'])) {
 }
 ?>
 
-<title>Acessar</title>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Acessar</title>
+
+    <!-- Icons bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+</head>
+
+
 <!-- Inicio do body -->
-<section class="bg-white d-flex flex-column min-vh-100 position-relative">
+<body class="bg-white d-flex flex-column min-vh-100 position-relative">
 
     <!-- Botão Sair -->
     <a href="index.php" class="position-absolute top-0 end-0 m-5 text-decoration-none text-secondary small">
@@ -166,7 +176,28 @@ if (empty($_SESSION['csrf_token'])) {
             <a href="../views/cadastro.php" class="text-white fw-bold text-decoration-underline">Cadastre-se</a>
         </small>
     </footer>
-</section>
+            
 
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <?php if (!empty($_SESSION['login_success'])): ?>
+    <script>
+        Swal.fire({
+            icon: "success",
+            title: "Login feito com sucesso!",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "<?php echo $_SESSION['redirect_url']; ?>";
+        });
+    </script>
+    <?php
+        // Limpa as variáveis para não repetir na próxima vez
+        unset($_SESSION['login_success']);
+        unset($_SESSION['redirect_url']);
+    ?>
+<?php endif; ?>
+
+</body>
+</html>

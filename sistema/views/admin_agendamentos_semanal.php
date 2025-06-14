@@ -83,7 +83,7 @@ SELECT
     v.modelo,
     v.placa,
     a.servico,
-    a.preco,  -- <-- Aqui está o campo correto
+    a.preco,  
     a.data_agendamento,
     a.hora_agendamento,
     a.leva_e_tras,
@@ -155,11 +155,15 @@ $total_agend = count($agendamentos);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem Agendamentos</title>
-<link rel="stylesheet" href="../public/css/tabelas.css">
+
 <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+    <!-- CSS personalizado -->
+     <link rel="stylesheet" href="../public/css/tabelas.css">
 </head>
 <body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
@@ -477,13 +481,13 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('modal-numero').textContent = numero;
             document.getElementById('modal-bairro').textContent = bairro;
 
-            // Monta endereço completo
-            const enderecoCompleto = ${rua}, ${numero}, ${bairro}, ${cep};
+            // Corrigido: template literals com crase
+            const enderecoCompleto = `${rua}, ${numero}, ${bairro}, ${cep}`;
             const enderecoEncoded = encodeURIComponent(enderecoCompleto);
 
             // Atualiza os links do Waze e Maps
-            document.getElementById('btn-waze').href = https://waze.com/ul?query=${enderecoEncoded}&navigate=yes;
-            document.getElementById('btn-maps').href = https://www.google.com/maps/search/?api=1&query=${enderecoEncoded};
+            document.getElementById('btn-waze').href = `https://waze.com/ul?query=${enderecoEncoded}&navigate=yes`;
+            document.getElementById('btn-maps').href = `https://www.google.com/maps/search/?api=1&query=${enderecoEncoded}`;
         });
     });
 });
