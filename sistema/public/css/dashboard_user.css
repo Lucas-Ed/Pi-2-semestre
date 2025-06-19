@@ -24,7 +24,7 @@
   z-index: 1;
 }
 
-.btn_add_vei::before {
+/*.btn_add_vei::before {
   content: "";
   position: absolute;
   top: -4px;
@@ -48,4 +48,35 @@
   100% {
     transform: rotate(360deg);
   }
+}*/
+
+#carsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center; /* opcional, deixa centralizado */
+}
+
+#carsList .card {
+  flex: 1 1 320px;
+  max-width: 500px;
+}
+
+@media  (max-width: 768px) {
+  #meu_perfil{
+    font-size: medium;
+  }
+  
+}
+
+/* update de status */
+.status-updated {
+  animation: pulse 0.5s ease-in-out;
+  color: white;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
 }

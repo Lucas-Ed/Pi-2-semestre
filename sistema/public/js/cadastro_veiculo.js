@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const marcasPorTipo = {
     carro: ['lexus','audi','alfa_romeo','rolls_royce','Fiat', 'volkswagen', 'chevrolet', 'toyota', 'honda', 'hyundai', 'ford', 'renault', 'nissan', 'citroen', 'peugeot', 'kia', 'mitsubishi', 'chery', 'lifan', 'jac', 'volvo'],
-    moto: ['husqvarna', 'mv_augusta','honda', 'yamaha',"triumph", 'suzuki', 'kawasaki', 'ducati', 'triumph', 'shineray', 'dafra', 'sundown', 'bmw', 'royal_enfield', 'harley_davidson', 'ktm', 'voltz', 'gws'],
+    moto: ['husqvarna', 'mv_augusta','honda', 'yamaha',"triumph", 'suzuki', 'kawasaki', 'ducati', 'triumph', 'shineray', 'dafra', 'sundown', 'bmw', 'royalenfield', 'harley', 'ktm', 'voltz', 'gws'],
     caminhao: ['man','foton','scania', 'mercedes-Benz', 'Volvo', 'Iveco', 'daf', 'ford', 'chevrolet', 'fiat', 'volkswagen'],
     van: ['fiat', 'renault', 'mercedes_benz', 'ford', 'volkswagen', 'chevrolet', 'citroen', 'peugeot', 'nissan', 'hyundai', 'kia'],
     onibus: ['mercedes_benz', 'volvo', 'scania', 'marcopolo', 'iveco', 'volkswagen', 'neobus', 'trolebus', 'volare', 'mascarello', 'comil', 'irizar', 'viação'],

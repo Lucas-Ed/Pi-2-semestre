@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verificação do token CSRF
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die("Token CSRF inválido.");
+        header("Location: ../views/login.php");
+        exit();
     }
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
@@ -79,17 +81,16 @@ if (empty($_SESSION['csrf_token'])) {
 
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Acessar</title>
-
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Favicon -->
     <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
 </head>
 
-
-<!-- Inicio do body -->
 <body class="bg-white d-flex flex-column min-vh-100 position-relative">
 
     <!-- Botão Sair -->
@@ -98,21 +99,21 @@ if (empty($_SESSION['csrf_token'])) {
     </a>
 
     <!-- Conteúdo central -->
-    <main class="d-flex flex-grow-1 align-items-center justify-content-center px-3">
-        <div style="width: 100%; max-width: 400px;">
+    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 200px;">
+        <div style="width: 380px;">
             <h4 class="text-center fw-bold mb-5" style="color: #444;">Login</h4>
 
 
             <!-- Exibição de erro, apenas após submissão real do form -->
             <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login']) && !empty($error)): ?>
-                <!-- <div class="alert alert-danger"><php echo $error; ?></div> -->
-                 <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+            <!-- <div class="alert alert-danger"><php echo $error; ?></div> -->
+            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <p class="text-muted mb-2 small">Insira seus dados...</p>
                 <!-- Campo CSRF. envia via post, input oculto -->
-                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                 <!-- Campo Nome -->
                 <!-- <div class="mb-3">
@@ -128,11 +129,12 @@ if (empty($_SESSION['csrf_token'])) {
                 <!-- Campo E-mail -->
                 <div class="mb-3">
                     <div class="d-flex align-items-center"
-                        style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-envelope-fill" style="color: #00a3c7; font-size: 1.2rem;"></i>
+                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
+                        <i class="bi bi-envelope-fill" style="color: #0097B2; font-size: 1.2rem;"></i>
                         <input type="email" name="email" class="form-control border-0 shadow-none placeholder-light"
                             placeholder="E-mail"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
+                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
+                            required>
                     </div>
                 </div>
 
@@ -140,28 +142,29 @@ if (empty($_SESSION['csrf_token'])) {
                 <!-- Campo Senha -->
                 <div class="mb-3">
                     <div class="d-flex align-items-center"
-                        style="border: 2px solid #00a3c7; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-key" style="color: #00a3c7; font-size: 1.2rem;"></i>
+                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
+                        <i class="bi bi-key" style="color: #0097B2; font-size: 1.2rem;"></i>
                         <input type="password" name="senha" class="form-control border-0 shadow-none placeholder-light"
-                            placeholder="Senha"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;" required>
+                            placeholder="Senha" style="margin-left: 0.75rem; font-size: 1rem; height: 100%; line-height: 1.5; padding: 0;"
+                            required />
                     </div>
                 </div>
 
                 <!-- Botão Entrar -->
-    <div class="d-grid mb-3">
-        <button type="submit" name="login" class="btn text-white d-flex align-items-center justify-content-center"
-            style="background-color: #009bbf; border-radius: 10px; height: 55px;">
-            Entrar
-        </button>
-    </div>
+                <div class="d-grid mb-3">
+                    <button type="submit" name="login"
+                        class="btn text-white d-flex align-items-center justify-content-center border-0"
+                        style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); fonst-size: 18px;">
+                        Entrar
+                    </button>
+                </div>
 
                 <!-- Link Esqueci a senha -->
-                <div class="text-start mb-4">
+                <div class="text-start">
                     <small class="text-muted" style="font-size: 0.85rem;">
                         Esqueceu a senha?
-                        <a href="../views/recovery.php"
-                            class="text-decoration-none" style="color: #009bbf;">Recuperar senha</a>
+                        <a href="../views/recovery.php" class="text-decoration-none" style="color: #0097B2;">Recuperar
+                            senha</a>
                     </small>
                 </div>
             </form>
@@ -169,35 +172,37 @@ if (empty($_SESSION['csrf_token'])) {
     </main>
 
     <!-- Rodapé -->
-    <footer class="text-white text-center py-5"
-        style="background-color: #009bbf; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+    <footer class="text-white text-center py-5 d-flex flex-column align-items-center justify-content-center fixed-bottom"
+        style="background-color: #0097B2; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 130px; font-size: 1.1rem; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+">
         <small>
             Não tem uma conta?
-            <a href="../views/cadastro.php" class="text-white fw-bold text-decoration-underline">Cadastre-se</a>
+            <a href="../views/cadastro.php" class="text-white fw-bold text-decoration-none">Cadastre-se</a>
         </small>
     </footer>
-            
+
 
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <?php if (!empty($_SESSION['login_success'])): ?>
     <script>
-        Swal.fire({
-            icon: "success",
-            title: "Login feito com sucesso!",
-            showConfirmButton: false,
-            timer: 2000
-        }).then(() => {
-            window.location.href = "<?php echo $_SESSION['redirect_url']; ?>";
-        });
+    Swal.fire({
+        icon: "success",
+        title: "Login feito com sucesso!",
+        showConfirmButton: false,
+        timer: 2000
+    }).then(() => {
+        window.location.href = "<?php echo $_SESSION['redirect_url']; ?>";
+    });
     </script>
     <?php
         // Limpa as variáveis para não repetir na próxima vez
         unset($_SESSION['login_success']);
         unset($_SESSION['redirect_url']);
     ?>
-<?php endif; ?>
+    <?php endif; ?>
 
 </body>
+
 </html>

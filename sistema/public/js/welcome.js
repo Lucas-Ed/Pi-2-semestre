@@ -272,27 +272,54 @@ function displayCars(cars) {
   if (Array.isArray(cars) && cars.length > 0) {
     cars.forEach((car) => {
       const card = document.createElement('div');
-      card.className = 'card mb-3';
+      card.className = 'card border-0';
+      card.style.flex = '1 1 40%';
+      card.style.minWidth = '200px';
+      card.style.maxWidth = '600px';
+
       card.innerHTML = `
-        <div class="card-body d-flex align-items-center gap-3 ">
-          <div class="d-flex justify-content-between align-items-center w-100">
-                    <img src="../public/uploads/img/marcas/${pastaDaMarcaPorTipo(car.tipo)}/${normalizarMarca(car.marca)}.svg"
-                      alt="${car.marca ?? 'Marca desconhecida'}"
-                      style="width: 60px; height: auto; max-height: 100px;">
-            <div>
-              <h5 class="card-title mb-1">${car.modelo}</h5>
-              <p class="card-text text-muted mb-0">Placa: ${car.placa}</p>
+        <div class="card-body d-flex align-items-center" 
+          style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
+
+          <div class="d-flex flex-column justify-content-between align-items-center w-100">
+
+            <img src="../public/uploads/img/marcas/${pastaDaMarcaPorTipo(car.tipo)}/${normalizarMarca(car.marca)}.svg"
+              alt="${car.marca ?? 'Marca desconhecida'}"
+              style="width: 60px; height: auto; max-height: 100px;">
+
+            <div class="text-center pt-2 pb-4">
+              <p class="card-text text-muted mb-0 fs-5">${car.modelo}</p>
+              <h5 class="card-text text-muted mb-0">${car.placa}</h5>
             </div>
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#scheduleModal"
-                      style="background-color: #009BBF; color: white;"
-                      onclick="openScheduleModal(${car.id})">
+
+            <div class="btn-group d-flex w-100 gap-2">
+              <button 
+                class="btn btn-sm border-0 p-3 w-50" 
+                style="
+                  background-color: #009BBF; 
+                  color: white;
+                  border-radius: 8px; 
+                  box-shadow: 0 0 10px inset rgba(0,0,0,0.3);
+                "
+                data-bs-toggle="modal" 
+                data-bs-target="#scheduleModal"
+                onclick="openScheduleModal(${car.id})">
                 <i class="bi bi-calendar-plus"></i> Agendar
               </button>
-              <button class="btn btn-danger btn-sm" onclick="removeCar(${car.id})">
+
+              <button 
+                class="btn btn-sm border-0 p-3 w-50" 
+                style="
+                  background-color: #D9534F; 
+                  color: white;
+                  border-radius: 8px; 
+                  box-shadow: 0 0 10px inset rgba(0,0,0,0.3);
+                "
+                onclick="removeCar(${car.id})">
                 <i class="bi bi-trash"></i> Remover
               </button>
             </div>
+
           </div>
         </div>`;
       carsList.appendChild(card);
@@ -413,16 +440,40 @@ function sanitize(str) {
     .replace(/'/g, "&#039;");
 }
 
+// =====================================================================================================
+// Atualização de status dos agendamentos a cada 10 segundos.
+setInterval(() => {
+  fetch('../controllers/api/get_agendamentos.php')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(agendamento => {
+        const statusElement = document.querySelector(`#status_${agendamento.idagendamentos}`);
+        const novoStatus = (agendamento.executado || 'Pendente').trim();
+        const novoTexto = novoStatus.charAt(0).toUpperCase() + novoStatus.slice(1).toLowerCase();
+
+        if (statusElement && statusElement.textContent !== novoTexto) {
+          statusElement.textContent = novoTexto;
+          statusElement.classList.add("status-updated");
+
+          setTimeout(() => {
+            statusElement.classList.remove("status-updated");
+          }, 1500);
+        }
+      });
+    })
+    .catch(error => console.error("Erro ao atualizar status:", error));
+}, 4000); // a cada 10 segundos
+
+
 // Exibir agendamentos
 function displayAppointments(appointmentsData) {
-  // Cria o elemento HTML de lista
   appointmentsList.innerHTML = '';
 
   if (Array.isArray(appointmentsData) && appointmentsData.length > 0) {
     appointmentsData.forEach((appointment) => {
       const card = document.createElement('div');
-      card.className = 'card mb-3';
-      // nomes dos serviços
+      card.className = 'card mb-3 border-0';
+
       const servicoChave = appointment.servico;
       const servicoFormatado = nomesServicos[servicoChave] || servicoChave.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
@@ -430,68 +481,80 @@ function displayAppointments(appointmentsData) {
         ? `<p class="text-success"><strong>Leva e Traz:</strong> Sim</p>`
         : '';
 
+      // Status
       const rawStatus = appointment.executado || 'pendente';
       const status = rawStatus.trim().toLowerCase();
 
-      let statusBadge = '';
+      let badgeClass = 'badge bg-secondary me-2';
+      let badgeText = 'Desconhecido';
+
       switch (status) {
         case 'pendente':
         case '':
-          statusBadge = '<span class="badge bg-warning text-dark me-2">Pendente</span>';
+          badgeClass = 'badge bg-warning text-dark me-2';
+          badgeText = 'Pendente';
           break;
-        case 'Confirmado':
         case 'confirmado':
-          statusBadge = '<span class="badge bg-secondary me-2">Confirmado</span>';
+          badgeClass = 'badge bg-secondary me-2';
+          badgeText = 'Confirmado';
           break;
         case 'fila de espera':
-          statusBadge = '<span class="badge bg-warning text-dark me-2">Fila de espera</span>';
+          badgeClass = 'badge bg-warning text-dark me-2';
+          badgeText = 'Fila de espera';
           break;
         case 'em andamento':
-          statusBadge = '<span class="badge bg-info text-dark me-2">Em andamento</span>';
+          badgeClass = 'badge bg-info text-dark me-2';
+          badgeText = 'Em andamento';
           break;
         case 'concluida':
         case 'concluído':
         case 'concluída':
-        case 'Concluída':
-          statusBadge = '<span class="badge bg-success me-2">Concluído</span>';
+          badgeClass = 'badge bg-success me-2';
+          badgeText = 'Concluída';
           break;
         case 'cancelado':
-          statusBadge = '<span class="badge bg-danger me-2">Cancelado</span>';
+          badgeClass = 'badge bg-danger me-2';
+          badgeText = 'Cancelado';
           break;
-        default:
-          statusBadge = '<span class="badge bg-secondary me-2">Desconhecido</span>';
+        case 'expirado':
+          badgeClass = '"badge bg-danger me-2';
+          badgeText = 'Expirado';
           break;
       }
 
-      // Garantir que o preço seja um número, caso contrário, atribuir valor zero
+      const statusBadge = `<span id="status_${appointment.idagendamentos}" class="badge ${badgeClass} me-2">${badgeText}</span>`;
+
+      // Preço
       const preco = parseFloat(appointment.preco_servico);
       const precoFormatado = !isNaN(preco) ? preco.toFixed(2) : '0,00';
 
-      card.innerHTML = `
-        <div class="card-body">
-          <h5 class="card-title">${sanitize(appointment.nome)}</h5>
-          <div class="row">
-            <div class="col-md-6">
-              <p><strong>Telefone:</strong> ${sanitize(appointment.telefone)}</p>
-              <p><strong>Veículo:</strong> ${sanitize(appointment.car_modelo)}</p>
-              <p><strong>Placa:</strong> ${sanitize(appointment.car_placa)}</p>
+      // HTML do card
+      card.innerHTML = 
+        `<div class="card-body" style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="card-title">${sanitize(appointment.nome)}</h5>
+              ${statusBadge}
             </div>
-            <div class="col-md-6">
-              <p><strong>Data:</strong> ${formatDate(appointment.data)}</p>
-              <p><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
-              <p><strong>Serviço:</strong> ${sanitize(servicoFormatado)}</p>
-              <p><strong>Preço:</strong> R$ ${precoFormatado}</p>
+            <div>
+              <button class="btn" onclick="removeAppointment(${appointment.idagendamentos})">
+                <i class="bi bi-trash fs-3"></i> 
+              </button>
+            </div>
+          </div>
+          <div class="">
+            <div class="d-flex flex-column gap-2">
+              <p class="m-0"><strong>Veículo:</strong> ${sanitize(appointment.car_modelo)}</p>
+              <p class="m-0"><strong>Placa:</strong> ${sanitize(appointment.car_placa)}</p>
+              <p class="m-0"><strong>Telefone:</strong> ${sanitize(appointment.telefone)}</p>
+              <p class="m-0"><strong>Data:</strong> ${formatDate(appointment.data)}</p>
+              <p class="m-0"><strong>Horário:</strong> ${sanitize(appointment.hora)}</p>
+              <p class="m-0"><strong>Serviço:</strong> ${sanitize(servicoFormatado)}</p>
+              <p class="m-0"><strong>Preço:</strong> R$ ${precoFormatado}</p>
               ${levaETrazHTML}
             </div>
           </div>
-          <div class="mt-3">
-            ${statusBadge}
-            <button class="btn btn-danger btn-sm" onclick="removeAppointment(${appointment.idagendamentos})">
-              <i class="bi bi-x-circle"></i> Cancelar
-            </button>
-          </div>
-        </div>
-      `;
+        </div>`;
 
       appointmentsList.appendChild(card);
     });
@@ -772,7 +835,7 @@ function openScheduleModal() {
   scheduleModal.show();
 }
 
-
+// =====================================================================================================
 // Definir data mínima
 const dateInput = document.getElementById('date');
 // dateInput.min = new Date().toISOString().split('T')[0];

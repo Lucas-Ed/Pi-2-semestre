@@ -87,13 +87,22 @@ try {
         exit;
     }
 
-    if ($diffEmSegundos < 3600) {
+    // if ($diffEmSegundos < 3600) {
+    //     echo json_encode([
+    //         'success' => false,
+    //         'message' => 'O cancelamento só é permitido com no mínimo 1 hora de antecedência.'
+    //     ]);
+    //     exit;
+    // }
+    // Verifica se o agendamento está no futuro e se o cancelamento é permitido
+    if ($dataHoraAgendada > $agora && $diffEmSegundos < 3600) {
         echo json_encode([
             'success' => false,
             'message' => 'O cancelamento só é permitido com no mínimo 1 hora de antecedência.'
         ]);
         exit;
     }
+
 
     // Remove status_ag (se existir)
     $sqlDeleteStatus = "DELETE FROM status_ag WHERE agendamentos_idagendamentos = ?";

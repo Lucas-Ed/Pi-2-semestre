@@ -102,9 +102,16 @@ composer install
 openssl rand -base64 16
 ```
 
-8. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
-9. Abra o sistema clicando na pasta views.
+**OBS:**  A chave privada é utilizada para criptografar o CPF do usuário, garantindo a segurança dos dados pessoais, e em conformidade com a **LGPD-(Lei geral de proteção de dados)**.
+
+8. Execute o script `setar_admin.php`, que esta na pasta raiz do sistema, para criar o usuário admin no banco de dados, com o seguinte comando no terminal:
+
+```bash
+php setar_admin.php
+```
+9. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
 10. Pronto você verá a página Home do sistema.
+11. Faça o login com o usuário admin, que foi criado no passo 8 com as seguintes credenciais de acesso **e-mail:** `admin@admin.com`  **e senha:** `admin123`, ou crie um novo usuário cliente fazendo o cadastro.
 
 ## 📂 Arquitetura(MVC) e funcionalidades do Projeto
 
@@ -123,6 +130,7 @@ openssl rand -base64 16
 |   |
 |   ├── 📄 add_agendamento.php-(adicionar agendamento)
 |   ├── 📄 admin_delete_agendamento.php-(fc. cancelar agendamento do admin)
+|   ├── 📄 atualiza_perfil.php-(update de dados do perfil do usuario)
 |   ├── 📄 logout.php-(lógica do logout do sistema)
 |   ├── 📄 new_pass.php-(lógica de alterarv a senha do usuario)
 │   ├── 📄 processa.php-(lógica do cadastro)
@@ -143,15 +151,16 @@ openssl rand -base64 16
 │   |     ├── 📄 buscar_clientes.js-(busca clientes pela api)
 │   |     ├── 📄 cadastro_veiculo.php-(lógica de cadastrar veículo)
 │   |     ├── 📄 new_pass__alerts.js-(alerts de recuperação de senha)
+│   |     ├── 📄 preencher_cep_perfil.js-(preenche os campos de endereço do modal perfil com base no CEP)
 │   |     ├── 📄 recuperacao_alerts.js-(alerts de envio de e-mail com token)
 |   |     ├── 📄 val_cads.js-(validações do form de cadastro)
-│   |     └── 📄 welcome.js-(funcionalidades de area logada)
+│   |     └── 📄 welcome.js-(funcionalidades de area  do usuário)
 |   |
 │   └── 📂 uploads/ (imagens e outros)
 |
-├── 📂 vendor/
+├── 📂 vendor/-(Blibliiotecas que o sistema depende)
 |
-├── 📂 views/
+├── 📂 views/-(Páginas do sistema)
 |   |
 |   |
 |   ├── 📄 admin_agendamentos_semanal.php-(Àrea logada Admin)
@@ -163,7 +172,6 @@ openssl rand -base64 16
 │   ├── 📄 dashboard_user.php-(Àrea logada usuario cliente)
 │   ├── 📄 index.php-(Página Home)ok
 │   ├── 📄 login.php-(Página de login de usuários)
-│   ├── 📄 perfil_user.php-(Página de perfil do usuario)
 │   ├── 📄 recovery.php-(Página de recuperação de senha)
 |   └── 📄 validacao_cod.php-(Página de validação do token)
 │    

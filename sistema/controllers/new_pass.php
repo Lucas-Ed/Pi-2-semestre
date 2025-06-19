@@ -95,12 +95,14 @@ if ($update->execute()) {
     $_SESSION['LAST_ACTIVITY'] = time();
 
     // Recupera o nome do usuário para exibir no dashboard
-    $stmt = $conn->prepare("SELECT nome FROM usuarios WHERE idusuarios = ?");
+    $stmt = $conn->prepare("SELECT nome, telefone, email FROM usuarios WHERE idusuarios = ?");
     $stmt->bind_param("i", $userId);
     $stmt->execute();
     $result = $stmt->get_result();
     $usuario = $result->fetch_assoc();
     $_SESSION['nome'] = $usuario['nome'] ?? 'Usuário';
+    $_SESSION['telefone'] = $usuario['telefone'] ?? '';
+    $_SESSION['email'] = $usuario['email'] ?? '';
 
     unset($_SESSION['redefinir_usuario_id']);
     unset($_SESSION['csrf_token']);

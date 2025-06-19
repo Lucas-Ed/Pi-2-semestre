@@ -151,20 +151,22 @@ $total_agend = count($agendamentos);
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem Agendamentos</title>
 
-<!-- Bootstrap -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Favicon -->
     <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
     <!-- CSS personalizado -->
-     <link rel="stylesheet" href="../public/css/tabelas.css">
+    <link rel="stylesheet" href="../public/css/tabelas.css">
 </head>
+
 <body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
@@ -178,15 +180,6 @@ $total_agend = count($agendamentos);
             <i class="bi bi-power me-1"></i> Sair
         </a>
     </header>
-
-            <!-- Botão Voltar -->
-            <div class="d-flex justify-content-center my-4">
-                <a href="../views/dashboard_admin.php"
-                    class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
-                    style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
-                    Voltar
-                </a>
-            </div>
 
     <main class="flex-grow-1 py-4">
         <?php
@@ -202,7 +195,7 @@ $total_agend = count($agendamentos);
             <div class="d-flex justify-content-between align-items-center mb-2 px-3">
                 <!--- Link para agendamentos do dia -->
                 <a href="../views/admin_agendamentos.php"
-                style="font-size: 0.85rem; color: #00a3c7; text-decoration: underline;">
+                    style="font-size: 0.85rem; color: #00a3c7; text-decoration: underline;">
                     Agendamentos do dia
                 </a>
                 <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
@@ -228,65 +221,58 @@ $total_agend = count($agendamentos);
                     </thead>
                     <tbody class="text-center">
                         <!-- ?<php while ($row = $result->fetch_assoc()): ?> -->
-                            <?php foreach ($agendamentos as $row): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['nome']) ?></td>
-                                <!-- <td>?<= htmlspecialchars($row['telefone']) ?></td> -->
-                                 <td>
-                                    <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: none;">
-                                        <?= htmlspecialchars($row['telefone']) ?>
-                                    </a>
-                                </td>
-                                <td><?= htmlspecialchars($row['modelo']) ?> [<?= htmlspecialchars($row['placa']) ?>]</td>
-                                <!-- <td>?<= htmlspecialchars($row['servico']) ?></td> -->
-                                 <td><?= $nomesServicos[$row['servico']] ?? ucfirst($row['servico']) ?></td>
-                                <td><?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></td>
-                                <td><?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></td>
-                                <td><?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></td>
-                                <!-- <td>?<= number_format($row['valor'], 2, ',', '.') ?> R$</td> -->
-                                <td>R$ <?= number_format($row['valor'], 2, ',', '.') ?></td>
-                                <td><?= htmlspecialchars($row['executado'] ?? 'Não definido') ?></td>
-                                <td>
-                                    <i class="bi bi-pencil-square me-2 icon-action btn-editar"
-                                        title="Editar"
-                                        data-id="<?= $row['idagendamentos'] ?>"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalEditar"
-                                        style="color: #00a3c7;">
-                                    </i>
-                                    <i class="bi bi-card-text icon-action btn-detalhes" 
-                                        title="Detalhes"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalDetalhes"
-                                        data-nome="<?= htmlspecialchars($row['nome']) ?>"
-                                        data-telefone="<?= htmlspecialchars($row['telefone']) ?>"
-                                        data-email="<?= htmlspecialchars($row['email']) ?>"
-                                        data-cpf="<?= htmlspecialchars($row['cpf']) ?>"
-                                        data-cep="<?= htmlspecialchars($row['cep']) ?>"
-                                        data-rua="<?= htmlspecialchars($row['rua']) ?>"
-                                        data-numero="<?= htmlspecialchars($row['numero']) ?>"
-                                        data-bairro="<?= htmlspecialchars($row['bairro']) ?>"
-                                        style="color: #00a3c7;">
-                                    </i>
-                                    <!-- Botão de remover -->
-                                     <i class="bi bi-trash icon-action btn-remover"
-                                        title="Remover"
-                                        data-id="<?= $row['idagendamentos'] ?>"
-                                        style="color: red; cursor: pointer;">
-                                    </i>
+                        <?php foreach ($agendamentos as $row): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['nome']) ?></td>
+                            <!-- <td>?<= htmlspecialchars($row['telefone']) ?></td> -->
+                            <td>
+                                <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>"
+                                    target="_blank" style="color: #00a3c7; text-decoration: none;">
+                                    <?= htmlspecialchars($row['telefone']) ?>
+                                </a>
+                            </td>
+                            <td><?= htmlspecialchars($row['modelo']) ?> [<?= htmlspecialchars($row['placa']) ?>]</td>
+                            <!-- <td>?<= htmlspecialchars($row['servico']) ?></td> -->
+                            <td><?= $nomesServicos[$row['servico']] ?? ucfirst($row['servico']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></td>
+                            <td><?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></td>
+                            <td><?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></td>
+                            <!-- <td>?<= number_format($row['valor'], 2, ',', '.') ?> R$</td> -->
+                            <td>R$ <?= number_format($row['valor'], 2, ',', '.') ?></td>
+                            <td><?= htmlspecialchars($row['executado'] ?? 'Não definido') ?></td>
+                            <td>
+                                <i class="bi bi-pencil-square me-2 icon-action btn-editar" title="Editar"
+                                    data-id="<?= $row['idagendamentos'] ?>" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditar" style="color: #00a3c7;">
+                                </i>
+                                <i class="bi bi-card-text icon-action btn-detalhes" title="Detalhes"
+                                    data-bs-toggle="modal" data-bs-target="#modalDetalhes"
+                                    data-nome="<?= htmlspecialchars($row['nome']) ?>"
+                                    data-telefone="<?= htmlspecialchars($row['telefone']) ?>"
+                                    data-email="<?= htmlspecialchars($row['email']) ?>"
+                                    data-cpf="<?= htmlspecialchars($row['cpf']) ?>"
+                                    data-cep="<?= htmlspecialchars($row['cep']) ?>"
+                                    data-rua="<?= htmlspecialchars($row['rua']) ?>"
+                                    data-numero="<?= htmlspecialchars($row['numero']) ?>"
+                                    data-bairro="<?= htmlspecialchars($row['bairro']) ?>" style="color: #00a3c7;">
+                                </i>
+                                <!-- Botão de remover -->
+                                <i class="bi bi-trash icon-action btn-remover" title="Remover"
+                                    data-id="<?= $row['idagendamentos'] ?>" style="color: red; cursor: pointer;">
+                                </i>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         <!-- ?<php endwhile; ?> -->
                         <?php endforeach; ?>
-                            <!-- Exibe o total do dia -->
-                            <tr>
-                                <tr>
-                                    <td colspan="7" class="text-end fw-bold text-black">Total da Semana:</td>
+                        <!-- Exibe o total do dia -->
+                        <tr>
+                        <tr>
+                            <td colspan="7" class="text-end fw-bold text-black">Total da Semana:</td>
 
-                                    <td class="fw-bold text-black"> R$ <?= number_format($total_valor_dia, 2, ',', '.') ?></td>
-                                    <td colspan="2"></td>
-                                </tr>
+                            <td class="fw-bold text-black"> R$ <?= number_format($total_valor_dia, 2, ',', '.') ?></td>
+                            <td colspan="2"></td>
+                        </tr>
 
                     </tbody>
                 </table>
@@ -302,36 +288,56 @@ $total_agend = count($agendamentos);
                     </small>
                 </div>
 
-                <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
-                    <div class="card-body position-relative">
-                        <p><strong>Nome:</strong> <?= htmlspecialchars($row['nome']) ?></p>
-                        <p>
+                <div class="card text-white mb-3 border-0" style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
+                    <div class="card-body position-relative ">
+
+                        <div>
+                            <h4 class="card-title m-0 pb-3" style="color: #444;"><?= htmlspecialchars($row['nome']) ?>
+                            </h4>
+
+                            <!-- Inserir aqui o status igual o do usuario, pois o admin precisa ferificar em qual parte do processo o cliente está vendo -->
+
+                        </div>
+
+                        <p class="card-text m-0" style="color: #444;">
                             <strong>Telefone:</strong>
-                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank" style="color: white; text-decoration: underline;">
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>" target="_blank"
+                                style="color: #444; text-decoration: underline;">
                                 <?= htmlspecialchars($row['telefone']) ?>
                             </a>
                         </p>
-                        <p><strong>Veículo:</strong> <?= htmlspecialchars($row['modelo']) ?> (<?= htmlspecialchars($row['placa']) ?>)</p>
-                        <p><strong>Serviço:</strong> <?= htmlspecialchars($row['servico']) ?></p>
-                        <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>
-                        <p><strong>Hora:</strong> <?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></p>
-                        <p><strong>Leva e Traz:</strong> <?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></p>
-                        <p><strong>Preço:</strong>R$ <?= number_format($row['valor'], 2, ',', '.') ?></p>
-                        <p><strong>Status:</strong> <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Veículo:</strong>
+                            <?= htmlspecialchars($row['modelo']) ?>
+                            (<?= htmlspecialchars($row['placa']) ?>)</p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Serviço:</strong>
+                            <?= htmlspecialchars($row['servico']) ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Data:</strong>
+                            <?= date('d/m/Y', strtotime($row['data_agendamento'])) ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Hora:</strong>
+                            <?= htmlspecialchars(substr($row['hora_agendamento'], 0, 5)) ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Leva e Traz:</strong>
+                            <?= $row['leva_e_tras'] ? 'Sim' : 'Não' ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Preço:</strong> R$
+                            <?= number_format($row['preco'], 2, ',', '.') ?></p>
+
+                        <p class="card-text m-0" style="color: #444;"><strong>Status:</strong>
+                            <?= $row['executado'] ? 'Confirmado' : 'Não Confirmado' ?></p>
 
                         <div class="position-absolute top-0 end-0 m-3">
-                            <i class="bi bi-pencil-square me-2 icon-action btn-editar"
-                                title="Editar"
-                                data-id="<?= $row['idagendamentos'] ?>"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEditar"
-                                style="color: white;">
+
+                            <i class="bi bi-pencil-square icon-action btn-editar p-1 fs-3" style="color: #444;"
+                                title="Editar" data-id="<?= $row['idagendamentos'] ?>" data-bs-toggle="modal"
+                                data-bs-target="#modalEditar" style="color: white;">
                             </i>
 
-                            <i class="bi bi-card-text btn-detalhes" 
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalDetalhes"
-                                data-nome="<?= htmlspecialchars($row['nome']) ?>"
+                            <i class="bi bi-card-text btn-detalhes p-1 fs-3" style="color: #444;" data-bs-toggle="modal"
+                                data-bs-target="#modalDetalhes" data-nome="<?= htmlspecialchars($row['nome']) ?>"
                                 data-telefone="<?= htmlspecialchars($row['telefone']) ?>"
                                 data-email="<?= htmlspecialchars($row['email']) ?>"
                                 data-cpf="<?= htmlspecialchars($row['cpf']) ?>"
@@ -341,21 +347,32 @@ $total_agend = count($agendamentos);
                                 data-bairro="<?= htmlspecialchars($row['bairro']) ?>">
                             </i>
 
-                            <i class="bi bi-trash icon-action btn-remover"
-                                title="Remover"
-                                data-id="<?= $row['idagendamentos'] ?>"
-                                style="color: red; cursor: pointer;">
+                            <i class="bi bi-trash icon-action btn-remover p-1 fs-3" title="Remover"
+                                data-id="<?= $row['idagendamentos'] ?>" style="color: red; cursor: pointer;">
                             </i>
                         </div>
                     </div>
                 </div>
                 <?php endforeach; ?>
             </div>
+        </div>
+    </main>
 
 
     <footer class="text-center py-3 small" style="color: #bbb;">
+
+        <!-- Botão Voltar -->
+        <div class="d-flex justify-content-center mb-5 fixed-bottom">
+            <a href="../views/dashboard_admin.php"
+                class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
+                style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                Voltar
+            </a>
+        </div>
+
         &copy; <?= date('Y') ?> Embelezamento Automotivo. Todos os direitos reservados.
     </footer>
+
 
     <!-- Modal Detalhes -->
     <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-hidden="true">
@@ -391,7 +408,8 @@ $total_agend = count($agendamentos);
                     </div>
 
 
-                    <button type="button" class="btn w-100 mt-5" style="background-color: white; color: #444;" data-bs-dismiss="modal">
+                    <button type="button" class="btn w-100 mt-5" style="background-color: white; color: #444;"
+                        data-bs-dismiss="modal">
                         Voltar
                     </button>
                 </div>
@@ -399,7 +417,7 @@ $total_agend = count($agendamentos);
         </div>
     </div>
 
-<!-- Modal Editar -->
+    <!-- Modal Editar -->
     <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="border-radius: 15px; background-color: #009bbf;">
@@ -437,167 +455,188 @@ $total_agend = count($agendamentos);
         </div>
     </div>
 
-<!-- Script para preencher o modal dinamicamente -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const detalhesBtns = document.querySelectorAll('.btn-detalhes');
-    detalhesBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-            document.getElementById('modal-nome').textContent = btn.dataset.nome;
-            document.getElementById('modal-telefone').textContent = btn.dataset.telefone;
-            document.getElementById('modal-email').textContent = btn.dataset.email;
-            document.getElementById('modal-cpf').textContent = btn.dataset.cpf;
-            document.getElementById('modal-cep').textContent = btn.dataset.cep;
-            document.getElementById('modal-rua').textContent = btn.dataset.rua;
-            document.getElementById('modal-numero').textContent = btn.dataset.numero;
-            document.getElementById('modal-bairro').textContent = btn.dataset.bairro;
+    <!-- Script para preencher o modal dinamicamente -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const detalhesBtns = document.querySelectorAll('.btn-detalhes');
+        detalhesBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('modal-nome').textContent = btn.dataset.nome;
+                document.getElementById('modal-telefone').textContent = btn.dataset.telefone;
+                document.getElementById('modal-email').textContent = btn.dataset.email;
+                document.getElementById('modal-cpf').textContent = btn.dataset.cpf;
+                document.getElementById('modal-cep').textContent = btn.dataset.cep;
+                document.getElementById('modal-rua').textContent = btn.dataset.rua;
+                document.getElementById('modal-numero').textContent = btn.dataset.numero;
+                document.getElementById('modal-bairro').textContent = btn.dataset.bairro;
+            });
         });
     });
-});
-</script>
+    </script>
 
-<!-- Script do waze e google maps -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const detalhesBtns = document.querySelectorAll('.btn-detalhes');
+    <!-- Script do waze e google maps -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const detalhesBtns = document.querySelectorAll('.btn-detalhes');
 
-    detalhesBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const nome = btn.dataset.nome;
-            const telefone = btn.dataset.telefone;
-            const email = btn.dataset.email;
-            const cpf = btn.dataset.cpf;
-            const cep = btn.dataset.cep;
-            const rua = btn.dataset.rua;
-            const numero = btn.dataset.numero;
-            const bairro = btn.dataset.bairro;
+        detalhesBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const nome = btn.dataset.nome;
+                const telefone = btn.dataset.telefone;
+                const email = btn.dataset.email;
+                const cpf = btn.dataset.cpf;
+                const cep = btn.dataset.cep;
+                const rua = btn.dataset.rua;
+                const numero = btn.dataset.numero;
+                const bairro = btn.dataset.bairro;
 
-            document.getElementById('modal-nome').textContent = nome;
-            document.getElementById('modal-telefone').textContent = telefone;
-            document.getElementById('modal-email').textContent = email;
-            document.getElementById('modal-cpf').textContent = cpf;
-            document.getElementById('modal-cep').textContent = cep;
-            document.getElementById('modal-rua').textContent = rua;
-            document.getElementById('modal-numero').textContent = numero;
-            document.getElementById('modal-bairro').textContent = bairro;
+                document.getElementById('modal-nome').textContent = nome;
+                document.getElementById('modal-telefone').textContent = telefone;
+                document.getElementById('modal-email').textContent = email;
+                document.getElementById('modal-cpf').textContent = cpf;
+                document.getElementById('modal-cep').textContent = cep;
+                document.getElementById('modal-rua').textContent = rua;
+                document.getElementById('modal-numero').textContent = numero;
+                document.getElementById('modal-bairro').textContent = bairro;
 
-            // Corrigido: template literals com crase
-            const enderecoCompleto = `${rua}, ${numero}, ${bairro}, ${cep}`;
-            const enderecoEncoded = encodeURIComponent(enderecoCompleto);
+                // Corrigido: template literals com crase
+                const enderecoCompleto = `${rua}, ${numero}, ${bairro}, ${cep}`;
+                const enderecoEncoded = encodeURIComponent(enderecoCompleto);
 
-            // Atualiza os links do Waze e Maps
-            document.getElementById('btn-waze').href = `https://waze.com/ul?query=${enderecoEncoded}&navigate=yes`;
-            document.getElementById('btn-maps').href = `https://www.google.com/maps/search/?api=1&query=${enderecoEncoded}`;
+                // Atualiza os links do Waze e Maps
+                document.getElementById('btn-waze').href =
+                    `https://waze.com/ul?query=${enderecoEncoded}&navigate=yes`;
+                document.getElementById('btn-maps').href =
+                    `https://www.google.com/maps/search/?api=1&query=${enderecoEncoded}`;
+            });
         });
     });
-});
-</script>
+    </script>
 
-<!-- alertas  de editar-->
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-let agendamentoId = null;
+    <!-- alertas  de editar-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    let agendamentoId = null;
 
-document.querySelectorAll('.btn-editar').forEach(btn => {
-    btn.addEventListener('click', () => {
-        agendamentoId = btn.dataset.id;
-    });
-});
-
-document.querySelectorAll('#modalEditar .btn-status').forEach(button => {
-    button.addEventListener('click', () => {
-        const status = button.innerText.trim();
-        if (!agendamentoId) return;
-
-        fetch('../controllers/update_status.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: agendamentoId, status: status })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Status atualizado',
-                    text: 'O status foi alterado com sucesso!',
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => location.reload());
-            } else {
-                Swal.fire({ icon: 'error', title: 'Erro', text: data.message || 'Erro ao atualizar o status.' });
-            }
-        })
-        .catch(() => {
-            Swal.fire({ icon: 'error', title: 'Erro', text: 'Erro na requisição.' });
+    document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', () => {
+            agendamentoId = btn.dataset.id;
         });
     });
-});
-</script>
 
-<!-- alertas de remover -->
- <script>
-document.querySelectorAll('.btn-remover').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const agendamentoId = btn.dataset.id;
+    document.querySelectorAll('#modalEditar .btn-status').forEach(button => {
+        button.addEventListener('click', () => {
+            const status = button.innerText.trim();
+            if (!agendamentoId) return;
 
-        Swal.fire({
-            title: 'Tem certeza?',
-            text: "Essa ação não pode ser desfeita!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sim, remover!',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch('../controllers/admin_delete_agendamento.php', {
+            fetch('../controllers/update_status.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: agendamentoId })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: agendamentoId,
+                        status: status
+                    })
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Removido!',
-                            text: 'O agendamento foi removido com sucesso.',
+                            title: 'Status atualizado',
+                            text: 'O status foi alterado com sucesso!',
                             timer: 2000,
                             showConfirmButton: false
                         }).then(() => location.reload());
                     } else {
-                        Swal.fire('Erro', data.message || 'Erro ao remover o agendamento.', 'error');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro',
+                            text: data.message || 'Erro ao atualizar o status.'
+                        });
                     }
                 })
                 .catch(() => {
-                    Swal.fire('Erro', 'Erro na requisição.', 'error');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        text: 'Erro na requisição.'
+                    });
                 });
-            }
         });
     });
-});
-</script>
+    </script>
 
-<!-- Script para exibir a data atual -->
- <script>
-  // Obter a data atual
-  const hoje = new Date();
+    <!-- alertas de remover -->
+    <script>
+    document.querySelectorAll('.btn-remover').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const agendamentoId = btn.dataset.id;
 
-  // Formatar a data como dd/mm/yyyy
-  const dataFormatada = hoje.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Essa ação não pode ser desfeita!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sim, remover!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('../controllers/admin_delete_agendamento.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: agendamentoId
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Removido!',
+                                    text: 'O agendamento foi removido com sucesso.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => location.reload());
+                            } else {
+                                Swal.fire('Erro', data.message ||
+                                    'Erro ao remover o agendamento.', 'error');
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire('Erro', 'Erro na requisição.', 'error');
+                        });
+                }
+            });
+        });
+    });
+    </script>
 
-  // Inserir a data no elemento com id="data-dia"
-  document.getElementById('data-dia').textContent = dataFormatada;
-</script>
+    <!-- Script para exibir a data atual -->
+    <script>
+    // Obter a data atual
+    const hoje = new Date();
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    // Formatar a data como dd/mm/yyyy
+    const dataFormatada = hoje.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    // Inserir a data no elemento com id="data-dia"
+    document.getElementById('data-dia').textContent = dataFormatada;
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -1,7 +1,6 @@
 <?php
 session_start(); // Inicia a sessão
 require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
-require_once __DIR__ . '/components/header.php'; // Inclui o cabeçalho
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -41,8 +40,10 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
     $totalClientes = $rowTotalClientes['total'];
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,8 +54,8 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
     <!-- Icons bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
+<body class="bg-white d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
@@ -66,14 +67,11 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
             </h4>
             <small class="text-white" style="font-size: 0.9rem;">Seja bem-vindo!</small>
         </div>
-        <a href="../controllers/logout.php" class="text-white text-decoration-none small d-flex align-items-center">
-            <i class="bi bi-power me-1"></i> Sair
-        </a>
     </header>
 
     <!-- Main -->
     <main class="flex-grow-1 py-4">
-        <h5 class="text-center fw-semibold mb-4" style="color: #444;">Clientes</h5>
+        <h4 class="text-center fw-semibold mb-4" style="color: #444;">Clientes</h4>
 
         <!-- Barra de pesquisa (sem funcionalidade por enquanto) -->
         <div class="container mb-4 d-flex justify-content-center">
@@ -84,9 +82,6 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                 </button>
             </div>
         </div>
-
-
-            
         
         <div class="container px-3">
             <!-- Exibe o total de clientes cadastrados -->
@@ -98,9 +93,10 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
             <!-- Tabela para desktop -->
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle">
-                    <thead class="text-nowrap text-center">
+                    <thead class="text-nowrap text-center" style="background-color: #00a3c7; border-radius: 10px;">
                         <tr>
                             <th style="border-radius: 10px 0 0 10px;">Nome</th>
+                            <th>E-mail</th>
                             <th>Telefone</th>
                             <th>CPF</th>
                             <th style="border-radius: 0 10px 10px 0;">Ações</th>
@@ -110,18 +106,18 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                         <?php foreach ($clientes as $cliente): ?>
                         <tr>
                             <td><?= htmlspecialchars($cliente['nome']) ?></td>
-                            <!-- <td>?<= htmlspecialchars($cliente['telefone']) ?></td> -->
-                             <td>
-                                <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: none;">
+                            <td><?= htmlspecialchars($cliente['email']) ?></td> <!-- ✅ Aqui o e-mail -->
+                            <td>
+                                <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>"
+                                    target="_blank" style="color: #00a3c7; text-decoration: none;">
                                     <?= htmlspecialchars($cliente['telefone']) ?>
                                 </a>
                             </td>
                             <td><?= htmlspecialchars($cliente['cpf']) ?></td>
-
                             <td>
-                                <i class="bi bi-card-text" role="button" style="color: #00a3c7;"
-                                   data-bs-toggle="modal" data-bs-target="#modalDetalhes"
-                                   data-cliente='<?= json_encode($cliente, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'></i>
+                                <i class="bi bi-card-text" role="button" style="color: #00a3c7;" data-bs-toggle="modal"
+                                    data-bs-target="#modalDetalhes"
+                                    data-cliente='<?= json_encode($cliente, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'></i>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -135,13 +131,16 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                 <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
                     <div class="card-body position-relative">
                         <p><strong>Nome:</strong> <?= htmlspecialchars($cliente['nome']) ?></p>
-                        <!-- <p><strong>Telefone:</strong> ?<= htmlspecialchars($cliente['telefone']) ?></p> -->
+
+                        <p><strong>E-mail:</strong> <?= htmlspecialchars($cliente['email']) ?></p>
+
                         <p><strong>Telefone:</strong> 
                             <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: white; text-decoration: underline;">
                                 <?= htmlspecialchars($cliente['telefone']) ?>
                             </a>
                         </p>
                         <p><strong>CPF:</strong> <?= htmlspecialchars($cliente['cpf']) ?></p>
+
                         <div class="position-absolute top-0 end-0 m-2">
                             <!-- <i class="bi bi-pencil-square me-2" role="button"></i> -->
                             <i class="bi bi-card-text" role="button"
