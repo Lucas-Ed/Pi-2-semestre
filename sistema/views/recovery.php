@@ -8,7 +8,7 @@ if (empty($_SESSION['csrf_token'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -79,7 +79,7 @@ if (empty($_SESSION['csrf_token'])) {
     <!-- lib SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <!-- Script para exibir mensagens de erro ou sucesso -->
-    <script src="../public/js/recuperacao_alerts.js" defer></script>
+    <script src="../public/js/recuperacao_alerts.js?v=<?= time() ?>" defer></script>
 </body>
 
 </html>

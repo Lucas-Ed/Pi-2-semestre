@@ -79,6 +79,7 @@ if (empty($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -117,6 +118,7 @@ if (empty($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
                 <small><p class="text-muted mb-2 small">Insira seus dados...</p></small>
                 <!-- Campo CSRF. envia via post, input oculto -->
                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+
 
                 <!-- Campo Nome -->
                 <!-- <div class="mb-3">

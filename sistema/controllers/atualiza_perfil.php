@@ -30,10 +30,27 @@ $stmtUser->bind_param('ssssi', $nome, $telefone, $email, $cpfCriptografado, $use
 $stmtUser->execute();
 
 // Atualiza dados na tabela de endereços
-$sqlEndereco = "UPDATE enderecos SET cep = ?, rua = ?, numero = ?, bairro = ? WHERE usuarios_idusuarios = ?";
-$stmtEndereco = $conn->prepare($sqlEndereco);
-$stmtEndereco->bind_param('ssssi', $cep, $rua, $numero, $bairro, $userId);
-$stmtEndereco->execute();
+// Verifica se já existe endereço para o usuário
+$sqlCheckEndereco = "SELECT 1 FROM enderecos WHERE usuarios_idusuarios = ?";
+$stmtCheck = $conn->prepare($sqlCheckEndereco);
+$stmtCheck->bind_param('i', $userId);
+$stmtCheck->execute();
+$stmtCheck->store_result();
+
+if ($stmtCheck->num_rows > 0) {
+    // Já existe, faz UPDATE
+    $sqlEndereco = "UPDATE enderecos SET cep = ?, rua = ?, numero = ?, bairro = ? WHERE usuarios_idusuarios = ?";
+    $stmtEndereco = $conn->prepare($sqlEndereco);
+    $stmtEndereco->bind_param('ssssi', $cep, $rua, $numero, $bairro, $userId);
+    $stmtEndereco->execute();
+} else {
+    // Não existe, faz INSERT
+    $sqlEndereco = "INSERT INTO enderecos (cep, rua, numero, bairro, usuarios_idusuarios) VALUES (?, ?, ?, ?, ?)";
+    $stmtEndereco = $conn->prepare($sqlEndereco);
+    $stmtEndereco->bind_param('ssssi', $cep, $rua, $numero, $bairro, $userId);
+    $stmtEndereco->execute();
+}
+
 
 // Atualiza os dados na sessão também
 $_SESSION['nome'] = $nome;

@@ -64,22 +64,7 @@ if (empty($_SESSION['csrf_token'])) {
                     </div>
                 </div>
 
-                <!-- Telefone -->
-                <div class="mb-2">
-                    <!-- Mensagem ao usuário -->
-                    <small class="text-muted d-block mb-1" style="font-size: 0.85rem; opacity: 0.7;">
-                        Insira o DDD+número do celular, por exemplo: 11 para São Paulo.
-                    </small>
-                    <div class="d-flex align-items-center"
-                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-telephone" style="color: #0097B2; font-size: 1.2rem;"></i>
-                        <input type="text" name="telefone" id="telefone"
-                            class="form-control border-0 shadow-none placeholder-light" placeholder="*Celular (com DDD)"
-                            value="<?= htmlspecialchars($form_data['telefone'] ?? '') ?>"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                            required>
-                    </div>
-                </div>
+
 
                 <!-- Email -->
                 <div class="mb-2">
@@ -93,70 +78,6 @@ if (empty($_SESSION['csrf_token'])) {
                     </div>
                 </div>
 
-                <!-- CPF -->
-                <div class="mb-2">
-                    <div class="d-flex align-items-center"
-                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-credit-card" style="color: #0097B2; font-size: 1.2rem;"></i>
-                        <input type="text" name="cpf" id="cpf"
-                            class="form-control border-0 shadow-none placeholder-light" placeholder="*CPF"
-                            value="<?= htmlspecialchars($form_data['cpf'] ?? '') ?>"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                            required>
-                    </div>
-                </div>
-
-                <!-- CEP -->
-                <div class="mb-2">
-                    <div class="d-flex align-items-center"
-                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-geo-alt" style="color: #0097B2; font-size: 1.2rem;"></i>
-                        <input type="text" name="cep" id="cep"
-                            class="form-control border-0 shadow-none placeholder-light" placeholder="*CEP"
-                            value="<?= htmlspecialchars($form_data['cep'] ?? '') ?>"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                            required>
-                    </div>
-                </div>
-
-                <!-- Rua e Número -->
-                <div class="row g-2">
-                    <div class="col-7">
-                        <div class="d-flex align-items-center"
-                            style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                            <i class="bi bi-geo" style="color: #0097B2; font-size: 1.2rem;"></i>
-                            <input type="text" name="rua" id="rua"
-                                class="form-control border-0 shadow-none placeholder-light" placeholder="*Rua"
-                                value="<?= htmlspecialchars($form_data['rua'] ?? '') ?>"
-                                style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                                required>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <div class="d-flex align-items-center"
-                            style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                            <i class="bi bi-123" style="color: #0097B2; font-size: 1.2rem;"></i>
-                            <input type="number" name="numero"
-                                class="form-control border-0 shadow-none text-center placeholder-light"
-                                placeholder="*Número" value="<?= htmlspecialchars($form_data['numero'] ?? '') ?>"
-                                style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                                required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bairro -->
-                <div class="mt-2 mb-2">
-                    <div class="d-flex align-items-center"
-                        style="border: 2px solid #0097B2; border-radius: 10px; padding: 0 1rem; height: 55px;">
-                        <i class="bi bi-geo-alt-fill" style="color: #0097B2; font-size: 1.2rem;"></i>
-                        <input type="text" name="bairro" id="bairro"
-                            class="form-control border-0 shadow-none placeholder-light" placeholder="*Bairro"
-                            value="<?= htmlspecialchars($form_data['bairro'] ?? '') ?>"
-                            style="margin-left: 0.75rem; font-size: 1rem; color: #444; height: 100%; line-height: 1.5; padding: 0;"
-                            required>
-                    </div>
-                </div>
 
                 <!-- Senha -->
                 <div class="mb-2">
@@ -183,7 +104,7 @@ if (empty($_SESSION['csrf_token'])) {
                             required>
                     </div>
                     <!-- Small de confirmar senha em raltime -->
-                    <small id="senha-feedback" class="text-danger d-block mt-1" style="font-size: 0.9rem;"></small>
+                    <small id="senha-feedback" class=" d-block mt-1" style="font-size: 0.9rem;"></small>
                 </div>
 
                 <!-- Checkboxes -->
@@ -219,12 +140,22 @@ if (empty($_SESSION['csrf_token'])) {
             </form>
         </main>
 
+            <!-- Rodapé -->
+    <footer class="text-white text-center py-5 d-flex flex-column align-items-center justify-content-center fixed-bottom"
+        style=" background-color: #0097B2; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 130px; font-size: 1.1rem; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);">
+        <small>
+            &copy; <?= date('Y') ?> Embelezamento Automotivo
+            <br>
+            Todos os direitos reservados
+        </small>
+    </footer>
+
         <!-- lib sweetalert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Lib Inputmask -->
         <script src="https://unpkg.com/imask"></script>
         <!-- // alerts de validação -->
-        <script src="../public/js/val_cads.js"></script>
+        <script src="../public/js/val_cads.js?v=<?= time() ?>" defer></script>
 
     </body>
 

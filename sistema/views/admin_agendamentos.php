@@ -117,7 +117,7 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">

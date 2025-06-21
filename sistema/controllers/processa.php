@@ -32,12 +32,6 @@ if ($conn->connect_error) {
 //  Captura e sanitiza os dados do formulário.
 $nome = trim($_POST["nome"]);
 $email = trim($_POST["email"]);
-$cpf = preg_replace('/[^0-9]/', '', $_POST["cpf"]);
-$telefone = preg_replace('/[^0-9]/', '', $_POST["telefone"]);
-$rua = trim($_POST["rua"]);
-$numero = intval($_POST["numero"]);
-$bairro = trim($_POST["bairro"]);
-$cep = preg_replace('/[^0-9]/', '', $_POST["cep"]);
 $senha = $_POST["senha"];
 $senha_confirma = $_POST["confirma_senha"];
 $termos = isset($_POST["termos"]) ? 1 : 0;
@@ -48,12 +42,6 @@ $tipo = 'cliente';
 $_SESSION['form_data'] = [
     'nome' => $nome,
     'email' => $email,
-    'cpf' => $cpf,
-    'telefone' => $telefone,
-    'rua' => $rua,
-    'numero' => $_POST["numero"], // mantém como string
-    'bairro' => $bairro,
-    'cep' => $cep,
     'termos' => $termos ? 'on' : ''
 ];
 
@@ -83,27 +71,6 @@ if ($senha !== $senha_confirma) {
     //exit();
 }
 
-// CPF: 11 dígitos
-if (!preg_match('/^\d{11}$/', $cpf)) {
-    //header("Location: ../views/cadastro.php?erro=cpf_invalido");
-    $erros[] = "CPF inválido. Deve conter 11 dígitos numéricos.";
-    //exit();
-}
-
-// Telefone:  11 dígitos
-if (!preg_match('/^\d{11}$/', $telefone)) {
-    //header("Location: ../views/cadastro.php?erro=telefone_invalido");
-    $erros[] = "Telefone inválido. Deve conter 11 dígitos com DDD.";
-    //exit();
-}
-
-// CEP: 8 dígitos
-if (!preg_match('/^\d{8}$/', $cep)) {
-    //header("Location: ../views/cadastro.php?erro=cep_invalido");
-    $erros[] = "CEP inválido. Deve conter 8 dígitos.";
-    //exit();
-}
-
 // Verifica se há erros
 if (!empty($erros)) {
     $_SESSION['form_errors'] = $erros;
@@ -111,32 +78,18 @@ if (!empty($erros)) {
     exit();
 }
 
-// Criptografa a senha e cpf
+// Criptografa a senha 
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-$key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
-if ($key === false) die('Erro: chave CPF inválida.');
 
-$cpfCriptografado = openssl_encrypt($cpf, 'AES-128-ECB', $key);
-if ($cpfCriptografado === false) die('Erro: falha ao criptografar.');
-
-
-
-//  Verifica se e-mail ou CPF já estão cadastrados
-$sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ? OR cpf = ?";
+//  Verifica se e-mail ou CPF já estão 
+$sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ?";
 $stmtCheck = $conn->prepare($sqlCheck);
-$stmtCheck->bind_param("ss", $email, $cpfCriptografado);
+$stmtCheck->bind_param("s", $email); //"ss" , $cpfCriptografado
 $stmtCheck->execute();
 $stmtCheck->store_result();
 
-// if ($stmtCheck->num_rows > 0) {
-//     header("Location: ../views/cadastro.php?erro=email_ou_cpf");
-//     $stmtCheck->close();
-//     $conn->close();
-//     exit();
-// }
-// $stmtCheck->close();
 if ($stmtCheck->num_rows > 0) {
-    $_SESSION['form_errors'] = ["E-mail ou CPF já cadastrado."];
+    $_SESSION['form_errors'] = ["E-mail já cadastrado."];
     //$_SESSION['form_data'] = $_POST; // opcional aqui, pois já fizemos antes
     header("Location: ../views/cadastro.php?erro=email_ou_cpf");
     $stmtCheck->close();
@@ -145,31 +98,22 @@ if ($stmtCheck->num_rows > 0) {
 }
 
 //  Insere usuário
-$sqlUsuario = "INSERT INTO usuarios (nome, email, senha, cpf, telefone, termos, tipo) 
-               VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sqlUsuario = "INSERT INTO usuarios (nome, email, senha, termos, tipo) 
+               VALUES (?, ?, ?, ?, ?)"; // , ?, ?
 $stmtUsuario = $conn->prepare($sqlUsuario);
-$stmtUsuario->bind_param("sssssis", $nome, $email, $senhaHash, $cpfCriptografado, $telefone, $termos, $tipo);
+$stmtUsuario->bind_param("sssss", $nome, $email, $senhaHash, $termos, $tipo); //"sssssis" $cpfCriptografado, $telefone
 
 if ($stmtUsuario->execute()) {
     $usuarios_idusuarios = $conn->insert_id;
 
-    // Insere endereço
-    $sqlEndereco = "INSERT INTO enderecos (usuarios_idusuarios, rua, numero, bairro, cep) 
-                    VALUES (?, ?, ?, ?, ?)";
-    $stmtEndereco = $conn->prepare($sqlEndereco);
-    $stmtEndereco->bind_param("issss", $usuarios_idusuarios, $rua, $numero, $bairro, $cep);
-
-    // Login automático
-    if ($stmtEndereco->execute()) {
+        // Login automático
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
         $_SESSION['usuario_id'] = $usuarios_idusuarios;
         $_SESSION['nome'] = $nome;
-        $_SESSION['usuario_email'] = $email;
-        $_SESSION['telefone'] = $telefone;
-        $_SESSION['usuario_tipo'] = $tipo;
+        $_SESSION['email'] = $email;
+        $_SESSION['tipo'] = $tipo;
         $_SESSION['idusuarios'] = $usuarios_idusuarios;
         $_SESSION['loggedin'] = true;
 
@@ -179,11 +123,6 @@ if ($stmtUsuario->execute()) {
 
         header("Location: ../views/cadastro.php?status=sucesso");
         exit();
-    } else {
-        echo "Erro ao cadastrar endereço: " . $stmtEndereco->error;
-    }
-
-    $stmtEndereco->close();
 
 } else {
     echo "Erro ao cadastrar usuário: " . $stmtUsuario->error;

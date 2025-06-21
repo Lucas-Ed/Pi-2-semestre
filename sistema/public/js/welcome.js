@@ -222,6 +222,8 @@ function preencherSelectHorarios(horarios) {
     select.appendChild(option);
   });
 }
+
+
 // =====================================================================================================
 // Carrega veículos
 
@@ -714,6 +716,7 @@ if (!formData.tipo || !formData.marca || !formData.modelo || !formData.placa) {
 //   const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
 //   return oldFormat.test(placa) || newFormat.test(placa);
 // }
+// Função para validar placas de veículos
 function isValidPlate(placa) {
   if (typeof placa !== 'string') return false;
 
@@ -729,16 +732,7 @@ function isValidPlate(placa) {
     newMercosulFormat.test(normalized)
   );
 }
-// placas válidas:
-// ABC-1234 ✅
 
-// ABC1234 ✅
-
-// ABC1D23 ✅
-
-// abc1234 (deve funcionar após toUpperCase()) ✅
-
-// AB1-2345, A1B2C3, 123-ABCD ❌ (inválidos)
 
 // Adicionar carro
 async function addCar(car) {
@@ -881,7 +875,45 @@ dateInput.min = localDate;
 window.addEventListener('DOMContentLoaded', () => {
   loadAppointments();
   loadUserCars();
-  document.getElementById('addCarBtn').addEventListener('click', () => addCarModal.show());
+  // document.getElementById('addCarBtn').addEventListener('click', () => addCarModal.show());
+  document.getElementById('addCarBtn').addEventListener('click', async () => {
+  try {
+    const res = await fetch('../controllers/api/verifica_perfil.php', {
+      credentials: 'include'
+    });
+    const data = await res.json();
+
+    if (data.status === 'completo') {
+      addCarModal.show();
+    } else if (data.status === 'nao_logado') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Sessão expirada',
+        text: 'Por favor, faça login novamente.',
+      }).then(() => {
+        window.location.href = '../views/index.php';
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Complete seu perfil',
+        html: 'Antes de adicionar um veículo, complete seu perfil com:<br><strong>CPF, telefone e endereço</strong>.',
+        confirmButtonText: 'Ir para perfil'
+      }).then(() => {
+          const perfilModal = new bootstrap.Modal(document.getElementById('perfilModal')); // abre o modal de meu perfil
+          perfilModal.show();
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao verificar perfil:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: 'Não foi possível verificar os dados do perfil.',
+    });
+  }
+});
+
 });
 
 // Tornar funções globais

@@ -385,7 +385,7 @@ if ($stmt) {
                                 <option value="" disabled selected>Selecione o serviço</option>
                             </select>
                         </div>
-
+                        <!-- Exibe a data e horário -->
                         <div class="mb-3">
                             <label for="date" class="form-label small text-white m-0">Data:</label>
                             <input type="date" class="form-control" id="date" required
@@ -570,11 +570,11 @@ if ($stmt) {
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- carregando o js das funcionalidades -->
-    <script type="module" src="../public/js/welcome.js"></script>
+    <script type="module" src="../public/js/welcome.js?v=<?= time() ?>" defer></script>
     <!--- carrega a base url do projeto -->
     <!-- <script src="config/base_url.php"></script> -->
     <!-- cadastro de veiculos -->
-    <script src="../public/js/cadastro_veiculo.js"></script>
+    <script src="../public/js/cadastro_veiculo.js?v=<?= time() ?>" defer></script>
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -611,7 +611,7 @@ if ($stmt) {
     <?php endif; ?>
 
     <!-- // auto preencher cep do modal de perfil -->
-    <script src="../public/js/preencher_cep_perfil.js"></script>
+    <script src="../public/js/preencher_cep_perfil.js?v=<?= time() ?>" defer></script>
 
 </body>
 

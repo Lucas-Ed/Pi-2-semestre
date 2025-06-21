@@ -146,7 +146,7 @@ $nomeUsuario = $usuario['nome'] ?? 'Usuário';
     </footer>
 
     <!--Script para validação de nova senha-->
-    <script src="../public/js/new_pass_alerts.js" defer></script>
+    <script src="../public/js/new_pass_alerts.js?v=<?= time() ?>" defer></script>
 
     <!-- blibioteca de sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

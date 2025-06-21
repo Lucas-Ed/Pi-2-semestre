@@ -150,7 +150,7 @@ $total_agend = count($agendamentos);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
