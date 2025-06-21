@@ -7,50 +7,52 @@ session_start();
 // if (session_status() !== PHP_SESSION_ACTIVE) {
 //     die("Sessão não iniciada!");
 // }
-
-// Certifique-se de que init.php foi incluído ANTES deste arquivo.
-require_once '../init.php'; // Se este arquivo for o ponto de 
-//require_once BASE_PATH . '/model/db.php';
-// require_once "../config/config.php"; // Inclui a conexão com o banco de dados.
+// Certifique-se de que init.php define $conn corretamente
+require_once '../init.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Verificação do token CSRF
 
-     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-         die("Token CSRF inválido.");
-         header("Location: ../views/login.php");
-         exit();
-     }
+    // Verificação do token CSRF com segurança de tipo
+    $csrf_token_post = $_POST['csrf_token'] ?? '';
+    $csrf_token_session = $_SESSION['csrf_token'] ?? '';
+
+    if (
+        !is_string($csrf_token_post) || 
+        !is_string($csrf_token_session) || 
+        !hash_equals($csrf_token_session, $csrf_token_post)
+    ) {
+        $_SESSION['loggedin'] = FALSE;
+        header("Location: ../views/login.php");
+        exit();
+    }
+
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
         $password = trim($_POST['senha']);
-
         // Prepara a consulta SQL para evitar SQL Injection
-        $sql = "SELECT idusuarios, email, nome, senha, tipo, telefone FROM usuarios WHERE email = ?"; // tipo
+        $sql = "SELECT idusuarios, email, nome, senha, tipo, telefone FROM usuarios WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
-
+        
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $db_email, $db_username, $db_password, $db_tipo, $db_telefone);  // , $db_tipo
+            $stmt->bind_result($id, $db_email, $db_username, $db_password, $db_tipo, $db_telefone);
             $stmt->fetch();
             //echo $db_password;
             // Verifica se a senha está correta
             if (password_verify($password, $db_password)) {
-                session_regenerate_id(true); // Regerar a sessão ao logar,Proteção (regenerando session ID)
+                session_regenerate_id(true);
                 $_SESSION['loggedin'] = TRUE;
                 $_SESSION['idusuarios'] = $id;
                 $_SESSION['nome'] = $db_username;
-                $_SESSION['email'] = $db_email; // Adiciona o e-mail à sessão
-                $_SESSION["telefone"] = $db_telefone; // Adiciona o telefone à sessão
-                $_SESSION['tipo'] = $db_tipo; // Salva o tipo na sessão também
-                
+                $_SESSION['email'] = $db_email;
+                $_SESSION['telefone'] = $db_telefone;
+                $_SESSION['tipo'] = $db_tipo;
                 // Define controle para alerta e redirecionamento
                 $redirectUrl = ($db_tipo === 'admin') ? '../views/dashboard_admin.php' : '../views/dashboard_user.php';
                 $_SESSION['login_success'] = true;
                 $_SESSION['redirect_url'] = $redirectUrl;
-
                 // Redireciona para o mesmo arquivo (evita reenvio do POST)
                 header("Location: " . $_SERVER['PHP_SELF']);
                 exit();
@@ -71,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Gera o token CSRF
-if (empty($_SESSION['csrf_token'])) {
+// Gera o token CSRF apenas se ainda não existir
+if (empty($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 ?>
@@ -114,7 +116,7 @@ if (empty($_SESSION['csrf_token'])) {
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <small><p class="text-muted mb-2 small">Insira seus dados...</p></small>
                 <!-- Campo CSRF. envia via post, input oculto -->
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
                 <!-- Campo Nome -->
                 <!-- <div class="mb-3">

@@ -46,7 +46,7 @@ Veja o layout completo  [aqui.](https://www.figma.com/design/PpyOYg0jN5SyXKjDlWT
 <p> Páginas principais apenas:</p>
 
 
-![](/img/index.png)
+![](/img/index.JPG)
 
 ![](/img/dashboard_user.JPG)
 
@@ -118,15 +118,15 @@ php setar_admin.php
 ```bash
 📂 lava_rapido/
 │
-├── 📂 config/
-│   ├── 📄 base_url.php-(URL base do sistema)  
-│   └── 📄 gateway.php-(configuração da API de pagamento)
+├── 📂 config/ 
+│   └── 📄 gateway.php-(configuração da API de pagamento/Feature)
 │
 ├── 📂 controllers/-(lógica de negócios - salvar, listar, excluir)
 │   ├── 📂 Api/
 │   │    ├── 📄 buscar_clientes.php-(buscar usuarios no DB.)
 │   │    ├── 📄 get_agendamentos.php-(listar agendamentos)
-│   │    └── 📄 get_veiculos.php-(listar veiculos)
+│   │    ├── 📄 get_veiculos.php-(listar veiculos)
+│   │    └── 📄 verifica_perfil.php-(Verifica dados do perfil do usuário)
 |   |
 |   ├── 📄 add_agendamento.php-(adicionar agendamento)
 |   ├── 📄 admin_delete_agendamento.php-(fc. cancelar agendamento do admin)
@@ -160,7 +160,7 @@ php setar_admin.php
 |
 ├── 📂 vendor/-(Blibliiotecas que o sistema depende)
 |
-├── 📂 views/-(Páginas do sistema)
+├── 📂 views/
 |   |
 |   |
 |   ├── 📄 admin_agendamentos_semanal.php-(Àrea logada Admin)

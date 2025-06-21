@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 16/06/2025 às 04:21
+-- Tempo de geração: 21/06/2025 às 21:02
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -23,39 +23,13 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `lava_rapido` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `lava_rapido`;
 
-DELIMITER $$
---
--- Procedimentos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_ag_expirados` ()   BEGIN
-    UPDATE status_ag s
-    INNER JOIN agendamentos a ON s.agendamentos_idagendamentos = a.idagendamentos
-    SET s.executado = 'Expirado'
-    WHERE a.data_agendamento < CURDATE()
-      AND s.executado NOT IN ('Concluída', 'Expirado');
-END$$
-
---
--- Funções
---
-CREATE DEFINER=`root`@`localhost` FUNCTION `total_agendamentos_hoje` () RETURNS INT(11) DETERMINISTIC BEGIN
-    DECLARE total INT;
-
-    SELECT COUNT(*) INTO total
-    FROM agendamentos
-    WHERE data_agendamento = CURDATE();
-
-    RETURN total;
-END$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `agendamentos`
 --
 
+DROP TABLE IF EXISTS `agendamentos`;
 CREATE TABLE `agendamentos` (
   `idagendamentos` int(10) UNSIGNED NOT NULL,
   `usuarios_idusuarios` int(10) UNSIGNED NOT NULL,
@@ -69,18 +43,9 @@ CREATE TABLE `agendamentos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `agendamentos`
---
-
-INSERT INTO `agendamentos` (`idagendamentos`, `usuarios_idusuarios`, `veiculos_idveiculos`, `data_agendamento`, `hora_agendamento`, `leva_e_tras`, `pagamento_na_hora`, `servico`, `preco`) VALUES
-(110, 30, 46, '2025-06-16', '11:00:00', 0, 0, 'enceramento', 500.00),
-(111, 30, 44, '2025-06-16', '08:20:00', 0, 0, 'lavagem_externa', 70.00),
-(112, 30, 45, '2025-06-16', '11:40:00', 0, 0, 'lavagem_externa', 40.00),
-(113, 30, 47, '2025-06-16', '07:00:00', 0, 0, 'lavagem_externa', 40.00);
-
---
 -- Acionadores `agendamentos`
 --
+DROP TRIGGER IF EXISTS `insert_status_ag_executado`;
 DELIMITER $$
 CREATE TRIGGER `insert_status_ag_executado` AFTER INSERT ON `agendamentos` FOR EACH ROW BEGIN
     INSERT INTO status_ag (
@@ -100,6 +65,7 @@ DELIMITER ;
 -- Estrutura para tabela `cartoes`
 --
 
+DROP TABLE IF EXISTS `cartoes`;
 CREATE TABLE `cartoes` (
   `idcartoes` int(10) UNSIGNED NOT NULL,
   `usuarios_idusuarios` int(10) UNSIGNED NOT NULL,
@@ -113,6 +79,7 @@ CREATE TABLE `cartoes` (
 -- Estrutura para tabela `enderecos`
 --
 
+DROP TABLE IF EXISTS `enderecos`;
 CREATE TABLE `enderecos` (
   `idenderecos` int(10) UNSIGNED NOT NULL,
   `usuarios_idusuarios` int(10) UNSIGNED NOT NULL,
@@ -122,20 +89,13 @@ CREATE TABLE `enderecos` (
   `cep` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `enderecos`
---
-
-INSERT INTO `enderecos` (`idenderecos`, `usuarios_idusuarios`, `rua`, `numero`, `bairro`, `cep`) VALUES
-(23, 30, 'Rua Celso Luz', '1', 'Jardim Bela Vista', '13609400'),
-(24, 31, 'Rua Celso Luz', '1', 'Jardim Bela Vista', '13609400');
-
 -- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `pagamentos`
 --
 
+DROP TABLE IF EXISTS `pagamentos`;
 CREATE TABLE `pagamentos` (
   `idpagamentos` int(10) UNSIGNED NOT NULL,
   `cartoes_idcartoes` int(10) UNSIGNED NOT NULL,
@@ -150,6 +110,7 @@ CREATE TABLE `pagamentos` (
 -- Estrutura para tabela `status_ag`
 --
 
+DROP TABLE IF EXISTS `status_ag`;
 CREATE TABLE `status_ag` (
   `idstatus_ag` int(10) UNSIGNED NOT NULL,
   `agendamentos_idagendamentos` int(10) UNSIGNED NOT NULL,
@@ -157,22 +118,13 @@ CREATE TABLE `status_ag` (
   `executado` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `status_ag`
---
-
-INSERT INTO `status_ag` (`idstatus_ag`, `agendamentos_idagendamentos`, `status_pg`, `executado`) VALUES
-(83, 110, '', 'Pendente'),
-(84, 111, '', 'Pendente'),
-(85, 112, '', 'Pendente'),
-(86, 113, '', 'Pendente');
-
 -- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `idusuarios` int(10) UNSIGNED NOT NULL,
   `nome` varchar(45) NOT NULL,
@@ -187,21 +139,13 @@ CREATE TABLE `usuarios` (
   `expiracao_token` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `usuarios`
---
-
-INSERT INTO `usuarios` (`idusuarios`, `nome`, `cpf`, `telefone`, `email`, `senha`, `tipo`, `termos`, `token_hash`, `criacao_token`, `expiracao_token`) VALUES
-(26, 'admin', 'uwFHBjM78OflwVikhQZ0mw==', '11999999999', 'admin@seudominio.com', '$2y$10$Bm.o3fvsb1ildhYuupdd0.p12DAfJttc3dUqP15NOcE7HSL9LTgRS', 'admin', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 'Lucas eduardo rosolem', 't5gdxJwiEYw+xfDfSnojzQ==', '19996689483', 'madruguinha.racing+teste@gmail.com', '$2y$10$5mlXvx0S93XD6xZllx79zumqO17GtsHa2Jl4tWtPHuEUQfv6JFvwm', 'cliente', 1, '$2y$10$fx/hRizfTRAPg2rKHikrdewkJgmFC6wskiszsGYMzLmCIczqYLtZO', '2025-06-15 22:36:49', '2025-06-16 00:36:49'),
-(31, 'eduardo', 'FTaQ6EnNExSDff3u26oskg==', '19996689480', 'madruguinha.racing+teste1@gmail.com', '$2y$10$7u1GMK0g7tHRKG5o4.D5ueZLoBCeul/yoOVwzmXQ17K3uUYZy3Vv2', 'cliente', 1, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
 -- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `veiculos`
 --
 
+DROP TABLE IF EXISTS `veiculos`;
 CREATE TABLE `veiculos` (
   `idveiculos` int(10) UNSIGNED NOT NULL,
   `usuarios_idusuarios` int(10) UNSIGNED NOT NULL,
@@ -211,17 +155,6 @@ CREATE TABLE `veiculos` (
   `tipo` varchar(50) NOT NULL,
   `ativo` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `veiculos`
---
-
-INSERT INTO `veiculos` (`idveiculos`, `usuarios_idusuarios`, `modelo`, `placa`, `marca`, `tipo`, `ativo`) VALUES
-(44, 30, 'a3', 'JJJ1D43', 'audi', 'carro', 1),
-(45, 30, 'titan', 'GGG-3456', 'honda', 'moto', 1),
-(46, 30, '440', 'DDD1234', 'scania', 'caminhao', 1),
-(47, 30, '150', 'HHH1G45', 'honda', 'moto', 1),
-(48, 30, 'voyage', 'HHH3H87', 'volkswagen', 'carro', 0);
 
 --
 -- Índices para tabelas despejadas
@@ -287,7 +220,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -299,7 +232,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `pagamentos`
@@ -311,13 +244,13 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
@@ -365,16 +298,6 @@ ALTER TABLE `status_ag`
 --
 ALTER TABLE `veiculos`
   ADD CONSTRAINT `veiculos_ibfk_1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-DELIMITER $$
---
--- Eventos
---
-CREATE DEFINER=`root`@`localhost` EVENT `event_update_ag_expired` ON SCHEDULE EVERY 1 DAY STARTS '2025-06-15 23:59:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
-    CALL update_ag_expirados();
-END$$
-
-DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

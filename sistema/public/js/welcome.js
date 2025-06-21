@@ -125,14 +125,31 @@ selectedCarSelect.addEventListener("change", function () {
 
 // =====================================================================================================
 // Select de data e horário.
+// Evento para mostrar o modal de agendamento quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function () {
+  const dateInput = document.getElementById('date');
+  const modal = document.getElementById('scheduleModal');
+
+  modal.addEventListener('shown.bs.modal', () => {
+    if (dateInput && dateInput.value) {
+      dateInput.dispatchEvent(new Event('change'));
+    }
+  });
+});
+
+
 // evento de mudança no input de data
 document.getElementById('date').addEventListener('change', async function () {
-  const selectedDate = new Date(this.value);
-  if (!selectedDate) return;
+  const select = document.getElementById('time');
+  select.innerHTML = '<option value="">Carregando horários...</option>';
 
-  const day = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
+  const selectedDate = new Date(this.value + 'T00:00:00');
+  if (isNaN(selectedDate.getTime())) return;
+
+  const day = selectedDate.getDay(); // 0 Domingo, 6 Sábado
+  // console.log(`Data: ${this.value}, day=${day}`);
+
   let startHour, endHour;
-
   if (day === 0) {
     startHour = 7; endHour = 12;
   } else if (day === 6) {
@@ -141,12 +158,19 @@ document.getElementById('date').addEventListener('change', async function () {
     startHour = 7; endHour = 18;
   }
 
+  // console.log(`Início=${startHour}, Fim=${endHour}`);
   const horariosDisponiveis = gerarHorariosDisponiveis(startHour, endHour, 40);
+  // console.log("Disponíveis:", horariosDisponiveis);
+
   const agendados = await buscarHorariosAgendados(this.value);
-  const horariosFiltrados = horariosDisponiveis.filter(horario => !agendados.includes(horario));
+  // console.log("Já agendados:", agendados);
+
+  const horariosFiltrados = horariosDisponiveis.filter(h => !agendados.includes(h));
+  // console.log("Para preencher:", horariosFiltrados);
 
   preencherSelectHorarios(horariosFiltrados);
 });
+
 // Gera horários disponíveis
 function gerarHorariosDisponiveis(inicio, fim, intervaloMinutos) {
   const horarios = [];
@@ -155,7 +179,7 @@ function gerarHorariosDisponiveis(inicio, fim, intervaloMinutos) {
   const limite = new Date();
   limite.setHours(fim, 0, 0, 0);
 
-  while (base < limite) {
+  while (base <= limite) {
     const horas = base.getHours().toString().padStart(2, '0');
     const minutos = base.getMinutes().toString().padStart(2, '0');
     horarios.push(`${horas}:${minutos}`);
@@ -164,6 +188,7 @@ function gerarHorariosDisponiveis(inicio, fim, intervaloMinutos) {
 
   return horarios;
 }
+
 // busca horários agendados
 async function buscarHorariosAgendados(data) {
   try {
@@ -177,6 +202,13 @@ async function buscarHorariosAgendados(data) {
     return [];
   }
 }
+// Testando sábado (07:00 às 15:00)
+// console.log("Horários de sábado:");
+// console.log(gerarHorariosDisponiveis(7, 15, 40));
+
+// // Testando domingo (07:00 às 12:00)
+// console.log("Horários de domingo:");
+// console.log(gerarHorariosDisponiveis(7, 12, 40));
 
 // Preenche o select de horários
 function preencherSelectHorarios(horarios) {
@@ -190,8 +222,6 @@ function preencherSelectHorarios(horarios) {
     select.appendChild(option);
   });
 }
-
-
 // =====================================================================================================
 // Carrega veículos
 
@@ -517,7 +547,8 @@ function displayAppointments(appointmentsData) {
           badgeText = 'Cancelado';
           break;
         case 'expirado':
-          badgeClass = '"badge bg-danger me-2';
+        case 'Expirado':
+          badgeClass = 'badge bg-danger me-2';
           badgeText = 'Expirado';
           break;
       }
