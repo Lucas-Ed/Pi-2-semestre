@@ -24,7 +24,7 @@
   z-index: 1;
 }
 
-/*.btn_add_vei::before {
+.btn_add_vei::before {
   content: "";
   position: absolute;
   top: -4px;
@@ -48,7 +48,7 @@
   100% {
     transform: rotate(360deg);
   }
-}*/
+}
 
 #carsList {
   display: flex;

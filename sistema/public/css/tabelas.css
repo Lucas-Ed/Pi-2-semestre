@@ -5,7 +5,7 @@
 
 .table th {
     border: none !important; /* Remove todas as bordas */
-    background-color: #00a3c7; /* Mantém a cor de fundo para os itens */
+    background-color: #0097B2; /* Mantém a cor de fundo para os itens */
     color: white; /* Cor do texto */
     padding: 12px; /* Espaçamento interno */
 }

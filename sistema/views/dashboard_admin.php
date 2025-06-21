@@ -53,47 +53,43 @@ $totalUsuarios = $resultUsuarios->fetch_assoc()['total'] ?? 0;
     <main class="flex-grow-1 py-4">
         <h4 class="text-center fw-semibold mb-4 " style="color: #444;">Dashboard</h4>
 
-        <div class="container">
-            <div class="d-flex flex-wrap gap-3 justify-content-start">
-
-                <!-- Card: Agendamentos -->
-                <div style="min-width: 380px; flex: 1 1 auto;">
-                    <a href="../views/admin_agendamentos.php" style="text-decoration: none;">
-                        <div class="d-flex justify-content-between align-items-center shadow-sm px-3 py-2"
-                            style="height: 75px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fff;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-calendar3 me-3" style="font-size: 2rem; color: #0097B2;"></i>
-                                <div class="text-start">
-                                    <h6 class="mb-0 fw-bold" style="color: #333;">Agendamentos</h6>
-                                    <small class="text-muted" style="font-size: 13px;">
-                                        <!-- mostra os agendamentos ativos do dia -->
-                                        <?= $agendamentosAtivos ?> agendamento<?= $agendamentosAtivos != 1 ? 's' : '' ?> ativo<?= $agendamentosAtivos != 1 ? 's' : '' ?>
-                                    </small>
-                                </div>
+        <div class="container d-flex flex-wrap gap-3 justify-content-center">
+            <!-- Card: Agendamentos -->
+            <div class="col-12 col-md-6">
+                <a href="../views/admin_agendamentos.php" style="text-decoration: none;">
+                    <div class="d-flex justify-content-between align-items-center shadow-sm px-3 py-2"
+                        style="height: 75px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fff;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar3 me-3" style="font-size: 2rem; color: #0097B2;"></i>
+                            <div class="text-start">
+                                <h6 class="mb-0 fw-bold" style="color: #333;">Agendamentos</h6>
+                                <small class="text-muted" style="font-size: 13px;">
+                                    <?= $agendamentosAtivos ?> agendamento<?= $agendamentosAtivos != 1 ? 's' : '' ?>
+                                    ativo<?= $agendamentosAtivos != 1 ? 's' : '' ?>
+                                </small>
                             </div>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
+            </div>
 
-                <!-- Card: Clientes -->
-                <div style="min-width: 380px; flex: 1 1 auto;">
-                    <a href="../views/admin_usuarios.php" style="text-decoration: none;">
-                        <div class="d-flex justify-content-between align-items-center shadow-sm px-3 py-2"
-                            style="height: 75px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fff;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-person-lines-fill me-3" style="font-size: 2rem; color: #0097B2;"></i>
-                                <div class="text-start">
-                                    <h6 class="mb-0 fw-bold" style="color: #333;">Clientes</h6>
-                                    <small class="text-muted" style="font-size: 13px;">
-                                        <?= $totalUsuarios ?> Cliente<?= $totalUsuarios != 1 ? 's' : '' ?> cadastrado<?= $totalUsuarios != 1 ? 's' : '' ?>
-                                    </small>
-                                </div>
+            <!-- Card: Clientes -->
+            <div class="col-12 col-md-6">
+                <a href="../views/admin_usuarios.php" style="text-decoration: none;">
+                    <div class="d-flex justify-content-between align-items-center shadow-sm px-3 py-2"
+                        style="height: 75px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #fff;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-lines-fill me-3" style="font-size: 2rem; color: #0097B2;"></i>
+                            <div class="text-start">
+                                <h6 class="mb-0 fw-bold" style="color: #333;">Clientes</h6>
+                                <small class="text-muted" style="font-size: 13px;">
+                                    <?= $totalUsuarios ?> Cliente<?= $totalUsuarios != 1 ? 's' : '' ?>
+                                    cadastrado<?= $totalUsuarios != 1 ? 's' : '' ?>
+                                </small>
                             </div>
-                            <span style="width: 45px; height: 45px;"></span>
                         </div>
-                    </a>
-                </div>
-
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -101,11 +97,11 @@ $totalUsuarios = $resultUsuarios->fetch_assoc()['total'] ?? 0;
 
     <!-- Footer -->
     <footer class="text-center py-3 small" style="color: #bbb;">
-        &copy; <?= date('Y') ?>  Embelezamento Automotivo. Todos os direitos reservados.
+        &copy; <?= date('Y') ?> Embelezamento Automotivo. Todos os direitos reservados.
     </footer>
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
 
+</html>

@@ -116,10 +116,6 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
 }
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -127,7 +123,6 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listagem Agendamentos</title>
-
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons bootstrap -->
@@ -154,38 +149,43 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
 
     <main class="flex-grow-1 py-4">
 
-        <div class="container text-center mb-4">
-            <h5 class="text-center " style="color: #444;">
-            Agendamentos do dia</h5>
-            <small>Período: <span id="data-dia"></span></small>
-        </div>
-        
+        <h5 class="text-center fw-semibold  mb-4" style="color: #444;">
+            Agendamentos de hoje</h5>
+
         <div class="container px-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <!--- Link para agendamentos da semana -->
+
+                <div class="d-flex flex-column align-items-start">
+                    <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">Período: <span
+                            id="data-dia"></span></small>
+                    <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
+                        Total de agendamentos do dia: <?= $total_agend ?>
+                    </small>
+                </div>
+
+                <!-- Botão Agendamentos da semana -->
                 <a href="../views/admin_agendamentos_semanal.php"
-                    style="font-size: 0.85rem; color: #0097B2; text-decoration: underline;">
-                    Agendamentos da semana
+                    class="btn d-flex align-items-center justify-content-center fw-semibold"
+                    style=" border-radius: 8px; color: white; background-color: #0097B2">
+                    Semana
                 </a>
-                <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
-                    Total de agendamentos do dia: <?= $total_agend ?>
-                </small>
+
             </div>
 
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle table-agendamento">
-                    <thead class="text-nowrap text-center" style="background-color: #00a3c7;">
+                    <thead class="text-nowrap text-center" style="background-color: #0097B2;">
                         <tr>
-                            <th style="border-radius: 10px 0 0 10px;">Nome</th>
-                            <th>Telefone</th>
-                            <th>Veículo</th>
-                            <th>Serviço</th>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Leva e Traz</th>
-                            <th>Preço</th>
-                            <th>Status</th>
-                            <th style="border-radius: 0 10px 10px 0;">Ações</th>
+                            <th style="border-radius: 10px 0 0 10px; background-color: #0097B2;">Nome</th>
+                            <th style="background-color: #0097B2;">Telefone</th>
+                            <th style="background-color: #0097B2;">Veículo</th>
+                            <th style="background-color: #0097B2;">Serviço</th>
+                            <th style="background-color: #0097B2;">Data</th>
+                            <th style="background-color: #0097B2;">Hora</th>
+                            <th style="background-color: #0097B2;">Leva e Traz</th>
+                            <th style="background-color: #0097B2;">Preço</th>
+                            <th style="background-color: #0097B2;">Status</th>
+                            <th style="border-radius: 0 10px 10px 0; background-color: #0097B2;">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
@@ -196,7 +196,7 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
                             <!-- <td>?<= htmlspecialchars($row['telefone']) ?></td> -->
                             <td>
                                 <a href="https://wa.me/55<?= preg_replace('/\D/', '', $row['telefone']) ?>"
-                                    target="_blank" style="color: #00a3c7; text-decoration: none;">
+                                    target="_blank" style="color: #0097B2; text-decoration: none;">
                                     <?= htmlspecialchars($row['telefone']) ?>
                                 </a>
                             </td>
@@ -248,16 +248,10 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
 
             <!-- VISÃO MOBILE -->
             <div class="d-md-none">
-                <!-- Total de agendamentos do dia (VISÃO MOBILE) -->
-                <div class="d-flex justify-content-end pe-3 mb-2">
-                    <small class="text-white" style="font-size: 0.85rem; opacity: 0.9;">
-                        Total de agendamentos do dia: <?= $total_agend ?>
-                    </small>
-                </div>
 
                 <?php foreach ($agendamentos as $row): ?>
                 <div class="card text-white mb-3 border-0"
-                    style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
+                    style="box-shadow: 0 0 3px inset #0097B2; border-radius: 8px;">
                     <div class="card-body position-relative ">
 
                         <div>
@@ -332,7 +326,7 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
         <div class="d-flex justify-content-center mb-5 fixed-bottom">
             <a href="../views/dashboard_admin.php"
                 class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
-                style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
                 Voltar
             </a>
         </div>
@@ -381,11 +375,12 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
                         </div>
                     </div>
 
-                    <div class="pt-5">
-                        <button type="button" class="btn w-100" style="background-color: white; color: #444; border-radius: 10px; height: 55px; 
-                   box-shadow: 0 0 5px rgba(0,0,0,0.50); font-weight: 500;" data-bs-dismiss="modal">
+                    <!-- Botão Voltar -->
+                    <div class="d-flex justify-content-center my-4">
+                        <a href="../views/admin_agendamentos.php"
+                            class="btn d-flex align-items-center justify-content-center px-5 w-100" style="border-color: white; background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
                             Voltar
-                        </button>
+                        </a>
                     </div>
 
                 </div>

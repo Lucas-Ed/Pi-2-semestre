@@ -31,7 +31,7 @@ if (empty($_SESSION['csrf_token'])) {
 <?php endif; ?> -->
 
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="pt-br">
 
     <head>
         <meta charset="UTF-8">

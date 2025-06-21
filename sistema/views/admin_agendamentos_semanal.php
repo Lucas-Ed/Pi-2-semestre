@@ -171,7 +171,7 @@ $total_agend = count($agendamentos);
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
-        style="background-color: #009bbf; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
+        style="background-color: #0097B2; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
         <div>
             <h4 class="text-white m-0">Olá, <span class="fw-bold">Administrador</span></h4>
             <small class="text-white" style="font-size: 0.9rem;">Seja bem-vindo!</small>
@@ -186,37 +186,45 @@ $total_agend = count($agendamentos);
         $inicioSemana = date('d/m/Y', strtotime('monday this week'));
         $fimSemana = date('d/m/Y', strtotime('sunday this week'));
         ?>
-        <h5 class="text-center fw-semibold mb-1" style="color: #444;">
-            Agendamentos da semana (<?= $inicioSemana ?> - <?= $fimSemana ?>)
+        <h5 class="text-center fw-semibold  mb-4" style="color: #444;">
+            Agendamentos da Semana
         </h5>
 
         <div class="container px-3">
-            <!-- Exibe o total de agendamentos da semana -->
-            <div class="d-flex justify-content-between align-items-center mb-2 px-3">
-                <!--- Link para agendamentos do dia -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+                <div class="d-flex flex-column align-items-start">
+                    <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">Período: (<?= $inicioSemana ?> -
+                        <?= $fimSemana ?>)
+                    </small>
+
+                    <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
+                        Total de agendamentos da semana: <?= $total_agend ?>
+                    </small>
+                </div>
+
+                <!-- Botão Agendamentos da semana -->
                 <a href="../views/admin_agendamentos.php"
-                    style="font-size: 0.85rem; color: #00a3c7; text-decoration: underline;">
-                    Agendamentos do dia
+                    class="btn d-flex align-items-center justify-content-center fw-semibold"
+                    style=" border-radius: 8px; color: white; background-color: #0097B2">
+                    Hoje
                 </a>
-                <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
-                    Total de agendamentos da semana: <?= $total_agend ?>
-                </small>
             </div>
 
             <div class="table-responsive d-none d-md-block">
                 <table class="table text-white align-middle table-agendamento">
                     <thead class="text-nowrap text-center">
                         <tr>
-                            <th style="border-radius: 10px 0 0 10px;">Nome</th>
-                            <th>Telefone</th>
-                            <th>Veículo</th>
-                            <th>Serviço</th>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Leva e Traz</th>
-                            <th>Preço</th>
-                            <th>Status</th>
-                            <th style="border-radius: 0 10px 10px 0;">Ações</th>
+                            <th style="border-radius: 10px 0 0 10px; background-color: #0097B2">Nome</th>
+                            <th style="background-color: #0097B2">Telefone</th>
+                            <th style="background-color: #0097B2">Veículo</th>
+                            <th style="background-color: #0097B2">Serviço</th>
+                            <th style="background-color: #0097B2">Data</th>
+                            <th style="background-color: #0097B2">Hora</th>
+                            <th style="background-color: #0097B2">Leva e Traz</th>
+                            <th style="background-color: #0097B2">Preço</th>
+                            <th style="background-color: #0097B2">Status</th>
+                            <th style="border-radius: 0 10px 10px 0; background-color: #0097B2">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
@@ -281,14 +289,9 @@ $total_agend = count($agendamentos);
             <!-- VISÃO MOBILE -->
             <div class="d-md-none">
                 <?php foreach ($agendamentos as $row): ?>
-                <!-- Total de agendamentos da semana (VISÃO MOBILE) -->
-                <div class="d-flex justify-content-end pe-3 mb-2">
-                    <small class="text-white" style="font-size: 0.85rem; opacity: 0.9;">
-                        Total de agendamentos da semana: <?= $total_agend ?>
-                    </small>
-                </div>
 
-                <div class="card text-white mb-3 border-0" style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
+                <div class="card text-white mb-3 border-0"
+                    style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
                     <div class="card-body position-relative ">
 
                         <div>
@@ -364,8 +367,8 @@ $total_agend = count($agendamentos);
         <!-- Botão Voltar -->
         <div class="d-flex justify-content-center mb-5 fixed-bottom">
             <a href="../views/dashboard_admin.php"
-                class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
-                style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                class="btn d-flex align-items-center justify-content-center px-5 w-50 "
+                style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
                 Voltar
             </a>
         </div>
@@ -408,8 +411,10 @@ $total_agend = count($agendamentos);
                     </div>
 
 
-                    <button type="button" class="btn w-100 mt-5" style="background-color: white; color: #444;"
-                        data-bs-dismiss="modal">
+                    <button type="button" class="btn d-flex align-items-center justify-content-center px-5 w-100 me-2 border-0" style="background-color: white; border-radius: 10px; height: 55px; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;"
+                        data-bs-dismiss="modal"
+                        onmouseover="this.style.color='black';"
+                        onmouseout="this.style.color='black';">
                         Voltar
                     </button>
                 </div>

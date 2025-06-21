@@ -59,7 +59,7 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
 
     <!-- Header -->
     <header class="d-flex justify-content-between align-items-center px-5 py-3 shadow-sm"
-        style="background-color: #009bbf; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
+        style="background-color: #0097B2; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; height: 120px;">
         <div>
             <h4 class="text-white m-0">
                 Olá,
@@ -75,9 +75,9 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
 
         <!-- Barra de pesquisa (sem funcionalidade por enquanto) -->
         <div class="container mb-4 d-flex justify-content-center">
-            <div class="input-group w-50">
-                <input type="text" id="campoBusca" class="form-control" placeholder="Pesquisar cliente..." aria-label="Pesquisar cliente">
-                <button id="botaoBusca" class="btn" type="button" style="background-color: #00a3c7; color: white;">
+            <div class="input-group w-100">
+                <input type="text" id="campoBusca" class="form-control border-0" class="card-body" style="box-shadow: 0 0 3px inset #0097B2; border-radius: 0 0 0 px;" placeholder="Pesquisar cliente..." aria-label="Pesquisar cliente">
+                <button id="botaoBusca" class="btn" type="button" style="background-color: #0097B2; color: white">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
@@ -85,28 +85,27 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
         
         <div class="container px-3">
             <!-- Exibe o total de clientes cadastrados -->
-            <div class="d-flex justify-content-end pe-3 mb-2">
+            <div class="d-flex justify-content-start pe-3 mb-2">
                 <small class="text-muted" style="font-size: 0.85rem; opacity: 0.7;">
                     Total de clientes cadastrados: <?= $totalClientes ?>
                 </small>
             </div>
             <!-- Tabela para desktop -->
             <div class="table-responsive d-none d-md-block">
-                <table class="table text-white align-middle">
-                    <thead class="text-nowrap text-center" style="background-color: #00a3c7; border-radius: 10px;">
+                <table class="table text-white align-middle table-agendamento">
+                    <thead class="text-nowrap text-center " style="background-color: #0097B2;">
                         <tr>
-                            <th style="border-radius: 10px 0 0 10px;">Nome</th>
-                            <th>E-mail</th>
-                            <th>Telefone</th>
-                            <th>CPF</th>
-                            <th style="border-radius: 0 10px 10px 0;">Ações</th>
+                            <th style="border-radius: 10px 0 0 10px; background-color: #0097B2; color: white;">Nome</th>
+                            <th style="background-color: #0097B2; color: white;">E-mail</th>
+                            <th style="background-color: #0097B2; color: white;">Telefone</th>
+                            <th style="border-radius: 0 10px 10px 0;background-color: #0097B2; color: white;" >CPF</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         <?php foreach ($clientes as $cliente): ?>
                         <tr>
                             <td><?= htmlspecialchars($cliente['nome']) ?></td>
-                            <td><?= htmlspecialchars($cliente['email']) ?></td> <!-- ✅ Aqui o e-mail -->
+                            <td><?= htmlspecialchars($cliente['email']) ?></td>
                             <td>
                                 <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>"
                                     target="_blank" style="color: #00a3c7; text-decoration: none;">
@@ -114,11 +113,6 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
                                 </a>
                             </td>
                             <td><?= htmlspecialchars($cliente['cpf']) ?></td>
-                            <td>
-                                <i class="bi bi-card-text" role="button" style="color: #00a3c7;" data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalhes"
-                                    data-cliente='<?= json_encode($cliente, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'></i>
-                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -128,25 +122,18 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
             <!-- Cards para mobile -->
             <div class="d-md-none">
                 <?php foreach ($clientes as $cliente): ?>
-                <div class="card text-white mb-3" style="background-color: #00a3c7; border-radius: 12px;">
+                <div class="card text-white mb-3 border-0" style="box-shadow: 0 0 3px inset #009bbf; border-radius: 8px;">
                     <div class="card-body position-relative">
-                        <p><strong>Nome:</strong> <?= htmlspecialchars($cliente['nome']) ?></p>
+                        <p style="color: #00a3c7"><strong>Nome:</strong> <?= htmlspecialchars($cliente['nome']) ?></p>
 
-                        <p><strong>E-mail:</strong> <?= htmlspecialchars($cliente['email']) ?></p>
+                        <p style="color: #00a3c7"><strong>E-mail:</strong> <?= htmlspecialchars($cliente['email']) ?></p>
 
-                        <p><strong>Telefone:</strong> 
-                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: white; text-decoration: underline;">
+                        <p style="color: #00a3c7"><strong>Telefone:</strong> 
+                            <a href="https://wa.me/55<?= preg_replace('/\D/', '', $cliente['telefone']) ?>" target="_blank" style="color: #00a3c7; text-decoration: underline;">
                                 <?= htmlspecialchars($cliente['telefone']) ?>
                             </a>
                         </p>
-                        <p><strong>CPF:</strong> <?= htmlspecialchars($cliente['cpf']) ?></p>
-
-                        <div class="position-absolute top-0 end-0 m-2">
-                            <!-- <i class="bi bi-pencil-square me-2" role="button"></i> -->
-                            <i class="bi bi-card-text" role="button"
-                               data-bs-toggle="modal" data-bs-target="#modalDetalhes"
-                               data-cliente='<?= json_encode($cliente, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'></i>
-                        </div>
+                        <p style="color: #00a3c7"><strong>CPF:</strong> <?= htmlspecialchars($cliente['cpf']) ?></p>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -155,9 +142,8 @@ if ($resultTotalClientes && $rowTotalClientes = mysqli_fetch_assoc($resultTotalC
             <!-- Botão Voltar -->
             <div class="d-flex justify-content-center my-4 fixed-bottom">
                 <a href="../views/dashboard_admin.php"
-                   class="btn d-flex align-items-center justify-content-center px-5 w-50 me-2"
-                   style="background-color: #00a3c7; color: white; border-radius: 10px; height: 55px;
-                   box-shadow: 0 0 5px rgba(0, 0, 0, 0.50); font-weight: 500;">
+                   class="btn d-flex align-items-center justify-content-center px-5 w-50 m-2 border-0"
+                   style="background-color: #0097B2; color: white; border-radius: 10px; height: 55px; border-color: white; font-weight: 500;">
                     Voltar
                 </a>
             </div>

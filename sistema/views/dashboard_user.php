@@ -87,7 +87,7 @@ if ($stmt) {
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
 
-        // 🔑 Descriptografar o CPF
+        // Descriptografar o CPF
         $key = base64_decode($_ENV['CHAVE_CPF'] ?? '');
         if ($key === false) {
             die('Erro: chave CPF inválida.');
@@ -322,11 +322,15 @@ if ($stmt) {
                         <!-- Botões -->
                         <div class="d-flex justify-content-between mt-4">
                             <button type="button" class="btn w-50 me-2 border-0" data-bs-dismiss="modal"
-                                style="background-color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
+                                style="background-color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
+                                onmouseover="this.style.color='black';"
+                                onmouseout="this.style.color='black';">
                                 Voltar
                             </button>
                             <button type="submit" class="btn w-50 ms-2 border-0" id="submitCarBtn"
-                                style="background-color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);">
+                                style="background-color: white; border-radius: 10px; height: 55px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
+                                onmouseover="this.style.color='black';"
+                                onmouseout="this.style.color='black';">
                                 Salvar
                             </button>
                         </div>

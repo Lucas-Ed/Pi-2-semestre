@@ -15,11 +15,12 @@ require_once '../init.php'; // Se este arquivo for o ponto de
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verificação do token CSRF
-    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        die("Token CSRF inválido.");
-        header("Location: ../views/login.php");
-        exit();
-    }
+
+     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+         die("Token CSRF inválido.");
+         header("Location: ../views/login.php");
+         exit();
+     }
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
         $password = trim($_POST['senha']);
@@ -111,7 +112,7 @@ if (empty($_SESSION['csrf_token'])) {
             <?php endif; ?>
 
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <p class="text-muted mb-2 small">Insira seus dados...</p>
+                <small><p class="text-muted mb-2 small">Insira seus dados...</p></small>
                 <!-- Campo CSRF. envia via post, input oculto -->
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
