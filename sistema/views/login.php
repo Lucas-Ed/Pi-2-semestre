@@ -25,6 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../views/login.php");
         exit();
     }
+    // Validação explícita de e-mail
+    if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['loggedin'] = FALSE;
+        $error = "E-mail inválido.";
+        header("Location: ../views/login.php");
+        exit();
+    }
+    // Limite de tamanho
+    if (strlen($username) > 100 || strlen($password) > 100) {
+        $_SESSION['loggedin'] = FALSE;
+        $error = "Entrada excede o tamanho permitido.";
+        header("Location: ../views/login.php");
+        exit();
+    }
 
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
