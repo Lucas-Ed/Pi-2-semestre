@@ -1,3 +1,4 @@
+// script para exibir alertas personalizados para processo de recuperação de senha.
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const erro = params.get('erro');
@@ -23,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
             title: 'Código incorreto!',
             text: 'O código digitado não corresponde.',
             confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '../views/validacao_cod.php'; 
         });
     } else if (erro === 'token_expirado') {
         Swal.fire({

@@ -1,6 +1,7 @@
 <?php
-require '../Vendor/autoload.php';
-require_once '../init.php';
+// Controlador para cadastro de usuário.
+require '../Vendor/autoload.php'; //Carrega o autoload do Composer.
+require_once '../init.php'; // Inicializa o ambiente
 
 // Ativar exceptions em erros do mysqli
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -81,7 +82,7 @@ if (!empty($erros)) {
 // Criptografa a senha 
 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-//  Verifica se e-mail ou CPF já estão 
+//  Verifica se e-mail já esta sendo usado 
 $sqlCheck = "SELECT idusuarios FROM usuarios WHERE email = ?";
 $stmtCheck = $conn->prepare($sqlCheck);
 $stmtCheck->bind_param("s", $email); //"ss" , $cpfCriptografado
@@ -91,7 +92,7 @@ $stmtCheck->store_result();
 if ($stmtCheck->num_rows > 0) {
     $_SESSION['form_errors'] = ["E-mail já cadastrado."];
     //$_SESSION['form_data'] = $_POST; // opcional aqui, pois já fizemos antes
-    header("Location: ../views/cadastro.php?erro=email_ou_cpf");
+    header("Location: ../views/cadastro.php");
     $stmtCheck->close();
     $conn->close();
     exit();
@@ -102,7 +103,7 @@ $sqlUsuario = "INSERT INTO usuarios (nome, email, senha, termos, tipo)
                VALUES (?, ?, ?, ?, ?)"; // , ?, ?
 $stmtUsuario = $conn->prepare($sqlUsuario);
 $stmtUsuario->bind_param("sssss", $nome, $email, $senhaHash, $termos, $tipo); //"sssssis" $cpfCriptografado, $telefone
-
+// Verifica se a inserção foi bem-sucedida, e se sim, inicia a sessão do usuário.
 if ($stmtUsuario->execute()) {
     $usuarios_idusuarios = $conn->insert_id;
 

@@ -1,14 +1,15 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Pagina de Login do usuário.
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
-session_start();
+// session_start();
 // if (session_status() !== PHP_SESSION_ACTIVE) {
 //     die("Sessão não iniciada!");
 // }
-// Certifique-se de que init.php define $conn corretamente
-require_once '../init.php';
+
+require_once '../init.php'; // Incluí o arquivo de inicialização.
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -25,24 +26,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../views/login.php");
         exit();
     }
-    // Validação explícita de e-mail
-    if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['loggedin'] = FALSE;
-        $error = "E-mail inválido.";
-        header("Location: ../views/login.php");
-        exit();
-    }
-    // Limite de tamanho
-    if (strlen($username) > 100 || strlen($password) > 100) {
-        $_SESSION['loggedin'] = FALSE;
-        $error = "Entrada excede o tamanho permitido.";
-        header("Location: ../views/login.php");
-        exit();
-    }
 
+// Recebe os dados do formulário via POST.
     if (!empty($_POST['email']) && !empty($_POST['senha'])) {
         $username = trim($_POST['email']);
         $password = trim($_POST['senha']);
+        // Validação explícita de e-mail
+        if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['loggedin'] = FALSE;
+            $error = "E-mail inválido.";
+            header("Location: ../views/login.php");
+            exit();
+        }
+        // Limite de tamanho
+        if (strlen($username) > 100 || strlen($password) > 100) {
+            $_SESSION['loggedin'] = FALSE;
+            $error = "Entrada excede o tamanho permitido.";
+            header("Location: ../views/login.php");
+            exit();
+        }
         // Prepara a consulta SQL para evitar SQL Injection
         $sql = "SELECT idusuarios, email, nome, senha, tipo, telefone FROM usuarios WHERE email = ?";
         $stmt = $conn->prepare($sql);

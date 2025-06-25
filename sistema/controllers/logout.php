@@ -1,4 +1,5 @@
 <?php
+// Controlador para logout do usuário.
 // Inicializa uma sessão
 session_start();
  

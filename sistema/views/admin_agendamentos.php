@@ -1,4 +1,5 @@
 <?php
+// Pagina para listar agendamentos do dia atual, para o adm.
 session_start(); //  Inicia a sessão
 require_once __DIR__ . '/../init.php'; // e inclui o arquivo de inicialização
 
@@ -7,35 +8,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: ../views/index.php");
     exit;
 }
-
-// Consulta os agendamentos e os dados dos usuários sem filtros
-// $sql = "
-// SELECT 
-//     a.idagendamentos,
-//     u.nome,
-//     u.telefone,
-//     u.email,
-//     u.cpf,
-//     e.cep,
-//     e.rua,
-//     e.numero,
-//     e.bairro,
-//     v.modelo,
-//     v.placa,
-//     a.servico,
-//     p.valor,
-//     a.data_agendamento,
-//     a.hora_agendamento,
-//     a.leva_e_tras,
-//     s.executado
-// FROM agendamentos a
-// INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
-// LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
-// LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
-// ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
-// ";
 
 // Consulta os agendamentos e exibie somente os agendamentos do dia atual
 // e ordená-los do mais próximo para o mais distante no tempo
@@ -86,6 +58,7 @@ function descriptografarCPF($cpf_criptografado, $chave) {
 $total_valor_dia = 0;
 $agendamentos = [];
 
+// loop while para processar os resultados.
 while ($row = $result->fetch_assoc()) {
     $valor = $row['preco'] ?? 0;
     $row['valor'] = $valor;
@@ -96,15 +69,7 @@ while ($row = $result->fetch_assoc()) {
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
-// while ($row = $result->fetch_assoc()) {
-//     $valor = $row['preco'] ?? 0; // Usa o valor do banco
-//     $row['valor'] = $valor;
-//     $agendamentos[] = $row;
-//     $total_valor_dia += $valor;
-// }
 
-// Conta o total de agendamentos do dia
-// $total_agend = count($agendamentos);
 // Consulta o total de agendamentos do dia via função SQL
 $sqlTotal = "SELECT total_agendamentos_hoje() AS total_agend";
 $resultTotal = $conn->query($sqlTotal);

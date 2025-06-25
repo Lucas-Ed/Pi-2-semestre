@@ -1,4 +1,6 @@
 <?php
+// Rota de api  que busca os veículos do usuário autenticado.
+
 // conectar ao banco de dados mysqli
 require_once __DIR__ . '/../../init.php';
 
@@ -8,8 +10,6 @@ if (!isset($_SESSION['idusuarios'])) {
     echo json_encode(['error' => 'Usuário não autenticado']);
     exit;
 }
-
-
 
 $idUsuario = $_SESSION['idusuarios'];
 
@@ -27,8 +27,7 @@ FROM veiculos v
 WHERE v.usuarios_idusuarios = ? AND v.ativo = 1
 ORDER BY v.modelo");
 
-
-
+// Prepara a consulta SQL
 $stmt->bind_param("i", $idUsuario); // "i" indica que $idUsuario é um inteiro
 $stmt->execute();
 $result = $stmt->get_result();

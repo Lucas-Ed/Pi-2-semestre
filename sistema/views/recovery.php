@@ -1,5 +1,6 @@
 <?php 
-session_start();
+// Pagina de recuperação de senha, etapa 1: Enviar e-mail para o usuário.
+session_start(); // Inicia a sessão para usar variáveis de sessão
 
 // Gera um token CSRF se não existir
 if (empty($_SESSION['csrf_token'])) {

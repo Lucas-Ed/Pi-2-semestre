@@ -1,3 +1,4 @@
+// Script para validação de cadastro de usuário.
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     //const erro = params.get('erro');

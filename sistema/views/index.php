@@ -1,6 +1,7 @@
 <?php
+// Página Home do projeto.
 // Definindo o caminho base do projeto
-require_once __DIR__ . '/../init.php';
+require_once __DIR__ . '/../init.php'; // Inicializa o ambiente e a conexão com o banco de dados.
 
 // Roteamento usando o caminho da URL
 $caminho = $_SERVER['REQUEST_URI'];

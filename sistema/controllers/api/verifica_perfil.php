@@ -1,4 +1,5 @@
 <?php
+// Rota de api que verifica se o perfil do usuário está completo.
 session_start();
 require_once __DIR__ . '/../../init.php';
 
@@ -11,7 +12,7 @@ if (!isset($_SESSION["idusuarios"])) {
     echo json_encode(['status' => 'nao_logado']);
     exit;
 }
-
+// Obtém o ID do usuário da sessão
 $userId = $_SESSION["idusuarios"];
 
 // Consulta dados do usuário
@@ -21,7 +22,7 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
-
+// Verifica se os dados do usuário foi encontrado.
 $cpf = $user['cpf'] ?? '';
 $telefone = $user['telefone'] ?? '';
 

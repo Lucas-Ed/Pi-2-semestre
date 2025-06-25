@@ -1,3 +1,4 @@
+// Script para o cadastro de veículos do modal.
 document.addEventListener('DOMContentLoaded', function () {
   //console.log("Script Cadastro Veículo carregado com sucesso!");
 

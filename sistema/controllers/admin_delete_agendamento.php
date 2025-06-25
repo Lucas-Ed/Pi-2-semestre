@@ -1,4 +1,5 @@
 <?php
+// Controlador que permite o admin deletar um agendamento.
 require_once __DIR__ . '/../init.php'; // Conexão via $conn global
 
 header('Content-Type: application/json');
@@ -35,9 +36,9 @@ try {
     $stmt3->bind_param("i", $id);
     $stmt3->execute();
     $stmt3->close();
-
+    // Deleta agendamento do histórico
     $conn->commit();
-
+    // imprime o JSON de sucesso.
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
     $conn->rollback();

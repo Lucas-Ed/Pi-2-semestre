@@ -1,5 +1,5 @@
 <?php
-
+// Controller para adicionar agendamentos.
 require_once __DIR__ . '/../init.php'; // Caminho para o arquivo de inicialização e conexão com o banco de dados
 
 // Configurações de exibição de erros para depuração
@@ -90,7 +90,7 @@ $sql = "INSERT INTO agendamentos (
     preco
 ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-
+// Prepara a query de inserção.
 $stmt = $conn->prepare($sql);
 if ($stmt) {
     $stmt->bind_param("iissisd", $usuario, $veiculo, $data_agendamento, $hora_agendamento, $leva_e_tras, $servico, $preco);

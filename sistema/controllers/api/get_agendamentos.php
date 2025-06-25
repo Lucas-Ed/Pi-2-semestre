@@ -1,4 +1,6 @@
 <?php
+
+// rota de api que busca os agendamentos do usuário autenticado
 // conectar ao banco de dados mysqli
 require_once __DIR__ . '/../../init.php';
 
@@ -93,7 +95,7 @@ ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
 LIMIT 4
 ";
 
-// deixar a ordem do mais antigo para o mais novo (ainda limitado aos 4 últimos), você pode:trocar no SELECT
+// deixar a ordem do mais antigo para o mais novo (ainda limitado aos 4 últimos), trocar no SELECT
 //ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
 //LIMIT 4
 // e depois inverter o array com $agendamentos = array_reverse($agendamentos);

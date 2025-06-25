@@ -1,4 +1,5 @@
 <?php
+// Controlador para atualizar o status de um agendamento.
 require_once __DIR__ . '/../init.php'; // Incluir o arquivo de inicialização
 header('Content-Type: application/json'); // Definir o cabeçalho para JSON
 

@@ -1,4 +1,5 @@
 <?php
+// rota de api para buscar clientes por nome, CPF, telefone ou e-mail do input da pg. do admin.
 // Inclui o arquivo de inicialização
 require_once __DIR__ . '/../../init.php';
 

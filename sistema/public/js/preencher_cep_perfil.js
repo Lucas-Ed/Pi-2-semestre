@@ -1,3 +1,4 @@
+// Script para preencher os campos de endereço com base no CEP, para modal de perfil.
 document.addEventListener('DOMContentLoaded', () => {
     const cepInput = document.getElementById('cepInput');
     const ruaInput = document.getElementById('ruaInput');

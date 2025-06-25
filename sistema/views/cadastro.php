@@ -1,4 +1,5 @@
 <?php
+// Pagina de cadastro de um novo usuário.
 require_once '../init.php'; // <-- Inicia sessão
 //  captura os dados do formulário e os armazena na sessão.
 $form_data = $_SESSION['form_data'] ?? [];

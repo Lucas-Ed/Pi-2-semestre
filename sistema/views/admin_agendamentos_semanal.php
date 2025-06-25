@@ -1,4 +1,5 @@
 <?php
+// Pagina para listar agendamentos da semana do adm.
 session_start(); //  Inicia a sessão
 require_once __DIR__ . '/../init.php'; // e inclui o arquivo de inicialização
 
@@ -7,66 +8,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: ../views/index.php");
     exit;
 }
-
-// Consulta os agendamentos e os dados dos usuários sem filtros
-// $sql = "
-// SELECT 
-//     a.idagendamentos,
-//     u.nome,
-//     u.telefone,
-//     u.email,
-//     u.cpf,
-//     e.cep,
-//     e.rua,
-//     e.numero,
-//     e.bairro,
-//     v.modelo,
-//     v.placa,
-//     a.servico,
-//     p.valor,
-//     a.data_agendamento,
-//     a.hora_agendamento,
-//     a.leva_e_tras,
-//     s.executado
-// FROM agendamentos a
-// INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
-// LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
-// LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
-// ORDER BY a.data_agendamento DESC, a.hora_agendamento DESC
-// ";
-
-// Consulta os agendamentos e exibie somente os agendamentos do dia atual
-// e ordená-los do mais próximo para o mais distante no tempo
-// $sql = "
-// SELECT 
-//     a.idagendamentos,
-//     u.nome,
-//     u.telefone,
-//     u.email,
-//     u.cpf,
-//     e.cep,
-//     e.rua,
-//     e.numero,
-//     e.bairro,
-//     v.modelo,
-//     v.placa,
-//     a.servico,
-//     p.valor,
-//     a.data_agendamento,
-//     a.hora_agendamento,
-//     a.leva_e_tras,
-//     s.executado
-// FROM agendamentos a
-// INNER JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN enderecos e ON e.usuarios_idusuarios = u.idusuarios
-// LEFT JOIN veiculos v ON a.veiculos_idveiculos = v.idveiculos
-// LEFT JOIN pagamentos p ON a.idagendamentos = p.agendamentos_idagendamentos
-// LEFT JOIN status_ag s ON a.idagendamentos = s.agendamentos_idagendamentos
-// WHERE a.data_agendamento = CURDATE()
-// ORDER BY a.hora_agendamento ASC
-// ";
 
 // Consulta os agendamentos e exibie somente os agendamentos da semana atual (segunda a domingo).
 $sql = "
@@ -126,7 +67,7 @@ function tipoVeiculo($modelo) {
 $total_valor_dia = 0;
 $agendamentos = [];
 
-
+// Array para mapear os nomes dos serviços.
 while ($row = $result->fetch_assoc()) {
     $valor = $row['preco'] ?? 0;
     $row['valor'] = $valor;
@@ -137,12 +78,6 @@ while ($row = $result->fetch_assoc()) {
     $agendamentos[] = $row;
     $total_valor_dia += $valor;
 }
-// while ($row = $result->fetch_assoc()) {
-//     $valor = $row['preco'] ?? 0; 
-//     $row['valor'] = $valor;      
-//     $agendamentos[] = $row;
-//     $total_valor_dia += $valor;
-// }
 
 // Conta o total de agendamentos da semana
 $total_agend = count($agendamentos);

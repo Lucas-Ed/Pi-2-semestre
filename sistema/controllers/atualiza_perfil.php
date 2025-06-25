@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Controlador para atualizar o perfil do usuário.
+session_start(); // Inicia a sessão para acessar as variáveis de sessão
 require_once __DIR__ . '/../init.php'; // conexão com o banco
 require_once __DIR__ . '/../vendor/autoload.php'; // se usa dotenv
 
@@ -15,6 +16,50 @@ $cep = trim($_POST['cep']);
 $rua = trim($_POST['rua']);
 $numero = trim($_POST['numero']);
 $bairro = trim($_POST['bairro']);
+
+// Salva os dados preenchidos na sessão (exceto senha)
+// Essa sessão será usada para manter os dados no formulário em caso de erro
+$_SESSION['form_data'] = [
+    'nome' => $nome,
+    'telefone' => $telefone,
+    'email' => $email,
+    'cpf' => $cpf,
+    'cep' => $cep,
+    'rua' => $rua,
+    'numero' => $numero,
+    'bairro' => $bairro
+];
+
+// Validações com retorno de erros via sessão
+$erros = [];
+
+//  Validações
+
+
+// TELEFONE
+$telefoneLimpo = preg_replace('/\D/', '', $telefone);
+if (strlen($telefoneLimpo) > 0 && strlen($telefoneLimpo) !== 11) {
+    $erros[] = "Telefone inválido. Deve conter 11 dígitos com DDD.";
+}
+
+// CPF
+$cpfLimpo = preg_replace('/\D/', '', $cpf);
+if (strlen($cpfLimpo) > 0 && strlen($cpfLimpo) !== 11) {
+    $erros[] = "CPF inválido. Deve conter 11 dígitos numéricos.";
+}
+
+// CEP
+$cepLimpo = preg_replace('/\D/', '', $cep);
+if (strlen($cepLimpo) > 0 && strlen($cepLimpo) !== 8) {
+    $erros[] = "CEP inválido. Deve conter 8 dígitos.";
+}
+
+// Verifica se há erros
+if (!empty($erros)) {
+    $_SESSION['form_errors'] = $erros;
+    header("Location: ../views/dashboard_user.php");
+    exit();
+}
 
 // Criptografa o CPF antes de armazenar
 $key = base64_decode($_ENV['CHAVE_CPF']);

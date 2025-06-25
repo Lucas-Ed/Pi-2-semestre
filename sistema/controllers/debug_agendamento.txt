@@ -1,9 +1,0 @@
-Array
-(
-    [veiculos_idveiculos] => 30
-    [data_agendamento] => 2025-06-06
-    [hora_agendamento] => 15:00
-    [leva_e_tras] => 
-    [servico] => lavagem_interna
-    [preco] => 35
-)

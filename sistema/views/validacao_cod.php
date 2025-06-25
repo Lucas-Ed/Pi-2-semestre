@@ -1,5 +1,6 @@
 <?php 
-session_start();
+// pagina de validação de código(token) de recuperação de senha.
+session_start(); // Inicia a sessão para usar variáveis de sessão
 
 // Gera um token CSRF se não existir
 if (empty($_SESSION['csrf_token'])) {

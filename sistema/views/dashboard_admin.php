@@ -1,4 +1,5 @@
 <?php
+// Path: views/dashboard do adm.
 session_start(); // Inicia a sessão
 require_once __DIR__ . '/../init.php'; // Inclui o arquivo de inicialização
 

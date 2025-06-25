@@ -1,6 +1,14 @@
 <?php
-session_start();
-require_once __DIR__ . '/../init.php'; // para garantir que a conexão esteja disponível 
+// Pagina de dashboard do usuário.
+session_start(); // Inicializa uma sessão.
+require_once __DIR__ . '/../init.php'; // para garantir que a conexão esteja disponível
+//  captura os dados do formulário de perfil e os armazena na sessão.
+$form_data = $_SESSION['form_data'] ?? [];
+$form_errors = $_SESSION['form_errors'] ?? [];
+unset($_SESSION['form_data'], $_SESSION['form_errors']);
+
+// Exporta para JavaScript
+echo "<script>window.formErrors = " . json_encode($form_errors) . ";</script>";
 
 // Gera um token CSRF, pra sessão para proteger contra ataques CSRF
 // $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -459,13 +467,14 @@ if ($stmt) {
 
 
                         <!-- Telefone -->
-                        <div class="mb-2">
+                        <div class="mb-2"> <!-- value="<?= htmlspecialchars($_SESSION['telefone'] ?? '') ?>" -->
                             <div class="d-flex align-items-center"
                                 style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                 <i class="bi bi-telephone" style="color: #0097B2; font-size: 1.2rem;"></i>
                                 <input type="text" name="telefone" class="form-control border-0 shadow-none"
                                     placeholder="Celular (com DDD)"
-                                    value="<?= htmlspecialchars($_SESSION['telefone'] ?? '') ?>"
+                                    value="<?= htmlspecialchars($form_data['telefone'] ?? $_SESSION['telefone'] ?? '') ?>"
+                                    id="telefoneInput"
                                     style="margin-left: 0.75rem; font-size: 1rem; color: #444;" required>
                             </div>
                         </div>
@@ -482,58 +491,65 @@ if ($stmt) {
                         </div>
 
                         <!-- CPF -->
-                        <div class="mb-2">
+                        <div class="mb-2"><!--value="<?= htmlspecialchars($_SESSION['cpf'] ?? '') ?>"--->
                             <div class="d-flex align-items-center"
                                 style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                 <i class="bi bi-credit-card" style="color: #0097B2; font-size: 1.2rem;"></i>
                                 <input type="text" name="cpf" class="form-control border-0 shadow-none"
-                                    placeholder="CPF" value="<?= htmlspecialchars($_SESSION['cpf'] ?? '') ?>"
+                                    placeholder="CPF"
+                                    
+                                    value="<?= htmlspecialchars($form_data['cpf'] ?? $_SESSION['cpf'] ?? '') ?>"
+                                    id="cpfInput"
                                     style="margin-left: 0.75rem; font-size: 1rem; color: #444;" required>
                             </div>
                         </div>
 
                         <!-- CEP -->
-                        <div class="mb-2">
+                        <div class="mb-2"><!--value="<?= htmlspecialchars($_SESSION['cep'] ?? '') ?>"-->
                             <div class="d-flex align-items-center"
                                 style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                 <i class="bi bi-geo-alt" style="color: #0097B2; font-size: 1.2rem;"></i>
                                 <input type="text" name="cep" class="form-control border-0 shadow-none"
-                                    placeholder="CEP" value="<?= htmlspecialchars($_SESSION['cep'] ?? '') ?>"
+                                    placeholder="CEP" 
+                                    value="<?= htmlspecialchars($form_data['cep'] ?? $_SESSION['cep'] ?? '') ?>"
                                     style="margin-left: 0.75rem; font-size: 1rem; color: #444;" id="cepInput" required>
                             </div>
                         </div>
 
                         <!-- Rua e Número -->
-                        <div class="row g-2">
+                        <div class="row g-2"><!--value="<?= htmlspecialchars($_SESSION['rua'] ?? '') ?>"---->
                             <div class="col-7">
                                 <div class="d-flex align-items-center"
                                     style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                     <i class="bi bi-geo" style="color: #0097B2; font-size: 1.2rem;"></i>
                                     <input type="text" name="rua" class="form-control border-0 shadow-none"
-                                        placeholder="Rua" value="<?= htmlspecialchars($_SESSION['rua'] ?? '') ?>"
+                                        placeholder="Rua" 
+                                        value="<?= htmlspecialchars($form_data['rua'] ?? $_SESSION['rua'] ?? '') ?>"
                                         style="margin-left: 0.75rem; font-size: 1rem; color: #444;" id="ruaInput" required>
                                 </div>
                             </div>
 
-                            <div class="col-5">
+                            <div class="col-5"><!---value="<?= htmlspecialchars($_SESSION['numero'] ?? '') ?>"---->
                                 <div class="d-flex align-items-center"
                                     style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                     <i class="bi bi-123" style="color: #0097B2; font-size: 1.2rem;"></i>
                                     <input type="number" name="numero"
                                         class="form-control border-0 shadow-none text-center" placeholder="Número"
-                                        value="<?= htmlspecialchars($_SESSION['numero'] ?? '') ?>"
+                                        
+                                        value="<?= htmlspecialchars($form_data['numero'] ?? $_SESSION['numero'] ?? '') ?>"
                                         style="margin-left: 0.75rem; font-size: 1rem; color: #444;" required>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Bairro -->
-                        <div class="mt-2 mb-2">
+                        <div class="mt-2 mb-2"><!--value="<?= htmlspecialchars($_SESSION['bairro'] ?? '') ?>"-->
                             <div class="d-flex align-items-center"
                                 style="border: 2px solid white; border-radius: 10px; padding: 0 1rem; height: 50px; background-color: white;">
                                 <i class="bi bi-geo-alt-fill" style="color: #0097B2; font-size: 1.2rem;"></i>
                                 <input type="text" name="bairro" class="form-control border-0 shadow-none"
-                                    placeholder="Bairro" value="<?= htmlspecialchars($_SESSION['bairro'] ?? '') ?>"
+                                    placeholder="Bairro" 
+                                    value="<?= htmlspecialchars($form_data['bairro'] ?? $_SESSION['bairro'] ?? '') ?>"
                                     style="margin-left: 0.75rem; font-size: 1rem; color: #444;" id="bairroInput" required>
                             </div>
                         </div>
@@ -577,7 +593,8 @@ if ($stmt) {
     <script src="../public/js/cadastro_veiculo.js?v=<?= time() ?>" defer></script>
     <!-- lib sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <!-- Lib Inputmask -->
+    <script src="https://unpkg.com/imask"></script>
     <!-- Script para exibir mensagens de alerta -->
     <?php if ($alerta === 'senha_redefinida'): ?>
     <script>
@@ -612,6 +629,8 @@ if ($stmt) {
 
     <!-- // auto preencher cep do modal de perfil -->
     <script src="../public/js/preencher_cep_perfil.js?v=<?= time() ?>" defer></script>
+    <!-- // alerts de validação Perfil do usuário-->
+        <script src="../public/js/val_perfil.js?v=<?= time() ?>" defer></script>
 
 </body>
 

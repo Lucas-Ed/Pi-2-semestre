@@ -1,6 +1,6 @@
 <?php
-require_once '../init.php';
-require_once '../model/db.php';
+require_once '../init.php'; // Inicializa o ambiente e a conexão com o banco de dados.
+// require_once '../model/db.php';
 
 // Inicia a sessão
 ob_start();

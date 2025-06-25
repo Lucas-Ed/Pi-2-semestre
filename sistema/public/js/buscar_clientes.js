@@ -1,4 +1,4 @@
-// Função central para executar a busca
+// Função central para executar a busca de clientes da página do admin.
 function executarBusca() {
     const termo = document.getElementById('campoBusca').value.trim();
     console.log('Buscando:', termo); // debug opcional

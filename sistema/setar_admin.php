@@ -1,4 +1,5 @@
 <?php
+// Script para cadastrar um usuário admin no banco de dados.
 // Conexão com o banco
 $servername = "localhost";
 $username = "root";

@@ -1,3 +1,4 @@
+// script com todas as funcionalidades da página de dashboard do usuário.
 const addCarModal = new bootstrap.Modal(document.getElementById('addCarModal'));
 const scheduleModal = new bootstrap.Modal(document.getElementById('scheduleModal'));
 const carForm = document.getElementById('carForm');
@@ -11,10 +12,7 @@ document.getElementById('name').value = sessionStorage.getItem('userName') || ''
 
 let appointments = [];
 
-// Formatadores
-// function formatDate(date) {
-//   return new Date(date).toLocaleDateString('pt-BR');
-// }
+
 function formatDate(dateString) {
   // Divide manualmente a string no formato 'YYYY-MM-DD'
   const parts = dateString.split('-');
@@ -28,15 +26,6 @@ function formatDate(dateString) {
   // Formata no padrão brasileiro
   return date.toLocaleDateString('pt-BR');
 }
-
-// function getServiceName(serviceValue) {
-//   const services = {
-//     'simples': 'Lavagem Simples - R$ 40,00',
-//     'completa': 'Lavagem Completa - R$ 70,00',
-//     'premium': 'Lavagem Premium - R$ 100,00'
-//   };
-//   return services[serviceValue] || 'Serviço não especificado';
-// }
 
 // Spinner
 function showSpinner(container) {
@@ -136,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
-
 
 // evento de mudança no input de data
 document.getElementById('date').addEventListener('change', async function () {
@@ -634,10 +622,6 @@ async function removeAppointment(appointmentId) {
     }).then(() => {
       window.location.href = '../views/dashboard_user.php';
     });
-      // Swal.fire('Cancelado!', 'Agendamento cancelado com sucesso.', 'success')
-      //   .then(() => {
-      //     window.location.href = '../views/dashboard_user.php'; // Redireciona após fechar o alerta
-      //   });
   } else {
     // Tratamento de erros específicos
     const msg = data.message.toLowerCase();
@@ -675,12 +659,6 @@ async function removeAppointment(appointmentId) {
 // Funcionalidade de adicionar veículo.
 carForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  // const formData = {
-  // tipo: document.getElementById('tipo').value,
-  // marca: document.getElementById('marca').value,
-  // modelo: document.getElementById('modelo').value,
-  // placa: document.getElementById('placa').value.toUpperCase()
-  //};
 
   const formData = {
   tipo: document.getElementById('tipo').value.trim(),
@@ -710,12 +688,7 @@ if (!formData.tipo || !formData.marca || !formData.modelo || !formData.placa) {
   // addCarModal.hide(); // Fechar modal
 });
 
-// Validar placa
-// function isValidPlate(placa) {
-//   const oldFormat = /^[A-Z]{3}-\d{4}$/;
-//   const newFormat = /^[A-Z]{3}\d[A-Z]\d{2}$/;
-//   return oldFormat.test(placa) || newFormat.test(placa);
-// }
+
 // Função para validar placas de veículos
 function isValidPlate(placa) {
   if (typeof placa !== 'string') return false;
@@ -808,7 +781,7 @@ async function removeCar(carId) {
     });
      const data = await res.json();
     //const text = await res.text(); // <-- NÃO usa res.json() ainda
-    //console.log('Resposta bruta do PHP:', text); // <-- Veja o conteúdo no console
+    //console.log('Resposta bruta do PHP:', text); // <-- Ver o conteúdo no console
     if (data.success) {
       Swal.fire({
         icon: 'success',
@@ -819,11 +792,7 @@ async function removeCar(carId) {
       }).then(() => {
         window.location.href = '../views/dashboard_user.php';
       });
-  //     Swal.fire('Removido!',
-  //                'Veículo removido com sucesso.',
-  //               'success').then(() => {
-  //   window.location.href = '../views/dashboard_user.php';
-  // });
+      // Atualizar a lista de veículos e agendamentos
       await loadUserCars();
       await loadAppointments();
     } else {

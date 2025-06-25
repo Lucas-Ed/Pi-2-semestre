@@ -9,7 +9,7 @@ define('BASE_PATH', __DIR__);
 require_once __DIR__ . '/Vendor/autoload.php';
 
 //require_once BASE_PATH . '/vendor/autoload.php';
-// Agora você pode usar as classes das bibliotecas do Composer diretamente
+// Agqui pode usar as classes das bibliotecas do Composer diretamente
 // sem precisar de require individual para cada arquivo.
 // Exemplo (se você tiver uma biblioteca chamada 'Monolog' para logs):
 // use Monolog\Logger;
@@ -20,7 +20,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// Outras configurações globais podem vir aqui, como:
+// Lembrete: outras configurações globais podem ser adicionadas aqui, como:
 // - Configurações de sessão
 // - Definição de constantes globais
 // - Inicialização de algum serviço essencial

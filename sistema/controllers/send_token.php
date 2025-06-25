@@ -1,4 +1,5 @@
 <?php
+// Controlador para enviar token de recuperação de senha, para o e-mail do usuário.
 require_once __DIR__ . '/../init.php';    // Inicializa o ambiente e a conexão com o banco de dados
 require_once '../Vendor/autoload.php'; // Autoload do Composer para PHPMailer e outros
 
@@ -10,7 +11,7 @@ require_once '../Vendor/autoload.php'; // Autoload do Composer para PHPMailer e 
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-
+// Importa as classes necessárias do PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -23,7 +24,7 @@ function gerarToken() {
 function env($key, $default = null) {
     return $_ENV[$key] ?? getenv($key) ?: $default;
 }
-
+// Verifica se a requisição é POST e se o botão de enviar email foi acionado
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
     // echo "<script>alert('PHP foi acionado');</script>";
     // var_dump($_POST); die();

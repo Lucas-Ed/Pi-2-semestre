@@ -1,3 +1,4 @@
+// Script para exibir alertas e validar senhas na página de redefinição de senha.
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
     const erro = params.get('erro');
