@@ -416,14 +416,27 @@ async function addAppointment(appointmentData) {
     }
 
     if (data.success) {
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Agendamento realizado!',
+      //   text: `Para ${appointmentData.data_agendamento} às ${appointmentData.hora_agendamento}`,
+      //   timer: 2000,
+      //   showConfirmButton: false
+      // }).then(() => {
+      //   window.location.href = '../views/dashboard_user.php';
+      // });
       Swal.fire({
         icon: 'success',
         title: 'Agendamento realizado!',
-        text: `Para ${appointmentData.data_agendamento} às ${appointmentData.hora_agendamento}`,
-        timer: 2000,
-        showConfirmButton: false
-      }).then(() => {
-        window.location.href = '../views/dashboard_user.php';
+        html: `
+          <p>Para ${appointmentData.data_agendamento} às ${appointmentData.hora_agendamento}</p>
+          <p>Acompanhe o status do seu agendamento no <strong>Dashboard</strong>.</p>
+        `,
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '../views/dashboard_user.php';
+        }
       });
     } else {
       throw new Error(data.message || 'Falha ao agendar.');
