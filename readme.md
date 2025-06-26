@@ -172,6 +172,7 @@ php setar_admin.php
 │   |     ├── 📄 preencher_cep_perfil.js-(preenche os campos de endereço do modal perfil com base no CEP)
 │   |     ├── 📄 recuperacao_alerts.js-(alerts de envio de e-mail com token)
 |   |     ├── 📄 val_cads.js-(validações do form de cadastro)
+|   |     ├── 📄 val_perfil.js-(validações do modal perfil do usuário)
 │   |     └── 📄 welcome.js-(funcionalidades de area  do usuário)
 |   |
 │   └── 📂 uploads/ (imagens e outros)
