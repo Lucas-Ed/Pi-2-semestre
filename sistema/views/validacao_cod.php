@@ -1,5 +1,5 @@
 <?php 
-// pagina de validação de código(token) de recuperação de senha.
+// pagina de validação de código(token) de recuperação de senha , etapa 2.
 session_start(); // Inicia a sessão para usar variáveis de sessão
 
 // Gera um token CSRF se não existir

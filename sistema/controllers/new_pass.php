@@ -1,4 +1,5 @@
 <?php
+// Controller para redefinição de senha.
 require_once '../init.php'; // Inicializa o ambiente e a conexão com o banco de dados.
 // require_once '../model/db.php';
 
@@ -57,7 +58,7 @@ if ($senha !== $nova_senha) {
 
 // Validação de senha forte: pelo menos 8 caracteres, contendo letras e números
 if (
-    strlen($senha) < 8 ||                      // menos de 8 caracteres → inválido
+    strlen($senha) < 8 ||                      // menos de 8 caracteres = inválido
     !preg_match('/[A-Za-z]/', $senha) ||       // deve conter pelo menos uma letra
     !preg_match('/\d/', $senha)                // deve conter pelo menos um número
 ) {

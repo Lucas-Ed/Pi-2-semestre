@@ -119,7 +119,7 @@ exit;
 
 
 
-<!--- abaixo somente deleta veículos do usuário autenticado --->
+<!--- abaixo somente deleta veículos do usuário autenticado, sem inativar --->
 <!-- ?<php
 
 require_once __DIR__ . '/../init.php'; // Inicializa o ambiente

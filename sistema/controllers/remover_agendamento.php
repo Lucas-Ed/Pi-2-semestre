@@ -1,4 +1,5 @@
 <?php
+// Controlar para remover agendamentos.
 require_once __DIR__ . '/../init.php'; // Inicializa o ambiente e a conexão com o banco de dados
 
 // Previne qualquer saída inesperada

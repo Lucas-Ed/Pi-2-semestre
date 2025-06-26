@@ -1,5 +1,5 @@
 <?php
-// Pagina de alteração de senha.
+// Pagina de alteração de senha , etapa 3.
 require_once __DIR__ . '/../init.php'; // Conecta via mysqli
 // converte para em variável js.
 // $status = $_SESSION['status'] ?? null; // aqui

@@ -1,4 +1,5 @@
 <?php
+//  Arquivo de inicialização do projeto.
 // Define o fuso horário.
 date_default_timezone_set('America/Sao_Paulo');
 ob_start(); // inicia buffer de saída

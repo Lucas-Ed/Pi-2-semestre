@@ -31,6 +31,7 @@ Software liberado para uso **Não Comercial**, veja sobre a Licença, para mais 
  <a href="#-metodologia-ágil">Metodologia ágil</a> •
  <a href="#-documentação">Documentação</a> •
  <a href="#-sobre-o-projeto">Sobre o Projeto</a> •
+ <a href="#-Api ">Api</a> •
  <!-- <a href="#-Deploy">Deploy</a> • -->
  <!-- <a href="#-Live">Live</a> • -->
   <a href="#-autores">Autores</a> •
@@ -130,6 +131,31 @@ php setar_admin.php
 9. Acesse o sistema pelo navegador, no endereço: `http://localhost/sistema/views`.
 10. Pronto você verá a página Home do sistema.
 11. Faça o login com o usuário admin, que foi criado no passo 8 com as seguintes credenciais de acesso **e-mail:** `admin@admin.com`  **e senha:** `admin123`, ou crie um novo usuário cliente fazendo o cadastro.
+
+## 🧩 Api
+
+O sistema utiliza uma Api interna, que foi desenvolvida para buscar os clientes no banco de dados, e também para listar os agendamentos e veículos do usuário logado, entre outras, veja abaixo as rotas disponíveis:
+```bash
+GET /api/buscar_clientes.php - Buscar clientes no banco de dados. 
+GET /api/get_agendamentos.php - Listar agendamentos do usuário logado.
+GET /api/get_veiculos.php - Listar veículos do usuário logado.
+GET /api/verifica_perfil.php - Verifica dados do perfil do usuário logado.
+```
+ 
+Você pode acessar as rotas da API, através do navegador ou de uma ferramenta como o Postman,
+é necessário estar logado como cliente ou admin para testar as funcionalidades, veja as rotas abaixo:
+
+```bash
+http://localhost/sistema/controllers/api/buscar_clientes.php
+
+http://localhost/sistema/controllers/api/get_agendamentos.php
+
+http://localhost/sistema/controllers/api/get_veiculos.php
+
+http://localhost/sistema/controllers/api/verifica_perfil.php
+
+```
+
 
 ## 📂 Arquitetura(MVC) e funcionalidades do Projeto
 

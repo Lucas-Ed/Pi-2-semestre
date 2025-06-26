@@ -2,9 +2,9 @@
 // Controlador para atualizar o perfil do usuário.
 session_start(); // Inicia a sessão para acessar as variáveis de sessão
 require_once __DIR__ . '/../init.php'; // conexão com o banco
-require_once __DIR__ . '/../vendor/autoload.php'; // se usa dotenv
+require_once __DIR__ . '/../vendor/autoload.php'; // Carrega Blibliotecas do Composer.
 
-
+// Assume que o usuário está autenticado e o ID do usuário está na sessão.
 $userId = $_SESSION['idusuarios'];
 
 // Dados recebidos do formulário
