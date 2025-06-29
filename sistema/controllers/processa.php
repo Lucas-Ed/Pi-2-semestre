@@ -8,7 +8,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 // Iniciar sessão, caso ainda não esteja iniciada
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    session_start();// Inicia a sessão se ainda não estiver iniciada.
 }
 
 // validar CSRF

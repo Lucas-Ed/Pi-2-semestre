@@ -28,7 +28,11 @@ $dotenv->load();
 
 // Inicia a sessão:
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    // Configurações de segurança para a sessão.
+    ini_set('session.cookie_httponly', 1); // Impede acesso ao cookie via JS
+    ini_set('session.cookie_secure', 1);   // Garante que só trafegue via HTTPS
+    ini_set('session.cookie_samesite', 'Strict'); // Protege  contra ataques cross-site (CSRF)
+    session_start(); // Inicia a sessão se ainda não estiver iniciada.
     
 }
 

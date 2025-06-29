@@ -14,23 +14,6 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 ?>
-
-<title>Cadastro</title>
-<!-- CSS personalizado -->
-<link rel="stylesheet" href="../public/css/cadastrar_se/cadastro.css">
-
-<section class="bg-white d-flex flex-column min-vh-100">
-    <!-- Mensagem de erro -->
-    <!-- <?php if (!empty($form_errors)): ?>
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            <?php foreach ($form_errors as $erro): ?>
-                <li><?= htmlspecialchars($erro) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?> -->
-
     <!DOCTYPE html>
     <html lang="pt-br">
 
@@ -44,10 +27,22 @@ if (empty($_SESSION['csrf_token'])) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <!-- Favicon -->
         <link rel="icon" href="../public/uploads/img/favicon.svg" type="image/svg+xml">
+        <!-- CSS personalizado -->
+       <link rel="stylesheet" href="../public/css/cadastrar_se/cadastro.css">
     </head>
 
     <body>
         <main class="container my-auto px-3" style="max-width: 400px;">
+                <!-- Mensagem de erro -->
+            <!-- <?php if (!empty($form_errors)): ?>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <?php foreach ($form_errors as $erro): ?>
+                        <li><?= htmlspecialchars($erro) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?> -->
             <h4 class="text-center fw-bold mb-5 mt-4" style="color: #444">Cadastro</h4>
 
             <form method="POST" action="../controllers/processa.php">

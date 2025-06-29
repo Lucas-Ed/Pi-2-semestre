@@ -124,7 +124,7 @@ $pagina = $caminho[0] ?? 'index';
             </a>
         </div>
 
-        <small class="mb-0">&copy; 2025 Minha Empresa. Todos os direitos reservados.</small>
+        <small class="mb-0">&copy; 2025 Embelezamento Automotivo. Todos os direitos reservados.</small>
     </footer>
 
     <!-- Bootstrap JS -->
