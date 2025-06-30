@@ -29,8 +29,8 @@ if (empty($_SESSION['csrf_token'])) {
 
     </header>
 
-    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 200px;">
-        <div style="width: 380px;">
+    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 170px;">
+        <div style="width: 350px;">
 
             <h4 class="text-center fw-bold mb-5" style="color: #444;">Verificação de Identidade</h4>
 

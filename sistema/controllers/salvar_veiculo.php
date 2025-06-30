@@ -13,9 +13,9 @@ if (!$csrfTokenHeader || $csrfTokenHeader !== $_SESSION['csrf_token']) {
 }
 
 // Verifica se  erros de conexão com o banco de dados
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-header("Content-Type: application/json");
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// header("Content-Type: application/json");
 
 $idUsuario = $_SESSION['idusuarios'] ?? 0;
 if ($idUsuario === 0) {

@@ -4,8 +4,8 @@ require_once __DIR__ . '/../init.php'; // Conexão via $conn global
 
 header('Content-Type: application/json');
 // Debug completo
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 $data = json_decode(file_get_contents('php://input'), true);
 

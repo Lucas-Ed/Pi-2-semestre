@@ -3,9 +3,9 @@
 require_once __DIR__ . '/../init.php'; // Caminho para o arquivo de inicialização e conexão com o banco de dados
 
 // Configurações de exibição de erros para depuração
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 

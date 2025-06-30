@@ -22,8 +22,8 @@ if (empty($_SESSION['csrf_token'])) {
 <body class="bg-white d-flex flex-column min-vh-100">
 
 
-    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 200px;">
-        <div style="width: 380px;">
+    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 170px;">
+        <div style="width: 350px;">
 
             <h4 class="text-center fw-bold mb-5" style="color: #444;">Verificação de Token</h4>
             <!-- Mensagem -->

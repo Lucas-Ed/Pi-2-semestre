@@ -66,8 +66,8 @@ $nomeUsuario = $usuario['nome'] ?? 'Usuário';
     //console.log("phpStatus:", phpStatus);
     </script>
 
-    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 200px;">
-        <div style="width: 380px;">
+    <main class="d-flex flex-grow-1 justify-content-center" style="margin-top: 170px;">
+        <div style="width: 350px;">
 
             <div class="caixa-texto" id="caixaTexto">
                 <!-- Texto inicial -->

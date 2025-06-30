@@ -98,7 +98,7 @@ $pagina = $caminho[0] ?? 'index';
     </main>
 
     <!-- Rodapé -->
-    <footer class="text-white text-center  fixed-bottom d-flex flex-column justify-content-center align-items-center"
+    <footer class="text-white text-center d-flex flex-column justify-content-center align-items-center mt-5"
         style="background-color: #0097B2; border-top-left-radius: 20px; border-top-right-radius: 20px; height: 150px;">
 
         <div class=" d-flex gap-3 p-3 align-items-center justify-content-center">
