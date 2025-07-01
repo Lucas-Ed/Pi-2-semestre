@@ -56,7 +56,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
  ## 💻 Layout do Projeto
 
-<!-- ![](/img/gif_apresentação.gif) -->
+![](/img/gif_apresentacao.gif)
 
 Veja o layout completo  [aqui.](https://www.figma.com/design/PpyOYg0jN5SyXKjDlWTspq/Fatec-Projeto-Integrador-2%C2%BA-S?node-id=0-1&p=f)
 
@@ -120,6 +120,7 @@ composer install
 ```bash
 openssl rand -base64 16
 ```
+Caso o comando acima não funcione, é necessário instalar o OpenSSL, veja como instalar [aqui.](https://slproweb.com/products/Win32OpenSSL.html?utm_source)
 
 **OBS:**  A chave privada é utilizada para criptografar o CPF do usuário, garantindo a segurança dos dados pessoais, e em conformidade com a **LGPD-(Lei geral de proteção de dados)**.
 

@@ -305,7 +305,7 @@ if ($resultTotal && $rowTotal = $resultTotal->fetch_assoc()) {
             <div class="modal-content border-0" style="border-radius: 15px; background-color: #0097B2;">
 
                 <div class="modal-header px-4 py-4 text-white">
-                    <h5 class="modal-title">Meu Perfil</h5>
+                    <h5 class="modal-title">Dados do Cliente</h5>
                 </div>
 
                 <div class="modal-body px-4 py-4 text-white">
