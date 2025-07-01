@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 21/06/2025 às 21:02
+-- Tempo de geração: 01/07/2025 às 06:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -22,6 +22,35 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `lava_rapido` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `lava_rapido`;
+
+DELIMITER $$
+--
+-- Procedimentos
+--
+DROP PROCEDURE IF EXISTS `update_ag_expirados`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_ag_expirados` ()   BEGIN
+    UPDATE status_ag s
+    INNER JOIN agendamentos a ON s.agendamentos_idagendamentos = a.idagendamentos
+    SET s.executado = 'Expirado'
+    WHERE a.data_agendamento < CURDATE()
+      AND s.executado NOT IN ('Concluída', 'Expirado');
+END$$
+
+--
+-- Funções
+--
+DROP FUNCTION IF EXISTS `total_agendamentos_hoje`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `total_agendamentos_hoje` () RETURNS INT(11) DETERMINISTIC BEGIN
+    DECLARE total INT;
+
+    SELECT COUNT(*) INTO total
+    FROM agendamentos
+    WHERE data_agendamento = CURDATE();
+
+    RETURN total;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -220,7 +249,7 @@ ALTER TABLE `veiculos`
 -- AUTO_INCREMENT de tabela `agendamentos`
 --
 ALTER TABLE `agendamentos`
-  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `idagendamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT de tabela `cartoes`
@@ -232,7 +261,7 @@ ALTER TABLE `cartoes`
 -- AUTO_INCREMENT de tabela `enderecos`
 --
 ALTER TABLE `enderecos`
-  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `idenderecos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de tabela `pagamentos`
@@ -244,19 +273,19 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT de tabela `status_ag`
 --
 ALTER TABLE `status_ag`
-  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `idstatus_ag` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `idusuarios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de tabela `veiculos`
 --
 ALTER TABLE `veiculos`
-  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `idveiculos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- Restrições para tabelas despejadas
@@ -298,6 +327,17 @@ ALTER TABLE `status_ag`
 --
 ALTER TABLE `veiculos`
   ADD CONSTRAINT `veiculos_ibfk_1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+DELIMITER $$
+--
+-- Eventos
+--
+DROP EVENT IF EXISTS `event_update_ag_expired`$$
+CREATE DEFINER=`root`@`localhost` EVENT `event_update_ag_expired` ON SCHEDULE EVERY 1 DAY STARTS '2025-06-15 23:59:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+    CALL update_ag_expirados();
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
